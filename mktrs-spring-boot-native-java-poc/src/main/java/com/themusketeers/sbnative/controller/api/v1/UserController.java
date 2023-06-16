@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
  * User API Controller.
  * <p><b>Path:</b>api/v1/users</p>
  *
- * @author ORTIC140 - Carlos Adolfo Ortiz Q.
+ * @author COQ - Carlos Adolfo Ortiz Q.
  */
 @RestController
 @RequestMapping("api/v1/users")
@@ -42,7 +42,7 @@ public record UserController(UserService userService) {
     @GetMapping("all")
     public UserDataResponse retrieveUsers() {
         log.info(USER_CONTROLLER_GET_RETRIEVE_USERS_INFO);
-        return new UserDataResponse(userService.size(), userService.retrieveAll());
+        return new UserDataResponse(userService.count(), userService.retrieveAll());
     }
 
     /**
@@ -56,7 +56,7 @@ public record UserController(UserService userService) {
     public User insertUser(@RequestBody User user) {
         log.info(USER_CONTROLLER_POST_INSERT_USER_INFO);
         log.info("==> Payload user=[" + user + "]");
-        userService.add(user);
+        userService.insert(user);
 
         return user;
     }

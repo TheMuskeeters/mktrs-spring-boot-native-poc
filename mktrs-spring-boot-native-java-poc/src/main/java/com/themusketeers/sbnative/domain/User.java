@@ -9,12 +9,12 @@
 package com.themusketeers.sbnative.domain;
 
 /**
- * Represents an User information.
+ * Represents User information.
  *
  * @param id      Identifies the User.
  * @param name    Indicates the User's name.
  * @param address Indicates the location of the User.
- * @author ORTIC140 - Carlos Adolfo Ortiz Q.
+ * @author COQ - Carlos Adolfo Ortiz Q.
  */
-public record User(Integer id, String name, String address) {
+public record User(String id, String name, String address) {
 }

@@ -14,7 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 /**
  * Unit tests for Application class.
  *
- * @author Carlos Adolfo Ortiz Q.
+ * @author COQ - Carlos Adolfo Ortiz Q.
  */
 @SpringBootTest
 class ApplicationTests {

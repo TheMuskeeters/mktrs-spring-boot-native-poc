@@ -14,7 +14,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 /**
  * Entry point for running the application.
  *
- * @author Carlos Adolfo Ortiz Q.
+ * @author COQ - Carlos Adolfo Ortiz Q.
  */
 @SpringBootApplication
 public class Application {

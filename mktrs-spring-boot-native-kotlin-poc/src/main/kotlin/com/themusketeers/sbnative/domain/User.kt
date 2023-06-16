@@ -9,11 +9,11 @@
 package com.themusketeers.sbnative.domain
 
 /**
- * Represents an User information.
+ * Represents User information.
  *
  * @param id      Identifies the User.
  * @param name    Indicates the User's name.
  * @param address Indicates the location of the User.
- * @author ORTIC140 - Carlos Adolfo Ortiz Q.
+ * @author COQ - Carlos Adolfo Ortiz Q.
  */
-data class User(val id: Int, val name: String, val address: String)
+data class User(val id: String?, val name: String, val address: String)

@@ -16,7 +16,7 @@ import java.util.List;
  *
  * @param count Indicates how many users are registered in the system.
  * @param users Indicates the registered User List.
- * @author ORTIC140 - Carlos Adolfo Ortiz Q.
+ * @author COQ - Carlos Adolfo Ortiz Q.
  */
 public record UserDataResponse(Long count, List<User> users) {
 }
