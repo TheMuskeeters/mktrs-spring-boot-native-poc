@@ -1,6 +1,6 @@
 /*----------------------------------------------------------------------------*/
 /* Source File:   USERDATARESPONSE.JAVA                                       */
-/* Copyright (c), 2023 TheMuskeeters                                          */
+/* Copyright (c), 2023 The Musketeers                                         */
 /*----------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------
  History
@@ -17,4 +17,4 @@ import com.themusketeers.sbnative.domain.User
  * @param users Indicates the registered User List.
  * @author ORTIC140 - Carlos Adolfo Ortiz Q.
  */
-data class UserDataResponse(val count: Int, val users: List<User>)
+data class UserDataResponse(val count: Long, val users: List<User>)

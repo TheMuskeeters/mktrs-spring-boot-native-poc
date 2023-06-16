@@ -1,6 +1,6 @@
 /*----------------------------------------------------------------------------*/
 /* Source File:   USERDATARESPONSE.JAVA                                       */
-/* Copyright (c), 2023 TheMuskeeters                                          */
+/* Copyright (c), 2023 The Musketeers                                         */
 /*----------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------
  History
@@ -8,9 +8,8 @@
  -----------------------------------------------------------------------------*/
 package com.themusketeers.sbnative.domain.response;
 
-import java.util.List;
-
 import com.themusketeers.sbnative.domain.User;
+import java.util.List;
 
 /**
  * Keeps the users for the User List response.
@@ -19,5 +18,5 @@ import com.themusketeers.sbnative.domain.User;
  * @param users Indicates the registered User List.
  * @author ORTIC140 - Carlos Adolfo Ortiz Q.
  */
-public record UserDataResponse(Integer count, List<User> users) {
+public record UserDataResponse(Long count, List<User> users) {
 }
