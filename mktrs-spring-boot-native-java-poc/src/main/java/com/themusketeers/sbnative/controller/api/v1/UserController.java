@@ -8,15 +8,22 @@
  -----------------------------------------------------------------------------*/
 package com.themusketeers.sbnative.controller.api.v1;
 
+import static com.themusketeers.sbnative.common.consts.GlobalConstants.USER_CONTROLLER_DELETE_USER_INFO;
 import static com.themusketeers.sbnative.common.consts.GlobalConstants.USER_CONTROLLER_GET_RETRIEVE_USERS_INFO;
+import static com.themusketeers.sbnative.common.consts.GlobalConstants.USER_CONTROLLER_GET_RETRIEVE_USER_INFO;
+import static com.themusketeers.sbnative.common.consts.GlobalConstants.USER_CONTROLLER_PATCH_USER_INFO;
 import static com.themusketeers.sbnative.common.consts.GlobalConstants.USER_CONTROLLER_POST_INSERT_USER_INFO;
 
 import com.themusketeers.sbnative.domain.User;
 import com.themusketeers.sbnative.domain.response.UserDataResponse;
+import com.themusketeers.sbnative.domain.response.UsersDataResponse;
 import com.themusketeers.sbnative.service.intr.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,32 +31,48 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * User API Controller.
- * <p><b>Path:</b>api/v1/users</p>
+ * <p><b>Path:</b>{@code api/v1/users}</p>
  *
  * @author COQ - Carlos Adolfo Ortiz Q.
  */
 @RestController
 @RequestMapping("api/v1/users")
 public record UserController(UserService userService) {
+
     private static final Logger log = LoggerFactory.getLogger(UserController.class);
 
     /**
      * Retrieves all users registered in the system.
-     * <p>GET: api/v1/users/all</p>
+     * <p>{@code GET: api/v1/users}</p>
      *
      * @return Registered information.
      */
-    @GetMapping("all")
-    public UserDataResponse retrieveUsers() {
+    @GetMapping()
+    public UsersDataResponse retrieveUsers() {
         log.info(USER_CONTROLLER_GET_RETRIEVE_USERS_INFO);
-        return new UserDataResponse(userService.count(), userService.retrieveAll());
+        return new UsersDataResponse(userService.count(), userService.retrieveAll());
+    }
+
+    /**
+     * Retrieve one user registered in the system.
+     * <p>{@code GET: api/v1/users/{userId} }</p>
+     *
+     * @param userId Indicates the user unique identifier to search. If it is empty or NULL an exception is thrown.
+     * @return If it is not found an HTTP 404 is returned, otherwise an HTTP 200 is returned with the proper information.
+     */
+    @GetMapping("{userId}")
+    public UserDataResponse retrieveUser(@PathVariable String userId) {
+        log.info(USER_CONTROLLER_GET_RETRIEVE_USER_INFO);
+        log.info("==> User Id=[" + userId + "]");
+
+        return new UserDataResponse(userService.retrieve(userId));
     }
 
     /**
      * Add new record to the User List system.
-     * <p>POST: api/v1/users</p>
+     * <p>{@code POST: api/v1/users}</p>
      *
-     * @param user Includes the user to insert.
+     * @param user Includes the user information to insert.
      * @return Record with Id inserted.
      */
     @PostMapping()
@@ -59,5 +82,36 @@ public record UserController(UserService userService) {
         userService.insert(user);
 
         return user;
+    }
+
+    /**
+     * Modifies the data for the user.
+     * <p>{@code PATCH: api/v1/users}</p>
+     *
+     * @param user Includes the user information to update.
+     * @return If record is not found, then an HTTP 400 is returned, otherwise an HTTP 200 is returned.
+     */
+    @PatchMapping()
+    public User updateRecord(@RequestBody User user) {
+        log.info(USER_CONTROLLER_PATCH_USER_INFO);
+        log.info("==> Payload user=[" + user + "]");
+        userService.update(user);
+
+        return user;
+    }
+
+    /**
+     * Removes an User from the system.
+     * <p>{@code DELETE api/v1/users/{userId} }</p>
+     *
+     * @param userId Indicates the user unique identifier to search. If it is empty or NULL an exception is thrown.
+     * @return HTTP 200 if removed, HTTP 400 ????
+     */
+    @DeleteMapping("{userId}")
+    public Boolean deleteRecord(@PathVariable String userId) {
+        log.info(USER_CONTROLLER_DELETE_USER_INFO);
+        log.info("==> User Id=[" + userId + "]");
+
+        return userService.delete(userId);
     }
 }

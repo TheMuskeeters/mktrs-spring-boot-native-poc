@@ -1,20 +1,22 @@
 /*----------------------------------------------------------------------------*/
-/* Source File:   USERDATARESPONSE.JAVA                                       */
+/* Source File:   USERSDATARESPONSE.JAVA                                      */
 /* Copyright (c), 2023 The Musketeers                                         */
 /*----------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------
  History
- May.30/2023  COQ  File created.
+ Jun.20/2023  COQ  File created.
  -----------------------------------------------------------------------------*/
 package com.themusketeers.sbnative.domain.response;
 
 import com.themusketeers.sbnative.domain.User;
+import java.util.List;
 
 /**
  * Keeps the users for the User List response.
  *
- * @param user Indicates one user information record retrieved.
+ * @param count Indicates how many users are registered in the system.
+ * @param users Indicates the registered User List.
  * @author COQ - Carlos Adolfo Ortiz Q.
  */
-public record UserDataResponse(User user) {
+public record UsersDataResponse(Long count, List<User> users) {
 }

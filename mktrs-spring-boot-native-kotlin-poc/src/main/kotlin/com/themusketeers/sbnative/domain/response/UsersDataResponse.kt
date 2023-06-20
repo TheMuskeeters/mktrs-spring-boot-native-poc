@@ -17,4 +17,12 @@ import com.themusketeers.sbnative.domain.User
  * @param users Indicates the registered User List.
  * @author COQ - Carlos Adolfo Ortiz Q.
  */
-data class UserDataResponse(val count: Long, val users: List<User>)
+data class UsersDataResponse(val count: Long, val users: List<User>)
+
+/**
+ * Keeps the users for the User List response.
+ *
+ * @param user Indicates one user information record retrieved.
+ * @author COQ - Carlos Adolfo Ortiz Q.
+ */
+data class UserDataResponse(val user: User)

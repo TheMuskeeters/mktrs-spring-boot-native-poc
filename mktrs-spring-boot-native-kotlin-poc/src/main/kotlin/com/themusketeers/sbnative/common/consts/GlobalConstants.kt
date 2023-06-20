@@ -16,6 +16,9 @@ package com.themusketeers.sbnative.common.consts
 
 const val USER_CONTROLLER_GET_RETRIEVE_USERS_INFO = "GET api/v1/users/all -> Retrieving Users"
 const val USER_CONTROLLER_POST_INSERT_USER_INFO = "POST api/v1/users -> Retrieving Users"
+const val USER_CONTROLLER_GET_RETRIEVE_USER_INFO = "GET api/v1/users/{userId}"
+const val USER_CONTROLLER_PATCH_USER_INFO = "PATCH api/v1/users -> Insert user."
+const val USER_CONTROLLER_DELETE_USER_INFO = "DELETE api/v1/users/{userId}"
 
 const val INT_ZERO = 0
 const val INT_ONE = 1
