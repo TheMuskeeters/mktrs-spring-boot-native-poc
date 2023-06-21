@@ -13,6 +13,7 @@ import com.themusketeers.sbnative.domain.User
 import com.themusketeers.sbnative.domain.response.UserDataResponse
 import com.themusketeers.sbnative.domain.response.UsersDataResponse
 import com.themusketeers.sbnative.service.intr.UserService
+import jakarta.validation.Valid
 import org.slf4j.LoggerFactory
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -70,7 +71,7 @@ class UserController(val userService: UserService) {
      * @return Record with Id inserted.
      */
     @PostMapping
-    fun insertUser(@RequestBody user: User): User {
+    fun insertUser(@Valid @RequestBody user: User): User {
         log.info(USER_CONTROLLER_POST_INSERT_USER_INFO)
         log.info("==> Payload user=[$user]")
 
@@ -85,10 +86,10 @@ class UserController(val userService: UserService) {
      * <p>{@code PATCH: api/v1/users}</p>
      *
      * @param user Includes the user information to update.
-     * @return If record is not found, then an HTTP 400 is returned, otherwise an HTTP 200 is returned.
+     * @return If record is not found, then an HTTP 404 is returned, otherwise an HTTP 200 is returned.
      */
     @PatchMapping
-    fun updateRecord(@RequestBody user: User): User? {
+    fun updateUser(@Valid @RequestBody user: User): User? {
         log.info(USER_CONTROLLER_PATCH_USER_INFO)
         log.info("==> Payload user=[$user]")
         userService.update(user)
@@ -102,10 +103,10 @@ class UserController(val userService: UserService) {
      * <p>{@code DELETE api/v1/users/{userId}}</p>
      *
      * @param userId Indicates the user unique identifier to search. If it is empty or NULL an exception is thrown.
-     * @return HTTP 200 if removed, HTTP 400 ????
+     * @return HTTP 200 if removed, HTTP 404 if user record not found.
      */
     @DeleteMapping("{userId}")
-    fun deleteRecord(@PathVariable userId: String): Boolean? {
+    fun deleteUser(@PathVariable userId: String): Boolean? {
         log.info(USER_CONTROLLER_DELETE_USER_INFO)
         log.info("==> User Id=[$userId]")
 

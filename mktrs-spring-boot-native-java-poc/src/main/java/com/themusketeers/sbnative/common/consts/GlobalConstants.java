@@ -19,6 +19,7 @@ public class GlobalConstants {
     public static final String USER_CONTROLLER_GET_RETRIEVE_USER_INFO = "GET api/v1/users/{userId}";
     public static final String USER_CONTROLLER_PATCH_USER_INFO = "PATCH api/v1/users -> Insert user.";
     public static final String USER_CONTROLLER_DELETE_USER_INFO = "DELETE api/v1/users/{userId}";
+    public static final String COLON_SPACE_DELIMITER = ": ";
 
     public static final int INT_ZERO = 0;
     public static final int INT_ONE = 1;

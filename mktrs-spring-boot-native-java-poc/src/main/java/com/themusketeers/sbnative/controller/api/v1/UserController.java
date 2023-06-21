@@ -14,10 +14,12 @@ import static com.themusketeers.sbnative.common.consts.GlobalConstants.USER_CONT
 import static com.themusketeers.sbnative.common.consts.GlobalConstants.USER_CONTROLLER_PATCH_USER_INFO;
 import static com.themusketeers.sbnative.common.consts.GlobalConstants.USER_CONTROLLER_POST_INSERT_USER_INFO;
 
+import com.themusketeers.sbnative.common.exception.UserNotFoundException;
 import com.themusketeers.sbnative.domain.User;
 import com.themusketeers.sbnative.domain.response.UserDataResponse;
 import com.themusketeers.sbnative.domain.response.UsersDataResponse;
 import com.themusketeers.sbnative.service.intr.UserService;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -50,6 +52,7 @@ public record UserController(UserService userService) {
     @GetMapping()
     public UsersDataResponse retrieveUsers() {
         log.info(USER_CONTROLLER_GET_RETRIEVE_USERS_INFO);
+
         return new UsersDataResponse(userService.count(), userService.retrieveAll());
     }
 
@@ -65,6 +68,10 @@ public record UserController(UserService userService) {
         log.info(USER_CONTROLLER_GET_RETRIEVE_USER_INFO);
         log.info("==> User Id=[" + userId + "]");
 
+        if (userService.retrieve(userId) == null) {
+            throw new UserNotFoundException(userId);
+        }
+
         return new UserDataResponse(userService.retrieve(userId));
     }
 
@@ -76,7 +83,7 @@ public record UserController(UserService userService) {
      * @return Record with Id inserted.
      */
     @PostMapping()
-    public User insertUser(@RequestBody User user) {
+    public User insertUser(@Valid @RequestBody User user) {
         log.info(USER_CONTROLLER_POST_INSERT_USER_INFO);
         log.info("==> Payload user=[" + user + "]");
         userService.insert(user);
@@ -89,10 +96,10 @@ public record UserController(UserService userService) {
      * <p>{@code PATCH: api/v1/users}</p>
      *
      * @param user Includes the user information to update.
-     * @return If record is not found, then an HTTP 400 is returned, otherwise an HTTP 200 is returned.
+     * @return If record is not found, then an HTTP 404 is returned, otherwise an HTTP 200 is returned.
      */
     @PatchMapping()
-    public User updateRecord(@RequestBody User user) {
+    public User updateUser(@Valid @RequestBody User user) {
         log.info(USER_CONTROLLER_PATCH_USER_INFO);
         log.info("==> Payload user=[" + user + "]");
         userService.update(user);
@@ -105,12 +112,16 @@ public record UserController(UserService userService) {
      * <p>{@code DELETE api/v1/users/{userId} }</p>
      *
      * @param userId Indicates the user unique identifier to search. If it is empty or NULL an exception is thrown.
-     * @return HTTP 200 if removed, HTTP 400 ????
+     * @return HTTP 200 if removed, HTTP 404 if user record not found.
      */
     @DeleteMapping("{userId}")
-    public Boolean deleteRecord(@PathVariable String userId) {
+    public Boolean deleteUser(@PathVariable String userId) {
         log.info(USER_CONTROLLER_DELETE_USER_INFO);
         log.info("==> User Id=[" + userId + "]");
+
+        if (!userService.delete(userId)) {
+            throw new UserNotFoundException(userId);
+        }
 
         return userService.delete(userId);
     }

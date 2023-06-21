@@ -8,13 +8,17 @@
  -----------------------------------------------------------------------------*/
 package com.themusketeers.sbnative.domain;
 
+import jakarta.validation.constraints.NotEmpty;
+
 /**
  * Represents User information.
  *
  * @param id      Identifies the User.
- * @param name    Indicates the User's name.
- * @param address Indicates the location of the User.
+ * @param name    Indicates the User's name (mandatory).
+ * @param address Indicates the location of the User (mandatory).
  * @author COQ - Carlos Adolfo Ortiz Q.
  */
-public record User(String id, String name, String address) {
+public record User(String id,
+                   @NotEmpty(message = "Name User is mandatory") String name,
+                   @NotEmpty(message = "Address is mandatory") String address) {
 }
