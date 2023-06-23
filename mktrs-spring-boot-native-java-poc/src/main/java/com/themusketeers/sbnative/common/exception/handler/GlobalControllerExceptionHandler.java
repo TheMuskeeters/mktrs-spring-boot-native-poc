@@ -14,7 +14,7 @@ import com.themusketeers.sbnative.common.exception.ApiException;
 import com.themusketeers.sbnative.common.exception.UserNotFoundException;
 import java.net.URI;
 import java.time.Instant;
-import java.util.ArrayList;
+import java.util.stream.Stream;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -46,13 +46,14 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class GlobalControllerExceptionHandler extends ResponseEntityExceptionHandler {
 
     public static final String USER_NOT_FOUND = "User Not Found";
-    public static final String USER_NOT_FOUND_ERROR_URL = "https://api.bookmarks.com/errors/not-found";
+    public static final String USER_NOT_FOUND_ERROR_URL = "/api/v1/users";
     public static final String TIMESTAMP_PROPERTY = "timestamp";
     public static final String ERROR_CATEGORY_GENERIC = "Generic";
     public static final String ERROR_CATEGORY_PROPERTY = "errorCategory";
     public static final String BAD_REQUEST_ON_PAYLOAD = "Bad Request on payload";
     public static final String ERROR_CATEGORY_PARAMETERS = "Parameters";
     public static final String ERRORS_PROPERTY = "errors";
+    public static final String VALIDATION_ERROR_ON_SUPPLIED_PAYLOAD = "Validation error on supplied payload";
 
     /**
      * Defines the message to be returned as the response when the {@link ApiException} is raised.
@@ -89,21 +90,26 @@ public class GlobalControllerExceptionHandler extends ResponseEntityExceptionHan
                                                                   HttpHeaders headers,
                                                                   HttpStatusCode status,
                                                                   WebRequest request) {
-        var errors = new ArrayList<String>();
-
-        ex.getBindingResult()
-            .getFieldErrors()
-            .forEach(error -> errors.add(error.getField() + COLON_SPACE_DELIMITER + error.getDefaultMessage()));
-        ex.getBindingResult()
-            .getGlobalErrors()
-            .forEach(error -> errors.add(error.getObjectName() + COLON_SPACE_DELIMITER + error.getDefaultMessage()));
+        var instanceURL = ((ServletWebRequest) request).getRequest().getRequestURI(); // This cast is for Servlet use case.
 
         return this.createResponseEntity(
-            ErrorResponse.builder(ex, HttpStatus.BAD_REQUEST, "Validation error on supplied payload")
+            ErrorResponse.builder(ex, HttpStatus.BAD_REQUEST, VALIDATION_ERROR_ON_SUPPLIED_PAYLOAD)
                 .title(BAD_REQUEST_ON_PAYLOAD)
-                .type(URI.create(((ServletWebRequest) request).getRequest().getRequestURI())) // This cast is for Servlet use case.
+                .type(URI.create(instanceURL))
+                .instance(URI.create(instanceURL))
                 .property(ERROR_CATEGORY_PROPERTY, ERROR_CATEGORY_PARAMETERS)
-                .property(ERRORS_PROPERTY, errors)
+                .property(ERRORS_PROPERTY,
+                    Stream.concat(
+                        ex.getBindingResult()
+                            .getFieldErrors()
+                            .stream()
+                            .map(field -> field.getField() + COLON_SPACE_DELIMITER + field.getDefaultMessage()),
+                        ex.getBindingResult()
+                            .getGlobalErrors()
+                            .stream()
+                            .map(field1 -> field1.getObjectName() + COLON_SPACE_DELIMITER + field1.getDefaultMessage())
+                    ).toList()
+                )
                 .property(TIMESTAMP_PROPERTY, Instant.now())
                 .build(),
             headers, status, request);

@@ -25,6 +25,10 @@ public class GlobalConstants {
     public static final int INT_ONE = 1;
     public static final int INT_TWO = 2;
 
+    public static final long LONG_ZERO= 0L;
+    public static final long LONG_ONE = 1L;
+    public static final long LONG_TWO = 2L;
+
     /**
      * Utility class, thus no constructor allowed.
      */

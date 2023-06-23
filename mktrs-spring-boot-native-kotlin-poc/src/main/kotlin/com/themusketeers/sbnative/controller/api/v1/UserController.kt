@@ -75,9 +75,7 @@ class UserController(val userService: UserService) {
         log.info(USER_CONTROLLER_POST_INSERT_USER_INFO)
         log.info("==> Payload user=[$user]")
 
-        userService.insert(user)
-
-        return user
+        return userService.insert(user)
     }
 
     /**

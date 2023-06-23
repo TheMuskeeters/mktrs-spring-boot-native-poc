@@ -86,9 +86,8 @@ public record UserController(UserService userService) {
     public User insertUser(@Valid @RequestBody User user) {
         log.info(USER_CONTROLLER_POST_INSERT_USER_INFO);
         log.info("==> Payload user=[" + user + "]");
-        userService.insert(user);
 
-        return user;
+        return userService.insert(user);
     }
 
     /**
@@ -102,7 +101,10 @@ public record UserController(UserService userService) {
     public User updateUser(@Valid @RequestBody User user) {
         log.info(USER_CONTROLLER_PATCH_USER_INFO);
         log.info("==> Payload user=[" + user + "]");
-        userService.update(user);
+
+        if (!userService.update(user)) {
+            throw new UserNotFoundException(user.id());
+        }
 
         return user;
     }
@@ -119,10 +121,12 @@ public record UserController(UserService userService) {
         log.info(USER_CONTROLLER_DELETE_USER_INFO);
         log.info("==> User Id=[" + userId + "]");
 
-        if (!userService.delete(userId)) {
+        var userDeleted = userService.delete(userId);
+
+        if (!userDeleted) {
             throw new UserNotFoundException(userId);
         }
 
-        return userService.delete(userId);
+        return userDeleted;
     }
 }

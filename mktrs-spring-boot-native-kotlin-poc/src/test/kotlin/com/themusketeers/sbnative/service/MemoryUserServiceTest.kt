@@ -15,11 +15,17 @@ import com.themusketeers.sbnative.common.consts.LONG_TWO
 import com.themusketeers.sbnative.common.consts.LONG_ZERO
 import com.themusketeers.sbnative.domain.User
 import com.themusketeers.sbnative.service.intr.UserService
-import org.assertj.core.api.Assertions
+
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
+/**
+ * Unit test for checking {@link UserService} interface when implemented as a Memory based storage.
+ *
+ * @author COQ- Carlos Adolfo Ortiz Q.
+ */
 class MemoryUserServiceTest {
     companion object {
         const val USER_ID_ONE = "c56b2741-028e-4ff5-9e15-be4f96b4ea35"
@@ -45,10 +51,10 @@ class MemoryUserServiceTest {
         val user = buildUserWithIDNULL()
         val insertedUser = userService.insert(user)
 
-        Assertions.assertThat(insertedUser).isNotNull()
-        Assertions.assertThat(insertedUser.id).isNotNull()
-        Assertions.assertThat(insertedUser.name).isEqualTo(user.name)
-        Assertions.assertThat(insertedUser.address).isEqualTo(user.address)
+        assertThat(insertedUser).isNotNull()
+        assertThat(insertedUser.id).isNotNull()
+        assertThat(insertedUser.name).isEqualTo(user.name)
+        assertThat(insertedUser.address).isEqualTo(user.address)
     }
 
     @Test
@@ -57,7 +63,7 @@ class MemoryUserServiceTest {
         val user = buildUserWithIDOne()
         val insertedUser = userService.insert(user)
 
-        Assertions.assertThat(insertedUser)
+        assertThat(insertedUser)
             .isNotNull()
             .isEqualTo(user)
     }
@@ -67,7 +73,7 @@ class MemoryUserServiceTest {
     fun verifyUserListIsEmpty() {
         val userListSize = userService.count()
 
-        Assertions.assertThat(userListSize)
+        assertThat(userListSize)
             .isEqualTo(LONG_ZERO)
     }
 
@@ -79,7 +85,7 @@ class MemoryUserServiceTest {
 
         val userListSize = userService.count()
 
-        Assertions.assertThat(userListSize).isEqualTo(LONG_TWO)
+        assertThat(userListSize).isEqualTo(LONG_TWO)
     }
 
     @Test
@@ -91,7 +97,7 @@ class MemoryUserServiceTest {
 
         val userListSize = userService.count()
 
-        Assertions.assertThat(userListSize)
+        assertThat(userListSize)
             .isEqualTo(LONG_ONE)
     }
 
@@ -104,7 +110,7 @@ class MemoryUserServiceTest {
 
         val userExists: Boolean = userService.exists(USER_ID_ONE)
 
-        Assertions.assertThat(userExists)
+        assertThat(userExists)
             .isTrue()
     }
 
@@ -117,7 +123,7 @@ class MemoryUserServiceTest {
 
         val userExists: Boolean = userService.exists(USER_ID_TWO)
 
-        Assertions.assertThat(userExists)
+        assertThat(userExists)
             .isFalse()
     }
 
@@ -130,7 +136,7 @@ class MemoryUserServiceTest {
 
         val actualUser = userService.retrieve(USER_ID_ONE)
 
-        Assertions.assertThat(actualUser)
+        assertThat(actualUser)
             .isNotNull()
             .isEqualTo(expectedUser)
     }
@@ -140,7 +146,7 @@ class MemoryUserServiceTest {
     fun whenUserIdIsTwoAndNotInUserListThenReturnNull() {
         userService.insert(buildUserWithIDOne())
 
-        Assertions.assertThat(userService.retrieve(USER_ID_TWO)).isNull()
+        assertThat(userService.retrieve(USER_ID_TWO)).isNull()
     }
 
     @Test
@@ -151,7 +157,7 @@ class MemoryUserServiceTest {
 
         val deletedUser: Boolean = userService.delete(USER_ID_TWO)
 
-        Assertions.assertThat(deletedUser)
+        assertThat(deletedUser)
             .isNotNull()
             .isTrue()
     }
@@ -161,7 +167,7 @@ class MemoryUserServiceTest {
     fun shouldRemoveUserWthIdTwoFromList() {
         val deletedUser: Boolean = userService.delete(USER_ID_TWO)
 
-        Assertions.assertThat(deletedUser)
+        assertThat(deletedUser)
             .isNotNull()
             .isFalse()
     }
@@ -174,10 +180,10 @@ class MemoryUserServiceTest {
         userService.insert(buildUserWithIDOne())
 
         val userUpdated: Boolean = userService.update(updateInfo)
-        Assertions.assertThat(userUpdated)
+        assertThat(userUpdated)
             .isNotNull()
             .isTrue()
-        Assertions.assertThat(userService.retrieve(USER_ID_ONE))
+        assertThat(userService.retrieve(USER_ID_ONE))
             .isNotNull()
             .isEqualTo(updateInfo)
     }
@@ -188,7 +194,7 @@ class MemoryUserServiceTest {
         val updateInfo = buildUserWithIDOneForUpdate()
         val userUpdated = userService.update(updateInfo)
 
-        Assertions.assertThat(userUpdated)
+        assertThat(userUpdated)
             .isNotNull()
             .isFalse()
     }
@@ -203,7 +209,7 @@ class MemoryUserServiceTest {
 
         val actualUserList = userService.retrieveAll()
 
-        Assertions.assertThat(actualUserList)
+        assertThat(actualUserList)
             .isNotNull()
             .hasSize(INT_TWO)
             .isEqualTo(expectedList)
@@ -214,7 +220,7 @@ class MemoryUserServiceTest {
     fun shouldRetrieveAllUserListAsEmptyList() {
         val actualUserList = userService.retrieveAll()
 
-        Assertions.assertThat(actualUserList)
+        assertThat(actualUserList)
             .isNotNull()
             .hasSize(INT_ZERO)
     }

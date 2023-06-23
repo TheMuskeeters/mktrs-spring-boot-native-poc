@@ -20,6 +20,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+/**
+ * Unit test for checking {@link UserService} interface when implemented as a Memory based storage.
+ *
+ * @author COQ- Carlos Adolfo Ortiz Q.
+ */
 class MemoryUserServiceTest {
 
     public static final String USER_ID_ONE = "c56b2741-028e-4ff5-9e15-be4f96b4ea35";

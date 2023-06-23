@@ -8,6 +8,8 @@
  -----------------------------------------------------------------------------*/
 package com.themusketeers.sbnative.domain.response;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.themusketeers.sbnative.domain.User;
 
 /**
@@ -16,5 +18,7 @@ import com.themusketeers.sbnative.domain.User;
  * @param user Indicates one user information record retrieved.
  * @author COQ - Carlos Adolfo Ortiz Q.
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonPropertyOrder({"user"})
 public record UserDataResponse(User user) {
 }

@@ -50,10 +50,10 @@ interface UserService {
     fun delete(userId: String): Boolean
 
     /**
-     * Changes the data for the
+     * Changes the data for the User. All fields are changed except the user  {@code id}.
      *
      * @param user Instance of data to be updated in the list of Users.
-     * @return If the data exists in the list of Users, it returns `true`.
+     * @return If the data exists in the list of Users, it returns {@code true}.
      */
     fun update(user: User): Boolean
 

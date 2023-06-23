@@ -45,6 +45,14 @@
             <artifactId>reactor-test</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <!-- This is a full Spring MVC but we use WebTestClient which is in the following package, that's why it is added -->
+        <!-- If it were a Spring WebFlux exclusively, this would be in the compile scope -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
+            <scope>test</scope>
+        </dependency>
         <!-- END Testing dependencies -->
     </dependencies>
 
