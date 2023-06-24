@@ -8,6 +8,15 @@
  -----------------------------------------------------------------------------*/
 package com.themusketeers.sbnative.common.exception.handler;
 
+import static com.themusketeers.sbnative.common.consts.ControllerExceptionHandlerConstants.ERROR_CATEGORY_GENERIC;
+import static com.themusketeers.sbnative.common.consts.ControllerExceptionHandlerConstants.ERROR_CATEGORY_PARAMETERS;
+import static com.themusketeers.sbnative.common.consts.ControllerExceptionHandlerConstants.PROPERTY_ERRORS;
+import static com.themusketeers.sbnative.common.consts.ControllerExceptionHandlerConstants.PROPERTY_ERROR_CATEGORY;
+import static com.themusketeers.sbnative.common.consts.ControllerExceptionHandlerConstants.PROPERTY_TIMESTAMP;
+import static com.themusketeers.sbnative.common.consts.ControllerExceptionHandlerConstants.TITLE_BAD_REQUEST_ON_PAYLOAD;
+import static com.themusketeers.sbnative.common.consts.ControllerExceptionHandlerConstants.TITLE_USER_NOT_FOUND;
+import static com.themusketeers.sbnative.common.consts.ControllerExceptionHandlerConstants.TITLE_VALIDATION_ERROR_ON_SUPPLIED_PAYLOAD;
+import static com.themusketeers.sbnative.common.consts.ControllerExceptionHandlerConstants.USER_NOT_FOUND_ERROR_URL;
 import static com.themusketeers.sbnative.common.consts.GlobalConstants.COLON_SPACE_DELIMITER;
 
 import com.themusketeers.sbnative.common.exception.ApiException;
@@ -45,16 +54,6 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @RestControllerAdvice
 public class GlobalControllerExceptionHandler extends ResponseEntityExceptionHandler {
 
-    public static final String USER_NOT_FOUND = "User Not Found";
-    public static final String USER_NOT_FOUND_ERROR_URL = "/api/v1/users";
-    public static final String TIMESTAMP_PROPERTY = "timestamp";
-    public static final String ERROR_CATEGORY_GENERIC = "Generic";
-    public static final String ERROR_CATEGORY_PROPERTY = "errorCategory";
-    public static final String BAD_REQUEST_ON_PAYLOAD = "Bad Request on payload";
-    public static final String ERROR_CATEGORY_PARAMETERS = "Parameters";
-    public static final String ERRORS_PROPERTY = "errors";
-    public static final String VALIDATION_ERROR_ON_SUPPLIED_PAYLOAD = "Validation error on supplied payload";
-
     /**
      * Defines the message to be returned as the response when the {@link ApiException} is raised.
      * Contains the information of the thrown exception to include as part of the response.
@@ -78,10 +77,10 @@ public class GlobalControllerExceptionHandler extends ResponseEntityExceptionHan
     @ExceptionHandler(UserNotFoundException.class)
     public ErrorResponse handleBookmarkNotFoundException(UserNotFoundException e) {
         return ErrorResponse.builder(e, HttpStatus.NOT_FOUND, e.getMessage())
-            .title(USER_NOT_FOUND)
+            .title(TITLE_USER_NOT_FOUND)
             .type(URI.create(USER_NOT_FOUND_ERROR_URL))
-            .property(ERROR_CATEGORY_PROPERTY, ERROR_CATEGORY_GENERIC)
-            .property(TIMESTAMP_PROPERTY, Instant.now())
+            .property(PROPERTY_ERROR_CATEGORY, ERROR_CATEGORY_GENERIC)
+            .property(PROPERTY_TIMESTAMP, Instant.now())
             .build();
     }
 
@@ -93,24 +92,26 @@ public class GlobalControllerExceptionHandler extends ResponseEntityExceptionHan
         var instanceURL = ((ServletWebRequest) request).getRequest().getRequestURI(); // This cast is for Servlet use case.
 
         return this.createResponseEntity(
-            ErrorResponse.builder(ex, HttpStatus.BAD_REQUEST, VALIDATION_ERROR_ON_SUPPLIED_PAYLOAD)
-                .title(BAD_REQUEST_ON_PAYLOAD)
+            ErrorResponse.builder(ex, HttpStatus.BAD_REQUEST, TITLE_VALIDATION_ERROR_ON_SUPPLIED_PAYLOAD)
+                .title(TITLE_BAD_REQUEST_ON_PAYLOAD)
                 .type(URI.create(instanceURL))
                 .instance(URI.create(instanceURL))
-                .property(ERROR_CATEGORY_PROPERTY, ERROR_CATEGORY_PARAMETERS)
-                .property(ERRORS_PROPERTY,
+                .property(PROPERTY_ERROR_CATEGORY, ERROR_CATEGORY_PARAMETERS)
+                .property(PROPERTY_ERRORS,
                     Stream.concat(
-                        ex.getBindingResult()
-                            .getFieldErrors()
-                            .stream()
-                            .map(field -> field.getField() + COLON_SPACE_DELIMITER + field.getDefaultMessage()),
-                        ex.getBindingResult()
-                            .getGlobalErrors()
-                            .stream()
-                            .map(field1 -> field1.getObjectName() + COLON_SPACE_DELIMITER + field1.getDefaultMessage())
-                    ).toList()
+                            ex.getBindingResult()
+                                .getFieldErrors()
+                                .stream()
+                                .map(field -> field.getField() + COLON_SPACE_DELIMITER + field.getDefaultMessage()),
+                            ex.getBindingResult()
+                                .getGlobalErrors()
+                                .stream()
+                                .map(field1 -> field1.getObjectName() + COLON_SPACE_DELIMITER + field1.getDefaultMessage())
+                        )
+                        .sorted()
+                        .toList()
                 )
-                .property(TIMESTAMP_PROPERTY, Instant.now())
+                .property(PROPERTY_TIMESTAMP, Instant.now())
                 .build(),
             headers, status, request);
     }

@@ -68,11 +68,13 @@ public record UserController(UserService userService) {
         log.info(USER_CONTROLLER_GET_RETRIEVE_USER_INFO);
         log.info("==> User Id=[" + userId + "]");
 
-        if (userService.retrieve(userId) == null) {
+        var userRetrieved = userService.retrieve(userId);
+
+        if (userRetrieved == null) {
             throw new UserNotFoundException(userId);
         }
 
-        return new UserDataResponse(userService.retrieve(userId));
+        return new UserDataResponse(userRetrieved);
     }
 
     /**
