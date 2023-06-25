@@ -53,7 +53,7 @@ import org.springframework.web.reactive.function.BodyInserters
  * @author COQ- Carlos Adolfo Ortiz Q.
  */
 @WebMvcTest(UserController::class)
-internal class UserControllerTest {
+class UserControllerTest {
     companion object {
         const val USER_CONTROLLER_BASE_PATH = "/api/v1/users"
         const val EXPECTED_ERROR_ADDRESS_IS_MANDATORY = "address: Address is mandatory"
@@ -445,7 +445,6 @@ internal class UserControllerTest {
               "name": "",
               "address": "address"
             }
-            
             """.trimIndent()
 
         client.patch()
