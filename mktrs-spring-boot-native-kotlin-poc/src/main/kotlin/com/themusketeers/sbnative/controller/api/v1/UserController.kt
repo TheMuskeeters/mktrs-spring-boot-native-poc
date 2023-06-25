@@ -8,7 +8,12 @@
  -----------------------------------------------------------------------------*/
 package com.themusketeers.sbnative.controller.api.v1
 
-import com.themusketeers.sbnative.common.consts.*
+import com.themusketeers.sbnative.common.consts.GlobalConstants.USER_CONTROLLER_DELETE_USER_INFO
+import com.themusketeers.sbnative.common.consts.GlobalConstants.USER_CONTROLLER_GET_RETRIEVE_USERS_INFO
+import com.themusketeers.sbnative.common.consts.GlobalConstants.USER_CONTROLLER_GET_RETRIEVE_USER_INFO
+import com.themusketeers.sbnative.common.consts.GlobalConstants.USER_CONTROLLER_PATCH_USER_INFO
+import com.themusketeers.sbnative.common.consts.GlobalConstants.USER_CONTROLLER_POST_INSERT_USER_INFO
+import com.themusketeers.sbnative.common.exception.UserNotFoundException
 import com.themusketeers.sbnative.domain.User
 import com.themusketeers.sbnative.domain.response.UserDataResponse
 import com.themusketeers.sbnative.domain.response.UsersDataResponse
@@ -41,7 +46,7 @@ class UserController(val userService: UserService) {
      *
      * @return Registered information.
      */
-    @GetMapping()
+    @GetMapping
     fun retrieveUsers(): UsersDataResponse {
         log.info(USER_CONTROLLER_GET_RETRIEVE_USERS_INFO)
 
@@ -56,19 +61,23 @@ class UserController(val userService: UserService) {
      * @return If it is not found an HTTP 404 is returned, otherwise an HTTP 200 is returned with the proper information.
      */
     @GetMapping("{userId}")
-    fun retrieveUser(@PathVariable userId: String): UserDataResponse? {
+    fun retrieveUser(@PathVariable userId: String): UserDataResponse {
         log.info(USER_CONTROLLER_GET_RETRIEVE_USER_INFO)
         log.info("==> User Id=[$userId]")
 
-        return UserDataResponse(userService.retrieve(userId)!!)
+        val userRetrieved = userService.retrieve(userId) ?: throw UserNotFoundException(userId)
+
+        return UserDataResponse(userRetrieved)
     }
 
     /**
      * Add new record to the User List system.
      * <p>{@code POST: api/v1/users}</p>
+     * <p>For the User to be inserted there are validations for required fields, {@code name} and {@code address}.
+     * A BAD REQUEST 400 error code is returned when {@code payload} is mal formed.</p>
      *
      * @param user Includes the user information to insert.
-     * @return Record with Id inserted.
+     * @return Record with 'Id' inserted.
      */
     @PostMapping
     fun insertUser(@Valid @RequestBody user: User): User {
@@ -80,17 +89,21 @@ class UserController(val userService: UserService) {
 
     /**
      * Modifies the data for the user.
-     *
      * <p>{@code PATCH: api/v1/users}</p>
+     * <p>For the User to be inserted there are validations for required fields, {@code name} and {@code address}.
+     * A BAD REQUEST 400 error code is returned when {@code payload} is mal formed.</p>
      *
      * @param user Includes the user information to update.
      * @return If record is not found, then an HTTP 404 is returned, otherwise an HTTP 200 is returned.
      */
     @PatchMapping
-    fun updateUser(@Valid @RequestBody user: User): User? {
+    fun updateUser(@Valid @RequestBody user: User): User {
         log.info(USER_CONTROLLER_PATCH_USER_INFO)
         log.info("==> Payload user=[$user]")
-        userService.update(user)
+
+        if (!userService.update(user)) {
+            throw UserNotFoundException(user.id!!)
+        }
 
         return user
     }
@@ -104,10 +117,14 @@ class UserController(val userService: UserService) {
      * @return HTTP 200 if removed, HTTP 404 if user record not found.
      */
     @DeleteMapping("{userId}")
-    fun deleteUser(@PathVariable userId: String): Boolean? {
+    fun deleteUser(@PathVariable userId: String): Boolean {
         log.info(USER_CONTROLLER_DELETE_USER_INFO)
         log.info("==> User Id=[$userId]")
 
-        return userService.delete(userId)
+        if (!userService.delete(userId)) {
+            throw UserNotFoundException(userId)
+        }
+
+        return true
     }
 }

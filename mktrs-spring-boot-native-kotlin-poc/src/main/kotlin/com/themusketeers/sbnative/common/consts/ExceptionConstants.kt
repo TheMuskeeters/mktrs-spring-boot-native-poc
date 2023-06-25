@@ -4,23 +4,16 @@
 /*----------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------
  History
- Jun.23/2023  COQ  File created.
+ Jun.24/2023  COQ  File created.
  -----------------------------------------------------------------------------*/
-
-package com.themusketeers.sbnative.common.consts;
+package com.themusketeers.sbnative.common.consts
 
 /**
  * Exception related constants.
  *
  * @author COQ - Carlos Adolfo Ortiz Q.
  */
-public class ExceptionConstants {
-    public static final String USER_WITH_ID = "User with id=[";
-    public static final String NOT_FOUND = "] not found";
-
-    /**
-     * Utility class, thus no constructor allowed.
-     */
-    private ExceptionConstants() {
-    }
+object ExceptionConstants {
+    const val USER_WITH_ID = "User with id=["
+    const val NOT_FOUND = "] not found"
 }

@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.1.0</version>
+        <version>3.1.1</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.themusketeers.</groupId>
@@ -15,7 +15,7 @@
     <description>Toying with Spring Native (Kotlin Version)</description>
     <properties>
         <java.version>17</java.version>
-        <kotlin.version>1.8.21</kotlin.version>
+        <kotlin.version>1.8.22</kotlin.version>
     </properties>
     <dependencies>
         <!-- Spring Boot dependencies -->
@@ -79,7 +79,15 @@
             <artifactId>reactor-test</artifactId>
             <scope>test</scope>
         </dependency>
-        <!-- End Testing dependencies -->
+
+        <!-- This is a full Spring MVC but we use WebTestClient which is in the following package, that's why it is added -->
+        <!-- If it were a Spring WebFlux exclusively, this would be in the compile scope -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!-- END Testing dependencies -->
     </dependencies>
 
     <build>

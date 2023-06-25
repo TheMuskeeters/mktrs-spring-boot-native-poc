@@ -60,6 +60,7 @@ public class MemoryUserService implements UserService {
             insert(user);
             return true;
         }
+
         return false;
     }
 

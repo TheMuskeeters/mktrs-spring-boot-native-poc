@@ -29,7 +29,6 @@ class MemoryUserServiceTest {
 
     public static final String USER_ID_ONE = "c56b2741-028e-4ff5-9e15-be4f96b4ea35";
     public static final String USER_ID_TWO = "b94f6ae6-e1d2-4fdf-8c6b-eb471da1d4d1";
-
     public static final String USER_NAME_ONE = "Name One";
     public static final String USER_NAME_ONE_UPDATED = "Name One Updated";
     public static final String USER_NAME_TWO = "Name Two";

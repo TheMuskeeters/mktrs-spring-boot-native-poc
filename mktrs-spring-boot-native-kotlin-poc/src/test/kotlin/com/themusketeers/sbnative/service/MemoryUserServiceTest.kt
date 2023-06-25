@@ -8,11 +8,11 @@
  -----------------------------------------------------------------------------*/
 package com.themusketeers.sbnative.service
 
-import com.themusketeers.sbnative.common.consts.INT_TWO
-import com.themusketeers.sbnative.common.consts.INT_ZERO
-import com.themusketeers.sbnative.common.consts.LONG_ONE
-import com.themusketeers.sbnative.common.consts.LONG_TWO
-import com.themusketeers.sbnative.common.consts.LONG_ZERO
+import com.themusketeers.sbnative.common.consts.GlobalConstants.INT_TWO
+import com.themusketeers.sbnative.common.consts.GlobalConstants.INT_ZERO
+import com.themusketeers.sbnative.common.consts.GlobalConstants.LONG_ONE
+import com.themusketeers.sbnative.common.consts.GlobalConstants.LONG_TWO
+import com.themusketeers.sbnative.common.consts.GlobalConstants.LONG_ZERO
 import com.themusketeers.sbnative.domain.User
 import com.themusketeers.sbnative.service.intr.UserService
 

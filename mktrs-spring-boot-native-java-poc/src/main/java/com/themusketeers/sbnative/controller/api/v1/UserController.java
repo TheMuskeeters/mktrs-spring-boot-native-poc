@@ -49,7 +49,7 @@ public record UserController(UserService userService) {
      *
      * @return Registered information.
      */
-    @GetMapping()
+    @GetMapping
     public UsersDataResponse retrieveUsers() {
         log.info(USER_CONTROLLER_GET_RETRIEVE_USERS_INFO);
 
@@ -80,11 +80,13 @@ public record UserController(UserService userService) {
     /**
      * Add new record to the User List system.
      * <p>{@code POST: api/v1/users}</p>
+     * <p>For the User to be inserted there are validations for required fields, {@code name} and {@code address}.
+     * A BAD REQUEST 400 error code is returned when {@code payload} is mal formed.</p>
      *
      * @param user Includes the user information to insert.
-     * @return Record with Id inserted.
+     * @return Record with 'Id' inserted.
      */
-    @PostMapping()
+    @PostMapping
     public User insertUser(@Valid @RequestBody User user) {
         log.info(USER_CONTROLLER_POST_INSERT_USER_INFO);
         log.info("==> Payload user=[" + user + "]");
@@ -95,11 +97,13 @@ public record UserController(UserService userService) {
     /**
      * Modifies the data for the user.
      * <p>{@code PATCH: api/v1/users}</p>
+     * <p>For the User to be inserted there are validations for required fields, {@code name} and {@code address}.
+     * A BAD REQUEST 400 error code is returned when {@code payload} is mal formed.</p>
      *
      * @param user Includes the user information to update.
      * @return If record is not found, then an HTTP 404 is returned, otherwise an HTTP 200 is returned.
      */
-    @PatchMapping()
+    @PatchMapping
     public User updateUser(@Valid @RequestBody User user) {
         log.info(USER_CONTROLLER_PATCH_USER_INFO);
         log.info("==> Payload user=[" + user + "]");
@@ -123,12 +127,10 @@ public record UserController(UserService userService) {
         log.info(USER_CONTROLLER_DELETE_USER_INFO);
         log.info("==> User Id=[" + userId + "]");
 
-        var userDeleted = userService.delete(userId);
-
-        if (!userDeleted) {
+        if (!userService.delete(userId)) {
             throw new UserNotFoundException(userId);
         }
 
-        return userDeleted;
+        return true;
     }
 }

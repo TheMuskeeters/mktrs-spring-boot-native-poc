@@ -34,7 +34,7 @@ class MemoryUserService : UserService {
 
     override fun retrieve(userId: String): User? = findUserInfo(userId).orElseGet { null };
 
-    override fun delete(userId: String) = userList.removeIf { user: User -> user.id == userId }
+    override fun delete(userId: String) = userList.removeIf { user -> user.id == userId }
 
     override fun update(user: User): Boolean {
         if (user.id?.let { exists(it) } == true) {
@@ -42,6 +42,7 @@ class MemoryUserService : UserService {
             insert(user)
             return true
         }
+
         return false
     }
 
@@ -53,10 +54,8 @@ class MemoryUserService : UserService {
         return userList.size.toLong()
     }
 
-    private fun findUserInfo(userId: String): Optional<User> {
-        return userList
-            .stream()
-            .filter { user -> user.id == userId }
-            .findFirst()
-    }
+    private fun findUserInfo(userId: String) = userList
+        .stream()
+        .filter { user -> user.id == userId }
+        .findFirst()
 }
