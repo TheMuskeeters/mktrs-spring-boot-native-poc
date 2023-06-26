@@ -24,8 +24,6 @@ import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.HttpStatusCode
 import org.springframework.http.ResponseEntity
-import org.springframework.validation.FieldError
-import org.springframework.validation.ObjectError
 import org.springframework.web.ErrorResponse
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
@@ -89,8 +87,9 @@ class GlobalControllerExceptionHandler : ResponseEntityExceptionHandler() {
         headers: HttpHeaders,
         status: HttpStatusCode,
         request: WebRequest
-    ): ResponseEntity<Any>? {
+    ): ResponseEntity<Any> {
         val instanceURL = (request as ServletWebRequest).request.requestURI // This cast is for Servlet use case.
+
         return createResponseEntity(
             ErrorResponse.builder(ex, HttpStatus.BAD_REQUEST, TITLE_VALIDATION_ERROR_ON_SUPPLIED_PAYLOAD)
                 .title(TITLE_BAD_REQUEST_ON_PAYLOAD)
@@ -102,11 +101,11 @@ class GlobalControllerExceptionHandler : ResponseEntityExceptionHandler() {
                               ex.bindingResult
                                   .fieldErrors
                                   .stream()
-                                  .map { field: FieldError -> field.field + COLON_SPACE_DELIMITER + field.defaultMessage },
+                                  .map { field -> field.field + COLON_SPACE_DELIMITER + field.defaultMessage },
                               ex.bindingResult
                                   .globalErrors
                                   .stream()
-                                  .map { field1: ObjectError -> field1.objectName + COLON_SPACE_DELIMITER + field1.defaultMessage }
+                                  .map { field1 -> field1.objectName + COLON_SPACE_DELIMITER + field1.defaultMessage }
                           )
                               .sorted()
                               .toList()

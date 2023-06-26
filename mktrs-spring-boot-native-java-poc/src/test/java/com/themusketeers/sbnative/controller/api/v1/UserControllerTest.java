@@ -58,8 +58,8 @@ import org.springframework.web.reactive.function.BodyInserters;
 @WebMvcTest(UserController.class)
 class UserControllerTest {
     public static final String USER_CONTROLLER_BASE_PATH = "/api/v1/users";
-    public static final String EXPECTED_ERROR_ADDRESS_IS_MANDATORY = "address: Address is mandatory";
-    public static final String EXPECTED_ERROR_NAME_USER_IS_MANDATORY = "name: Name User is mandatory";
+    public static final String EXPECTED_ERROR_ADDRESS_IS_MANDATORY = "address: User Address is mandatory";
+    public static final String EXPECTED_ERROR_NAME_USER_IS_MANDATORY = "name: User Name is mandatory";
     public static final String JSONPATH_TITLE = "$.title";
     public static final String JSONPATH_DETAIL = "$.detail";
     public static final String JSONPATH_ERROR_CATEGORY = "$.errorCategory";
@@ -292,7 +292,7 @@ class UserControllerTest {
     void shouldCreateNewRecord() {
         var user = buildUserWithIDSet();
 
-        when(userService.insert(any())).thenReturn(user);
+        when(userService.insert(any(User.class))).thenReturn(user);
 
         client.post()
             .uri(USER_CONTROLLER_BASE_PATH)

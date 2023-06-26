@@ -102,7 +102,7 @@ class UserController(val userService: UserService) {
         log.info("==> Payload user=[$user]")
 
         if (!userService.update(user)) {
-            throw UserNotFoundException(user.id!!)
+            throw UserNotFoundException(user.id)
         }
 
         return user

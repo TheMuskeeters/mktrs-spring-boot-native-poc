@@ -16,4 +16,4 @@ import com.themusketeers.sbnative.common.consts.ExceptionConstants.USER_WITH_ID
  * @param userId Indicates the `userId` which was not found.
  * @author COQ - Carlos Adolfo Ortiz Q.
  */
-class UserNotFoundException(userId: String) : RuntimeException(USER_WITH_ID + userId + NOT_FOUND)
+class UserNotFoundException(userId: String?) : RuntimeException(USER_WITH_ID + userId + NOT_FOUND)

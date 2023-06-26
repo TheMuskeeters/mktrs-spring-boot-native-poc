@@ -25,7 +25,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import org.mockito.ArgumentMatchers.any
 import org.mockito.ArgumentMatchers.anyString
 import org.mockito.Mockito.verify
 import org.mockito.Mockito.`when`
@@ -47,6 +46,7 @@ import org.springframework.web.reactive.function.BodyInserters
  * <ul>
  *     <li><a href="https://rieckpil.de/test-your-spring-mvc-controller-with-webtestclient-against-mockmvc/">Test Your Spring MVC Controller with the WebTestClient and MockMvc</a></li>
  *     <li><a href="https://www.callicoder.com/spring-5-reactive-webclient-webtestclient-examples/">Spring 5 WebClient and WebTestClient Tutorial with Examples</a></li>
+ *     <li><a href="https://www.baeldung.com/kotlin/mockk">MockK: A Mocking Library for Kotlin</a></li>
  * </ul>
  * </p>
  *
@@ -56,8 +56,8 @@ import org.springframework.web.reactive.function.BodyInserters
 class UserControllerTest {
     companion object {
         const val USER_CONTROLLER_BASE_PATH = "/api/v1/users"
-        const val EXPECTED_ERROR_ADDRESS_IS_MANDATORY = "address: Address is mandatory"
-        const val EXPECTED_ERROR_NAME_USER_IS_MANDATORY = "name: Name User is mandatory"
+        const val EXPECTED_ERROR_ADDRESS_IS_MANDATORY = "address: User Address is mandatory"
+        const val EXPECTED_ERROR_NAME_USER_IS_MANDATORY = "name: User Name is mandatory"
         const val JSONPATH_TITLE = "$.title"
         const val JSONPATH_DETAIL = "$.detail"
         const val JSONPATH_ERROR_CATEGORY = "$.errorCategory"
@@ -172,13 +172,8 @@ class UserControllerTest {
             .bodyValue(jsonPayload)
             .exchange()
             .expectStatus().isBadRequest()
-            .expectBody()
-            .jsonPath(JSONPATH_BODY_TITLE).isEqualTo(TITLE_BAD_REQUEST_ON_PAYLOAD)
-            .jsonPath(JSONPATH_BODY_DETAIL).isEqualTo(TITLE_VALIDATION_ERROR_ON_SUPPLIED_PAYLOAD)
-            .jsonPath(JSONPATH_BODY_ERROR_CATEGORY).isEqualTo(ERROR_CATEGORY_PARAMETERS)
-            .jsonPath(JSONPATH_BODY_ERRORS).isArray()
-            .jsonPath(JSONPATH_BODY_ERRORS_0).isEqualTo(EXPECTED_ERROR_ADDRESS_IS_MANDATORY)
-            .jsonPath(JSONPATH_BODY_ERRORS_1).isEqualTo(EXPECTED_ERROR_NAME_USER_IS_MANDATORY)
+            .expectBody(String::class.java)
+            .consumeWith { response -> assertThat(response.responseBody).isEqualTo(HTTP_400_BAD_REQUEST_RESPONSE) }
     }
 
     @Test
@@ -199,13 +194,8 @@ class UserControllerTest {
             .bodyValue(jsonPayload)
             .exchange()
             .expectStatus().isBadRequest()
-            .expectBody()
-            .jsonPath(JSONPATH_BODY_TITLE).isEqualTo(TITLE_BAD_REQUEST_ON_PAYLOAD)
-            .jsonPath(JSONPATH_BODY_DETAIL).isEqualTo(TITLE_VALIDATION_ERROR_ON_SUPPLIED_PAYLOAD)
-            .jsonPath(JSONPATH_BODY_ERROR_CATEGORY).isEqualTo(ERROR_CATEGORY_PARAMETERS)
-            .jsonPath(JSONPATH_BODY_ERRORS).isArray()
-            .jsonPath(JSONPATH_BODY_ERRORS_0).isEqualTo(EXPECTED_ERROR_ADDRESS_IS_MANDATORY)
-            .jsonPath(JSONPATH_BODY_ERRORS_1).isEqualTo(EXPECTED_ERROR_NAME_USER_IS_MANDATORY)
+            .expectBody(String::class.java)
+            .consumeWith { response -> assertThat(response.responseBody).isEqualTo(HTTP_400_BAD_REQUEST_RESPONSE) }
     }
 
     @Test
@@ -290,9 +280,11 @@ class UserControllerTest {
     @Test
     @DisplayName("Verify we can create a new record.")
     fun shouldCreateNewRecord() {
-        val user = buildUserWithIDSet()
+        var user = buildUserWithIDSet()
 
-        `when`(userService.insert(any())).thenReturn(user)
+        // NOTE: Mockito used in Kotlin cannot use the ArgumentMatchers.any() returns NPE
+        // Needs more thought.
+        `when`(userService.insert(user)).thenReturn(user)
 
         client.post()
             .uri(USER_CONTROLLER_BASE_PATH)
@@ -305,7 +297,7 @@ class UserControllerTest {
             .expectBody(User::class.java)
             .consumeWith { response -> assertThat(response.responseBody).isEqualTo(user) }
 
-        verify(userService).insert(any())
+        verify(userService).insert(user)
     }
 
     @Test
@@ -374,13 +366,8 @@ class UserControllerTest {
             .bodyValue(jsonPayload)
             .exchange()
             .expectStatus().isBadRequest()
-            .expectBody()
-            .jsonPath(JSONPATH_BODY_TITLE).isEqualTo(TITLE_BAD_REQUEST_ON_PAYLOAD)
-            .jsonPath(JSONPATH_BODY_DETAIL).isEqualTo(TITLE_VALIDATION_ERROR_ON_SUPPLIED_PAYLOAD)
-            .jsonPath(JSONPATH_BODY_ERROR_CATEGORY).isEqualTo(ERROR_CATEGORY_PARAMETERS)
-            .jsonPath(JSONPATH_BODY_ERRORS).isArray()
-            .jsonPath(JSONPATH_BODY_ERRORS_0).isEqualTo(EXPECTED_ERROR_ADDRESS_IS_MANDATORY)
-            .jsonPath(JSONPATH_BODY_ERRORS_1).isEqualTo(EXPECTED_ERROR_NAME_USER_IS_MANDATORY)
+            .expectBody(String::class.java)
+            .consumeWith { response -> assertThat(response.responseBody).isEqualTo(HTTP_400_BAD_REQUEST_RESPONSE) }
     }
 
     @Test
@@ -401,13 +388,8 @@ class UserControllerTest {
             .bodyValue(jsonPayload)
             .exchange()
             .expectStatus().isBadRequest()
-            .expectBody()
-            .jsonPath(JSONPATH_BODY_TITLE).isEqualTo(TITLE_BAD_REQUEST_ON_PAYLOAD)
-            .jsonPath(JSONPATH_BODY_DETAIL).isEqualTo(TITLE_VALIDATION_ERROR_ON_SUPPLIED_PAYLOAD)
-            .jsonPath(JSONPATH_BODY_ERROR_CATEGORY).isEqualTo(ERROR_CATEGORY_PARAMETERS)
-            .jsonPath(JSONPATH_BODY_ERRORS).isArray()
-            .jsonPath(JSONPATH_BODY_ERRORS_0).isEqualTo(EXPECTED_ERROR_ADDRESS_IS_MANDATORY)
-            .jsonPath(JSONPATH_BODY_ERRORS_1).isEqualTo(EXPECTED_ERROR_NAME_USER_IS_MANDATORY)
+            .expectBody(String::class.java)
+            .consumeWith { response -> assertThat(response.responseBody).isEqualTo(HTTP_400_BAD_REQUEST_RESPONSE) }
     }
 
     @Test
@@ -543,7 +525,9 @@ class UserControllerTest {
     fun whenAllPayloadIsSetButIdNotFoundThenReturn404ErrorCode() {
         val user = buildUserWithIDSet()
 
-        `when`(userService.update(any())).thenReturn(java.lang.Boolean.FALSE)
+        // NOTE: Mockito used in Kotlin cannot use the ArgumentMatchers.any() returns NPE
+        // Needs more thought.
+        `when`(userService.update(user)).thenReturn(java.lang.Boolean.FALSE)
 
         client.patch()
             .uri(USER_CONTROLLER_BASE_PATH)
@@ -558,7 +542,7 @@ class UserControllerTest {
             .jsonPath(JSONPATH_DETAIL).isEqualTo(USER_WITH_ID + USER_ID_UUID + NOT_FOUND)
             .jsonPath(JSONPATH_ERROR_CATEGORY).isEqualTo(ERROR_CATEGORY_GENERIC)
 
-        verify(userService).update(any())
+        verify(userService).update(user)
     }
 
     @Test
@@ -566,7 +550,9 @@ class UserControllerTest {
     fun whenAllPayloadIsSetButIdFoundThenReturnUserUpdatedRecord() {
         val user = buildUserWithIDSet()
 
-        `when`(userService.update(any())).thenReturn(java.lang.Boolean.TRUE)
+        // NOTE: Mockito used in Kotlin cannot use the ArgumentMatchers.any() returns NPE
+        // Needs more thought.
+        `when`(userService.update(user)).thenReturn(java.lang.Boolean.TRUE)
 
         client.patch()
             .uri(USER_CONTROLLER_BASE_PATH)
@@ -579,7 +565,7 @@ class UserControllerTest {
             .expectBody(User::class.java)
             .consumeWith { response -> assertThat(response.responseBody).isEqualTo(user) }
 
-        verify(userService).update(any())
+        verify(userService).update(user)
     }
 
     @Test

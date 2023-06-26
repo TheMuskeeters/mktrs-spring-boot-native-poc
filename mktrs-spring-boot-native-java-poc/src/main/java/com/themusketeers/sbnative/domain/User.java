@@ -27,6 +27,6 @@ import jakarta.validation.constraints.NotEmpty;
     "address"
 })
 public record User(String id,
-                   @NotEmpty(message = "Name User is mandatory") String name,
-                   @NotEmpty(message = "Address is mandatory") String address) {
+                   @NotEmpty(message = "User Name is mandatory") String name,
+                   @NotEmpty(message = "User Address is mandatory") String address) {
 }
