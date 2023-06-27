@@ -1,0 +1,16 @@
+
+## If you need to connect to a non-cluster Redis, use the following.
+spring:
+  redis:
+    password: ''
+    host: localhost
+    port: '6379'
+
+## Use this property when we connect to a clustered Redis.
+# See org.springframework.data.redis.connection.RedisClusterConfiguration
+#spring:
+#  redis:
+#    cluster:
+#      nodes: redis://abcyy.cache.amazonaws.com:6379
+#      timeout: '5'
+#      max-redirects: '3'

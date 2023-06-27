@@ -20,6 +20,8 @@ object GlobalConstants {
     const val USER_CONTROLLER_PATCH_USER_INFO = "PATCH api/v1/users -> Update user."
     const val USER_CONTROLLER_DELETE_USER_INFO = "DELETE api/v1/users/{userId} -> Remove user."
     const val COLON_SPACE_DELIMITER = ": "
+    const val DOT = "."
+    const val WILD_CARD_ASTERISK = "*"
 
     const val INT_ZERO = 0
     const val INT_ONE = 1
