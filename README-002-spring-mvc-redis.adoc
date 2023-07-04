@@ -1,0 +1,6 @@
+= mktrs-spring-boot-native-poc (0002-spring-mvc-redis)
+
+
+= References
+
+* https://github.com/kasramp/spring-data-redis-example-kotlin[Spring Data Redis Example with Kotlin^]
