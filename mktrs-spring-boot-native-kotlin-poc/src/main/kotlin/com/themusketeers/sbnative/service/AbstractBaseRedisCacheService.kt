@@ -34,6 +34,7 @@ open class AbstractBaseRedisCacheService<K, V>(protected val cacheName: String, 
     protected fun fillCacheMapRegionUsing(keys: List<K>, values: List<V>): HashMap<K, V> {
         // Keys must have the 'Cache Region' removed.
         val keysWithNoRegion = removeCacheRegion(keys)
+
         return fillCacheMapUsing(keysWithNoRegion, values)
     }
 
@@ -49,6 +50,7 @@ open class AbstractBaseRedisCacheService<K, V>(protected val cacheName: String, 
      */
     protected fun fillCacheMapUsing(keys: List<K>, values: List<V>): HashMap<K, V> {
         val map = LinkedHashMap<K, V>()
+
         IntStream.range(INT_ZERO, keys.size)
             .forEach { keyPos: Int ->
                 val key = keys[keyPos]
@@ -57,6 +59,7 @@ open class AbstractBaseRedisCacheService<K, V>(protected val cacheName: String, 
                     map[key] = value
                 }
             }
+
         return map
     }
 
@@ -92,7 +95,9 @@ open class AbstractBaseRedisCacheService<K, V>(protected val cacheName: String, 
      */
     protected fun transformKeyForRegionInMap(map: Map<K, V>): Map<K, V> {
         val newMap = LinkedHashMap<K, V>()
+
         map.forEach { (k: K, v: V) -> newMap[buildRegionKey(k)] = v }
+
         return newMap
     }
 
@@ -109,6 +114,7 @@ open class AbstractBaseRedisCacheService<K, V>(protected val cacheName: String, 
                 return key.substring(cacheName.length + INT_ONE) as K
             }
         }
+
         return key
     }
 
@@ -126,6 +132,7 @@ open class AbstractBaseRedisCacheService<K, V>(protected val cacheName: String, 
                 return (cacheName + DOT + key) as K
             }
         }
+
         return key
     }
 
@@ -143,12 +150,15 @@ open class AbstractBaseRedisCacheService<K, V>(protected val cacheName: String, 
      */
     protected fun verifyKeyPattern(keyPattern: String?): String {
         var keyPattern = keyPattern
+
         if (null == keyPattern) {
             keyPattern = StringUtils.EMPTY
         }
+
         if (!keyPattern.contains(WILD_CARD_ASTERISK)) {
             keyPattern += WILD_CARD_ASTERISK
         }
+
         return keyPattern
     }
 

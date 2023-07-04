@@ -25,8 +25,7 @@ import org.springframework.data.redis.core.RedisTemplate
  *
  * @see RedisCacheService
  */
-class RedisRegionCacheService<K, V>
-    (cacheName: String, redisTemplate: RedisTemplate<K, V>) : AbstractBaseRedisCacheService<K, V>(cacheName, redisTemplate), RedisCacheService<K, V> {
+class RedisRegionCacheService<K, V>(cacheName: String, redisTemplate: RedisTemplate<K, V>) : AbstractBaseRedisCacheService<K, V>(cacheName, redisTemplate), RedisCacheService<K, V> {
     override fun exists(key: K): Boolean {
         return redisTemplate.hasKey(buildRegionKey(key))
     }

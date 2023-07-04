@@ -4,10 +4,11 @@
  -----------------------------------------------------------------------------*/
 package com.themusketeers.sbnative.service
 
+import com.themusketeers.sbnative.common.consts.GlobalConstants.INT_ZERO
 import com.themusketeers.sbnative.service.intr.RedisCacheService
+import java.util.Map.Entry
 import java.util.function.Function
 import java.util.stream.Collectors
-import java.util.Map.Entry
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.data.redis.core.ScanOptions
 
@@ -22,8 +23,7 @@ import org.springframework.data.redis.core.ScanOptions
  * @see AbstractBaseRedisCacheService
  * @see RedisCacheService
  */
-class RedisHashCacheService<K, V>(cacheName: String, redisTemplate: RedisTemplate<K, V>)
-    : AbstractBaseRedisCacheService<K, V>(cacheName, redisTemplate), RedisCacheService<K, V> {
+class RedisHashCacheService<K : Any, V : Any>(cacheName: String, redisTemplate: RedisTemplate<K, V>) : AbstractBaseRedisCacheService<K, V>(cacheName, redisTemplate), RedisCacheService<K, V> {
     override fun exists(key: K): Boolean {
         return redisTemplate.opsForHash<Any, Any>().hasKey(cacheName as K, key)
     }
