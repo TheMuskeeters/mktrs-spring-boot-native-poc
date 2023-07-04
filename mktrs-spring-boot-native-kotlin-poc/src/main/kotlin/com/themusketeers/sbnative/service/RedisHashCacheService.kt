@@ -1,4 +1,8 @@
-/*----------------------------------------------------------------------------*/ /* Source File:   REDISHASHCACHESERVICE.JAVA                                  */ /* Copyright (c), 2023 The Musketeers                                         */ /*----------------------------------------------------------------------------*/ /*-----------------------------------------------------------------------------
+/*----------------------------------------------------------------------------*/
+/* Source File:   REDISHASHCACHESERVICE.JAVA                                  */
+/* Copyright (c), 2023 The Musketeers                                         */
+/*----------------------------------------------------------------------------*/
+/*-----------------------------------------------------------------------------
  History
  Jun.27/2023  COQ  File created.
  -----------------------------------------------------------------------------*/
@@ -19,36 +23,20 @@ import org.springframework.data.redis.core.ScanOptions
  * @param <V> Indicates the Redis Value type to work with.
  * @param cacheName     Represents the 'Cache Hash' name. It is used as part of a key such as @{code item}.
  * @param redisTemplate redisTemplate References the abstraction to communicate to a Redis server.
- * @author COQ - Carlos Adolfo Ortiz Q.
  * @see AbstractBaseRedisCacheService
  * @see RedisCacheService
+ * @author COQ - Carlos Adolfo Ortiz Q.
  */
-class RedisHashCacheService<K : Any, V : Any>(cacheName: String, redisTemplate: RedisTemplate<K, V>) : AbstractBaseRedisCacheService<K, V>(cacheName, redisTemplate), RedisCacheService<K, V> {
-    override fun exists(key: K): Boolean {
-        return redisTemplate.opsForHash<Any, Any>().hasKey(cacheName as K, key)
-    }
+class RedisHashCacheService<K, V>(cacheName: String, redisTemplate: RedisTemplate<K, V>) : AbstractBaseRedisCacheService<K, V>(cacheName, redisTemplate), RedisCacheService<K, V> {
 
-    override fun count(): Long {
-        return redisTemplate.opsForHash<Any, Any>().size(cacheName as K)
-    }
+    override fun exists(key: K): Boolean = redisTemplate.opsForHash<Any, Any>().hasKey(cacheName as K, key as Any)
+    override fun count(): Long = redisTemplate.opsForHash<Any, Any>().size(cacheName as K)
+    override fun count(keyPattern: String?): Long = multiRetrieveList(keyPattern).size.toLong()
+    override fun insert(key: K, info: V) = redisTemplate.opsForHash<Any, Any>().put(cacheName as K, key as Any, info as Any)
+    override fun multiInsert(map: Map<K, V>) = redisTemplate.opsForHash<Any, Any>().putAll(cacheName as K, map)
+    override fun retrieve(key: K): V = redisTemplate.opsForHash<Any, Any>().get(cacheName as K, key as Any) as V
 
-    override fun count(keyPattern: String): Long {
-        return java.lang.Long.valueOf(multiRetrieveList(keyPattern).size.toLong())
-    }
-
-    override fun insert(key: K, info: V) {
-        redisTemplate.opsForHash<Any, Any>().put(cacheName as K, key, info)
-    }
-
-    override fun multiInsert(map: Map<K, V>) {
-        redisTemplate.opsForHash<Any, Any>().putAll(cacheName as K, map)
-    }
-
-    override fun retrieve(key: K): V {
-        return redisTemplate.opsForHash<Any, Any>().get(cacheName as K, key) as V
-    }
-
-    override fun multiRetrieveKeyList(keyPattern: String): List<K> {
+    override fun multiRetrieveKeyList(keyPattern: String?): List<K> {
         val hOps = redisTemplate.opsForHash<Any, Any>()
         val scanOptions = ScanOptions.scanOptions().match(verifyKeyPattern(keyPattern)).build()
 
@@ -60,7 +48,7 @@ class RedisHashCacheService<K : Any, V : Any>(cacheName: String, redisTemplate: 
         }
     }
 
-    override fun multiRetrieveList(keyPattern: String): List<V> {
+    override fun multiRetrieveList(keyPattern: String?): List<V> {
         val hOps = redisTemplate.opsForHash<Any, Any>()
         val scanOptions = ScanOptions.scanOptions().match(verifyKeyPattern(keyPattern)).build()
 
@@ -74,7 +62,7 @@ class RedisHashCacheService<K : Any, V : Any>(cacheName: String, redisTemplate: 
 
     override fun multiRetrieveList(keys: Collection<K>): List<V> {
         return redisTemplate
-            .opsForHash<Any?, Any>()
+            .opsForHash<Any, Any>()
             .multiGet(
                 cacheName as K,
                 keys.stream()
@@ -86,13 +74,12 @@ class RedisHashCacheService<K : Any, V : Any>(cacheName: String, redisTemplate: 
             .collect(Collectors.toList())
     }
 
-    override fun multiRetrieveMap(): Map<K, V> {
-        return redisTemplate.opsForHash<Any, Any>().entries(cacheName as K) as Map<K, V>
-    }
+    override fun multiRetrieveMap(): Map<K, V> = redisTemplate.opsForHash<Any, Any>().entries(cacheName as K) as Map<K, V>
 
-    override fun multiRetrieveMap(keyPattern: String): Map<K, V> {
+    override fun multiRetrieveMap(keyPattern: String?): Map<K, V> {
         val hOps = redisTemplate.opsForHash<Any, Any>()
         val scanOptions = ScanOptions.scanOptions().match(verifyKeyPattern(keyPattern)).build()
+
         hOps.scan(cacheName as K, scanOptions).use { mapCursor ->
             return mapCursor
                 .stream()
@@ -101,18 +88,7 @@ class RedisHashCacheService<K : Any, V : Any>(cacheName: String, redisTemplate: 
         }
     }
 
-    override fun multiRetrieveMap(keys: Collection<K>): Map<K, V> {
-        return fillCacheMapUsing(
-            ArrayList(keys),
-            multiRetrieveList(keys)
-        )
-    }
-
-    override fun delete(key: K): Boolean {
-        return redisTemplate.opsForHash<Any, Any>().delete(cacheName as K, key) != INT_ZERO.toLong()
-    }
-
-    override fun delete(keys: Collection<K>): Long {
-        return redisTemplate.opsForHash<Any, Any>().delete(cacheName as K, *keys.toTypedArray())
-    }
+    override fun multiRetrieveMap(keys: Collection<K>): Map<K, V> = fillCacheMapUsing(ArrayList(keys), multiRetrieveList(keys))
+    override fun delete(key: K): Boolean = redisTemplate.opsForHash<Any, Any>().delete(cacheName as K, key) != INT_ZERO.toLong()
+    override fun delete(keys: Collection<K>): Long = redisTemplate.opsForHash<Any, Any>().delete(cacheName as K, *keys.toTypedArray())
 }

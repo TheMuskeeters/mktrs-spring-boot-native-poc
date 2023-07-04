@@ -1,4 +1,8 @@
-/*----------------------------------------------------------------------------*/ /* Source File:   REDISREGIONCACHESERVICE.JAVA                                */ /* Copyright (c), 2023 The Musketeers                                         */ /*----------------------------------------------------------------------------*/ /*-----------------------------------------------------------------------------
+/*----------------------------------------------------------------------------*/
+/* Source File:   REDISREGIONCACHESERVICE.JAVA                                */
+/* Copyright (c), 2023 The Musketeers                                         */
+/*----------------------------------------------------------------------------*/
+/*-----------------------------------------------------------------------------
  History
  Jun.27/2023  COQ  File created.
  -----------------------------------------------------------------------------*/
@@ -19,80 +23,55 @@ import org.springframework.data.redis.core.RedisTemplate
  * @param <V> Indicates the Redis Value type to work with.
  * @param cacheName     Represents the 'Cache Region' name. It is used as part of a key such as `myregion.item`.
  * @param redisTemplate References the abstraction to communicate to a Redis server.
- * @author COQ - Carlos Adolfo Ortiz Q.
  * @see AbstractBaseRedisCacheService
  * @see org.springframework.data.redis.core.RedisTemplate
+ * @author COQ - Carlos Adolfo Ortiz Q.
  *
  * @see RedisCacheService
  */
 class RedisRegionCacheService<K, V>(cacheName: String, redisTemplate: RedisTemplate<K, V>) : AbstractBaseRedisCacheService<K, V>(cacheName, redisTemplate), RedisCacheService<K, V> {
-    override fun exists(key: K): Boolean {
-        return redisTemplate.hasKey(buildRegionKey(key))
-    }
 
-    override fun count(): Long {
-        return count(StringUtils.EMPTY)
-    }
-
-    override fun count(keyPattern: String): Long {
-        return java.lang.Long.valueOf(CollectionUtils.emptyIfNull(redisTemplate.keys(buildRegionKeyPattern(keyPattern))).size.toLong())
-    }
-
-    override fun insert(key: K, info: V) {
-        redisTemplate.opsForValue()[buildRegionKey(key)] = info
-    }
-
-    override fun multiInsert(map: Map<K, V>) {
-        redisTemplate.opsForValue().multiSet(transformKeyForRegionInMap(map))
-    }
-
-    override fun retrieve(key: K): V {
-        return redisTemplate.opsForValue().get(buildRegionKey(key))
-    }
-
-    override fun multiRetrieveKeyList(keyPattern: String): List<K> {
-        return removeCacheRegion(
+    override fun exists(key: K): Boolean = redisTemplate.hasKey(buildRegionKey(key))
+    override fun count(): Long = count(StringUtils.EMPTY)
+    override fun count(keyPattern: String?): Long = CollectionUtils.emptyIfNull(redisTemplate.keys(buildRegionKeyPattern(keyPattern))).size.toLong()
+    override fun insert(key: K, info: V) = redisTemplate.opsForValue().set(buildRegionKey(key), info)
+    override fun multiInsert(map: Map<K, V>) = redisTemplate.opsForValue().multiSet(transformKeyForRegionInMap(map))
+    override fun retrieve(key: K): V? = redisTemplate.opsForValue().get(buildRegionKey(key) as Any)
+    override fun multiRetrieveKeyList(keyPattern: String?): List<K> =
+        removeCacheRegion(
             CollectionUtils.emptyIfNull(redisTemplate.keys(buildRegionKeyPattern(keyPattern)))
                 .stream()
                 .collect(Collectors.toList())
         )
-    }
 
-    override fun multiRetrieveList(keyPattern: String): List<V> {
-        return redisTemplate
+    override fun multiRetrieveList(keyPattern: String?): List<V> =
+        redisTemplate
             .opsForValue()
             .multiGet(CollectionUtils.emptyIfNull(redisTemplate.keys(buildRegionKeyPattern(keyPattern))))!!
-    }
 
-    override fun multiRetrieveList(keys: Collection<K>): List<V> {
-        return redisTemplate
+    override fun multiRetrieveList(keys: Collection<K>): List<V> =
+        redisTemplate
             .opsForValue()
             .multiGet(transformKeyForRegionInList(keys))!!
-    }
 
-    override fun multiRetrieveMap(): Map<K, V> {
-        return multiRetrieveMap(StringUtils.EMPTY)
-    }
+    override fun multiRetrieveMap(): Map<K, V> = multiRetrieveMap(StringUtils.EMPTY)
 
-    override fun multiRetrieveMap(keyPattern: String): Map<K, V> {
+    override fun multiRetrieveMap(keyPattern: String?): Map<K, V> {
         val keys = CollectionUtils.emptyIfNull(redisTemplate.keys(buildRegionKeyPattern(keyPattern)))
             .stream()
             .collect(Collectors.toList())
         val values = redisTemplate.opsForValue().multiGet(keys)
+
         return fillCacheMapRegionUsing(keys, values!!)
     }
 
     override fun multiRetrieveMap(keys: Collection<K>): Map<K, V> {
-        val keysInRegion: List<K?> = transformKeyForRegionInList(keys)
+        val keysInRegion: List<K> = transformKeyForRegionInList(keys)
         val values = multiRetrieveList(keys)
+
         return fillCacheMapRegionUsing(keysInRegion, values)
     }
 
-    override fun delete(key: K): Boolean {
-        return redisTemplate.delete(buildRegionKey(key))
-    }
-
-    override fun delete(keys: Collection<K>): Long {
-        return redisTemplate.delete(transformKeyForRegionInList(keys))
-    }
+    override fun delete(key: K): Boolean = redisTemplate.delete(buildRegionKey(key))
+    override fun delete(keys: Collection<K>): Long = redisTemplate.delete(transformKeyForRegionInList(keys))
 }

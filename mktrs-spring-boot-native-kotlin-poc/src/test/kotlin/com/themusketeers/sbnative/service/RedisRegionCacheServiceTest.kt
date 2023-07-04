@@ -430,7 +430,7 @@ class RedisRegionCacheServiceTest {
         return keySet
     }
 
-    private fun expectedKeyValueMap(): Map<String, String?> {
+    private fun expectedKeyValueMap(): Map<String, String> {
         return createKeyValueMap()
     }
 
