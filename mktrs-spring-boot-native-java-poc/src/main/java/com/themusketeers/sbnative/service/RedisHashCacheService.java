@@ -78,7 +78,7 @@ public class RedisHashCacheService<K, V> extends AbstractBaseRedisCacheService<K
                 mapCursor
                     .stream()
                     .map(cursorItem -> ((Map.Entry<K, V>) cursorItem).getKey())
-                    .collect(Collectors.toList());
+                    .toList();
         }
     }
 
@@ -92,7 +92,7 @@ public class RedisHashCacheService<K, V> extends AbstractBaseRedisCacheService<K
                 mapCursor
                     .stream()
                     .map(cursorItem -> ((Map.Entry<K, V>) cursorItem).getValue())
-                    .collect(Collectors.toList());
+                    .toList();
         }
     }
 
@@ -104,11 +104,11 @@ public class RedisHashCacheService<K, V> extends AbstractBaseRedisCacheService<K
                 (K) cacheName,
                 keys.stream()
                     .map(key -> (Object) key)
-                    .collect(Collectors.toList())
+                    .toList()
             )
             .stream()
             .map(value -> (V) value)
-            .collect(Collectors.toList());
+            .toList();
     }
 
     @Override

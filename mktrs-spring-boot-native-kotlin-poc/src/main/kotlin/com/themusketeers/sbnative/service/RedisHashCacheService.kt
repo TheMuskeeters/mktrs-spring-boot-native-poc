@@ -10,8 +10,7 @@ package com.themusketeers.sbnative.service
 
 import com.themusketeers.sbnative.common.consts.GlobalConstants.INT_ZERO
 import com.themusketeers.sbnative.service.intr.RedisCacheService
-import java.util.Map.Entry
-import java.util.function.Function
+import kotlin.collections.Map.Entry
 import java.util.stream.Collectors
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.data.redis.core.ScanOptions
@@ -44,7 +43,7 @@ class RedisHashCacheService<K, V>(cacheName: String, redisTemplate: RedisTemplat
             return mapCursor
                 .stream()
                 .map<K>(Function<Entry<Any, Any>, K> { cursorItem: Entry<Any, Any> -> (cursorItem as Entry<K, V>).key })
-                .collect(Collectors.toList<K>())
+                .toList()
         }
     }
 
@@ -56,7 +55,7 @@ class RedisHashCacheService<K, V>(cacheName: String, redisTemplate: RedisTemplat
             return mapCursor
                 .stream()
                 .map<V>(Function<Entry<Any, Any>, V> { cursorItem: Entry<Any, Any> -> (cursorItem as Entry<K, V>).value })
-                .collect(Collectors.toList<V>())
+                .toList()
         }
     }
 
@@ -67,11 +66,11 @@ class RedisHashCacheService<K, V>(cacheName: String, redisTemplate: RedisTemplat
                 cacheName as K,
                 keys.stream()
                     .map { key: K -> key as Any }
-                    .collect(Collectors.toList())
+                    .toList()
             )
             .stream()
             .map { value: Any -> value as V }
-            .collect(Collectors.toList())
+            .toList()
     }
 
     override fun multiRetrieveMap(): Map<K, V> = redisTemplate.opsForHash<Any, Any>().entries(cacheName as K) as Map<K, V>
@@ -84,7 +83,7 @@ class RedisHashCacheService<K, V>(cacheName: String, redisTemplate: RedisTemplat
             return mapCursor
                 .stream()
                 .map<Map.Entry<K, V>?>(Function<Map.Entry<Any, Any>, Entry<K, V>?> { cursorItem: Entry<Any, Any>? -> cursorItem as Entry<K, V>? })
-                .collect<Map<K, V>, Any>(Collectors.toMap<Entry<K, V>?, K, V>(Function<Entry<K, V>?, K> { java.util.Map.Entry.key }, Function<Entry<K, V>?, V> { java.util.Map.Entry.value }))
+                .collect<Map<K, V>, Any>(Collectors.toMap<Entry<K, V>?, K, V>(Function<Entry<K, V>?, K> { Entry.key }, Function<Entry<K, V>?, V> { java.util.Map.Entry.value }))
         }
     }
 
