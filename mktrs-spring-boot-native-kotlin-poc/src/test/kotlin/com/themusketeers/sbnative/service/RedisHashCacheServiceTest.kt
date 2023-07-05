@@ -263,15 +263,11 @@ internal class RedisHashCacheServiceTest {
     @DisplayName("Verify we are able to retrieve a map containing the key/value pairs from Redis using a collection containing the keys to look for, but some keys are not found, whose values are null in the response from Redis but filter out by the service.")
     fun givenListOfKeysThenRetrieveAMapWithKeyValueDataFromRedisDiscardingNotFoundKeys() {
         val multipleKeys = assignMultipleKeys()
-        val multipleKeysTransformed = multipleKeys.stream()
-            .map { key: String -> key as Any }
-            .toList()
         val multipleValues = assignMultipleValuesWithNullAsObjectList()
         val expectedKeyValueMap = expectedKeyValueExcludeNullItemMap()
 
         `when`(redisTemplate.opsForHash<Any, Any>()).thenReturn(hashOperations)
-        //`when`(redisHashCacheService.multiRetrieveList(multipleKeys)).thenReturn(multipleValues as List<String>)
-        `when`(hashOperations.multiGet(REDIS_HASH, multipleKeysTransformed)).thenReturn(multipleValues)
+        `when`(hashOperations.multiGet(anyString(), anyList())).thenReturn(multipleValues)
 
         val retrievedKeyValueMap = redisHashCacheService.multiRetrieveMap(multipleKeys)
 
@@ -280,8 +276,8 @@ internal class RedisHashCacheServiceTest {
             .hasSize(INT_TWO)
             .containsExactlyInAnyOrderEntriesOf(expectedKeyValueMap)
 
-        //verify(redisTemplate).opsForHash<Any, Any>()
-        //verify(hashOperations).multiGet(REDIS_HASH, multipleKeys)
+        verify(redisTemplate).opsForHash<Any, Any>()
+        verify(hashOperations).multiGet(anyString(), anyList())
     }
 
     @Test

@@ -68,7 +68,7 @@ class RedisHashCacheService<K, V>(cacheName: String, redisTemplate: RedisTemplat
                     .toList()
             )
             .stream()
-            .map { value: Any -> value as V }
+            .map { value  -> value as V }
             .toList()
     }
 
