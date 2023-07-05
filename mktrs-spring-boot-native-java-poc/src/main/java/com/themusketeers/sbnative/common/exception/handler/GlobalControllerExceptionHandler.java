@@ -10,16 +10,19 @@ package com.themusketeers.sbnative.common.exception.handler;
 
 import static com.themusketeers.sbnative.common.consts.ControllerExceptionHandlerConstants.ERROR_CATEGORY_GENERIC;
 import static com.themusketeers.sbnative.common.consts.ControllerExceptionHandlerConstants.ERROR_CATEGORY_PARAMETERS;
+import static com.themusketeers.sbnative.common.consts.ControllerExceptionHandlerConstants.MOVIE_RECORD_NOT_FOUND_ERROR_URL;
 import static com.themusketeers.sbnative.common.consts.ControllerExceptionHandlerConstants.PROPERTY_ERRORS;
 import static com.themusketeers.sbnative.common.consts.ControllerExceptionHandlerConstants.PROPERTY_ERROR_CATEGORY;
 import static com.themusketeers.sbnative.common.consts.ControllerExceptionHandlerConstants.PROPERTY_TIMESTAMP;
 import static com.themusketeers.sbnative.common.consts.ControllerExceptionHandlerConstants.TITLE_BAD_REQUEST_ON_PAYLOAD;
+import static com.themusketeers.sbnative.common.consts.ControllerExceptionHandlerConstants.TITLE_MOVIE_RECORD_NOT_FOUND;
 import static com.themusketeers.sbnative.common.consts.ControllerExceptionHandlerConstants.TITLE_USER_NOT_FOUND;
 import static com.themusketeers.sbnative.common.consts.ControllerExceptionHandlerConstants.TITLE_VALIDATION_ERROR_ON_SUPPLIED_PAYLOAD;
 import static com.themusketeers.sbnative.common.consts.ControllerExceptionHandlerConstants.USER_NOT_FOUND_ERROR_URL;
 import static com.themusketeers.sbnative.common.consts.GlobalConstants.COLON_SPACE_DELIMITER;
 
 import com.themusketeers.sbnative.common.exception.ApiException;
+import com.themusketeers.sbnative.common.exception.MovieRecordNotFoundException;
 import com.themusketeers.sbnative.common.exception.UserNotFoundException;
 import java.net.URI;
 import java.time.Instant;
@@ -79,6 +82,22 @@ public class GlobalControllerExceptionHandler extends ResponseEntityExceptionHan
         return ErrorResponse.builder(e, HttpStatus.NOT_FOUND, e.getMessage())
             .title(TITLE_USER_NOT_FOUND)
             .type(URI.create(USER_NOT_FOUND_ERROR_URL))
+            .property(PROPERTY_ERROR_CATEGORY, ERROR_CATEGORY_GENERIC)
+            .property(PROPERTY_TIMESTAMP, Instant.now())
+            .build();
+    }
+
+    /**
+     * Reports as response when the exception is raised indicating an 'Movie Record' was not found.
+     *
+     * @param e Instance to the whole problem.
+     * @return An instance to the detailed problem using RFC 7807 error response.
+     */
+    @ExceptionHandler(MovieRecordNotFoundException.class)
+    public ErrorResponse handleMovieRecordNotFoundException(MovieRecordNotFoundException e) {
+        return ErrorResponse.builder(e, HttpStatus.NOT_FOUND, e.getMessage())
+            .title(TITLE_MOVIE_RECORD_NOT_FOUND)
+            .type(URI.create(MOVIE_RECORD_NOT_FOUND_ERROR_URL))
             .property(PROPERTY_ERROR_CATEGORY, ERROR_CATEGORY_GENERIC)
             .property(PROPERTY_TIMESTAMP, Instant.now())
             .build();

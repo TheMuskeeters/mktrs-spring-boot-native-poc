@@ -16,6 +16,7 @@ package com.themusketeers.sbnative.common.consts;
  */
 public class ExceptionConstants {
     public static final String USER_WITH_ID = "User with id=[";
+    public static final String MOVIE_RECORD_WITH_ID = "Movie Record with id=[";
     public static final String NOT_FOUND = "] not found";
 
     /**
