@@ -16,7 +16,7 @@ import com.themusketeers.sbnative.common.consts.GlobalConstants.LONG_THREE
 import com.themusketeers.sbnative.common.consts.GlobalConstants.LONG_ZERO
 import java.util.Arrays
 import java.util.LinkedList
-import java.util.Map.Entry
+import kotlin.collections.Map.Entry
 import java.util.Queue
 import java.util.Stack
 import org.assertj.core.api.Assertions.assertThat
@@ -179,12 +179,13 @@ internal class RedisHashCacheServiceTest {
     @DisplayName("Verify we are able to retrieve a bulk of data from Redis given a key pattern.")
     fun givenAKeyPatternThenRetrieveAListOfStringFromRedis(keyPattern: String?) {
         val multipleValues = assignMultipleValues()
-        val cursor: Cursor<Entry<Any, Any?>> = buildScanCursor()
+        val cursor = buildScanCursor()
 
-        `when`(redisTemplate.opsForHash<Any, Any?>()).thenReturn(hashOperations)
-        `when`<Cursor<Entry<Any, Any?>>>(hashOperations.scan(anyString(), any())).thenReturn(cursor)
+        `when`(redisTemplate.opsForHash<Any, Any>()).thenReturn(hashOperations)
+        `when`(hashOperations.scan(anyString(), any())).thenReturn(cursor)
 
         val retrievedStringList = redisHashCacheService.multiRetrieveList(keyPattern)
+
         assertThat<String>(retrievedStringList)
             .isNotNull()
             .hasSize(INT_THREE)
@@ -206,7 +207,7 @@ internal class RedisHashCacheServiceTest {
 
         val retrievedStringList = redisHashCacheService.multiRetrieveList(multipleKeys)
 
-        assertThat<String>(retrievedStringList)
+        assertThat(retrievedStringList)
             .isNotNull()
             .hasSize(INT_THREE)
             .containsExactlyInAnyOrderElementsOf(multipleValuesExpected)
@@ -221,10 +222,10 @@ internal class RedisHashCacheServiceTest {
     @DisplayName("Verify we are able to retrieve a map containing the key/value pairs from Redis using a key pattern.")
     fun givenAKeyPatternThenRetrieveAMapWithKeyValueDataFromRedis(keyPattern: String?) {
         val expectedKeyValueMap = expectedKeyValueMap()
-        val cursor: Cursor<Entry<Any, Any?>> = buildScanCursor()
+        val cursor = buildScanCursor()
 
-        `when`(redisTemplate.opsForHash<Any, Any?>()).thenReturn(hashOperations)
-        `when`<Cursor<Entry<Any, Any>>>(hashOperations.scan(anyString(), any())).thenReturn(cursor)
+        `when`(redisTemplate.opsForHash<Any, Any>()).thenReturn(hashOperations)
+        `when`(hashOperations.scan(anyString(), any())).thenReturn(cursor)
 
         val retrievedStringMap = redisHashCacheService.multiRetrieveMap(keyPattern)
 
@@ -368,10 +369,10 @@ internal class RedisHashCacheServiceTest {
     @Test
     @DisplayName("Verify we retrieve selected items in the Cache Hash")
     fun shouldCountSelectedItemsInCacheHash() {
-        val cursor: Cursor<Entry<Any, Any?>> = buildScanCursor()
+        val cursor = buildScanCursor()
 
-        `when`(redisTemplate.opsForHash<Any, Any?>()).thenReturn(hashOperations)
-        `when`<Cursor<Entry<Any, Any?>>>(hashOperations.scan(anyString(), any())).thenReturn(cursor)
+        `when`(redisTemplate.opsForHash<Any, Any>()).thenReturn(hashOperations)
+        `when`(hashOperations.scan(anyString(), any())).thenReturn(cursor)
 
         val numItems = redisHashCacheService.count(KEY_PATTERN_AA)
 
@@ -494,7 +495,8 @@ internal class RedisHashCacheServiceTest {
             if (cursors == null) {
                 cursors = Stack()
             }
-            cursors.push(cursorId)
+
+            cursors!!.push(cursorId)
             return values.poll()
         }
     }

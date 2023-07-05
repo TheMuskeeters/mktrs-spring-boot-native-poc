@@ -11,7 +11,6 @@ package com.themusketeers.sbnative.service
 import com.themusketeers.sbnative.common.consts.GlobalConstants.INT_ZERO
 import com.themusketeers.sbnative.service.intr.RedisCacheService
 import kotlin.collections.Map.Entry
-import java.util.stream.Collectors
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.data.redis.core.ScanOptions
 
@@ -42,7 +41,7 @@ class RedisHashCacheService<K, V>(cacheName: String, redisTemplate: RedisTemplat
         hOps.scan(cacheName as K, scanOptions).use { mapCursor ->
             return mapCursor
                 .stream()
-                .map<K>(Function<Entry<Any, Any>, K> { cursorItem: Entry<Any, Any> -> (cursorItem as Entry<K, V>).key })
+                .map { cursorItem -> (cursorItem as Entry<K, V>).key }
                 .toList()
         }
     }
@@ -54,7 +53,7 @@ class RedisHashCacheService<K, V>(cacheName: String, redisTemplate: RedisTemplat
         hOps.scan(cacheName as K, scanOptions).use { mapCursor ->
             return mapCursor
                 .stream()
-                .map<V>(Function<Entry<Any, Any>, V> { cursorItem: Entry<Any, Any> -> (cursorItem as Entry<K, V>).value })
+                .map { cursorItem -> (cursorItem as Entry<K, V>).value }
                 .toList()
         }
     }
@@ -82,12 +81,12 @@ class RedisHashCacheService<K, V>(cacheName: String, redisTemplate: RedisTemplat
         hOps.scan(cacheName as K, scanOptions).use { mapCursor ->
             return mapCursor
                 .stream()
-                .map<Map.Entry<K, V>?>(Function<Map.Entry<Any, Any>, Entry<K, V>?> { cursorItem: Entry<Any, Any>? -> cursorItem as Entry<K, V>? })
-                .collect<Map<K, V>, Any>(Collectors.toMap<Entry<K, V>?, K, V>(Function<Entry<K, V>?, K> { Entry.key }, Function<Entry<K, V>?, V> { java.util.Map.Entry.value }))
+                .map { cursorItem -> cursorItem as Entry<K, V> }
+                .toList().associate { it.key to it.value }
         }
     }
 
     override fun multiRetrieveMap(keys: Collection<K>): Map<K, V> = fillCacheMapUsing(ArrayList(keys), multiRetrieveList(keys))
     override fun delete(key: K): Boolean = redisTemplate.opsForHash<Any, Any>().delete(cacheName as K, key) != INT_ZERO.toLong()
-    override fun delete(keys: Collection<K>): Long = redisTemplate.opsForHash<Any, Any>().delete(cacheName as K, *keys.toTypedArray())
+    override fun delete(keys: Collection<K>): Long = redisTemplate.opsForHash<Any, Any>().delete(cacheName as K, keys)
 }
