@@ -169,7 +169,7 @@ class RedisRegionCacheIntegerKeyServiceTest {
 
         `when`(redisTemplate.keys(any())).thenReturn(multipleKeys)
 
-        val retrievedStringList = redisRegionCacheService.multiRetrieveKeyList(keyPattern!!)
+        val retrievedStringList = redisRegionCacheService.multiRetrieveKeyList(keyPattern)
 
         assertThat(retrievedStringList)
             .hasSize(INT_THREE)
@@ -191,7 +191,7 @@ class RedisRegionCacheIntegerKeyServiceTest {
         `when`(redisTemplate.opsForValue()).thenReturn(valueOperations)
         `when`(valueOperations.multiGet(anySet())).thenReturn(multipleValues)
 
-        val retrievedStringList = redisRegionCacheService.multiRetrieveList(keyPattern!!)
+        val retrievedStringList = redisRegionCacheService.multiRetrieveList(keyPattern)
 
         assertThat(retrievedStringList)
             .isNotNull()
@@ -237,7 +237,7 @@ class RedisRegionCacheIntegerKeyServiceTest {
         `when`(redisTemplate.opsForValue()).thenReturn(valueOperations)
         `when`(valueOperations.multiGet(anyList())).thenReturn(valueList)
 
-        val retrievedStringMap = redisRegionCacheService.multiRetrieveMap(keyPattern!!)
+        val retrievedStringMap = redisRegionCacheService.multiRetrieveMap(keyPattern)
 
         assertThat(retrievedStringMap)
             .isNotNull()
@@ -263,7 +263,7 @@ class RedisRegionCacheIntegerKeyServiceTest {
         `when`(redisTemplate.opsForValue()).thenReturn(valueOperations)
         `when`(valueOperations.multiGet(anyList())).thenReturn(valueList)
 
-        val retrievedStringMap = redisRegionCacheService.multiRetrieveMap(keyPattern!!)
+        val retrievedStringMap = redisRegionCacheService.multiRetrieveMap(keyPattern)
 
         assertThat(retrievedStringMap)
             .isNotNull()
