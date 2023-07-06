@@ -1,9 +1,11 @@
 = mktrs-spring-boot-native-poc (0002-spring-mvc-redis)
 
+When you come to this branch you find how to use a *Redis* database.
 
-= References
+Check the *com.themusketeers.sbnative.service.intr.RedisCacheService* interface and its implementations. 
+This approach uses the *Spring RedisTemplate* class, and it is exercised in the
+*com.themusketeers.sbnative.controller.MovieRecordController* and 
+*com.themusketeers.sbnative.MovieRecordSpringDataController* uses a *Spring Data Redis Repository*.
 
-* https://github.com/kasramp/spring-data-redis-example-kotlin[Spring Data Redis Example with Kotlin^]
-* https://www.baeldung.com/kotlin/java-8-stream-vs-kotlin[Java 8 Stream API Analogies in Kotlin^]
-* https://www.tutorialspoint.com/kotlin/index.htm[Kotlin Tutorial^]
-* https://medium.com/codex/kotlin-why-no-collectors-ba314c6f6b1e[Kotlin: Why no Collectors?^]
+Another aspect here is that here it implements a *Redis Region* and a *Redis Hash* strategy, to activate 
+its usage, use the Spring Profile mechanism.
