@@ -2,4 +2,67 @@
 
 V2023.1.0
 
-Initial files.
+Welcome to the Proof Of Concept project around *_Spring Boot 3.x_* which has a lot of 
+improvements for the modern *_Java_* application writing.
+
+* GraalVM
+* CraC
+
+To name a few.
+
+The purpose here is to compile and mantain a few recipes as reference code for doing *Java/Kotlin* stuff.
+The project contains two folders.
+
+* *mktrs-spring-boot-native-java-poc:* Holds a pure Java implementation on the technologies and aspects to test.
+* *mktrs-spring-boot-native-kotlin-poc:* Holds a pure Kotlin implementation on the technologies and aspects to test.
+
+Basically what is done in the *Java* folder is replicated in the *Kotlin* folder. This way
+you have a lot of reference code without distractions about a topic in testing. To follow
+this goal, we have different braches to exercise some concept.
+
+== Branches
+Each branch is named after the concept in consideration. You can browse the branch for each folder code to check
+how it is built and hopefully you learn something new.
+
+Here are the current branches.
+* *master:* A basic controller using *Spring MVC* with in-memory storage. It keeps the minimal application in the series.
+* *steps/0001-initial:* Used to update the minimal application concept, normally it is the same as master.
+* *steps/0002-spring-mvc-redis:* From the initial app adds *Redis* support, uses *Spring MVC* (Servlet technology, blocking app model, synchronous model).
+* *steps/0003-spring-webflux-redis:* From the initial app adds *Redis* support, uses *Spring WebFlux* (non-blocking app model, asynchronous model).
+* *steps/0004-spring-mvc-elasticsearch:* From the initial app adds *ElasticSearch* support, uses *Spring MVC* (Servlet technology, blocking app model, synchronous model).
+* *steps/0005-spring-webflux-elasticsearch:* From the initial app adds *ElasticSearch* support, uses *Spring WebFlux* (non-blocking app model, asynchronous model).
+* *steps/0006-spring-mvc-mongodb:* From the initial app adds *MongoDB* support, uses *Spring MVC* (Servlet technology, blocking app model, synchronous model).
+* *steps/0007-spring-webflux-mongodb:* From the initial app adds *MongoDB* support, uses *Spring WebFlux* (non-blocking app model, asynchronous model).
+
+Some necessary files are to be touched as common files in all branches so from time to time those are synchronized
+with all the branches.
+
+These files are kept in the *master* branch and replicated in all other branches. Usually the versions of libraries in 
+'pom.xml' (Maven) or eventually 'build.gradle' (Gradle with Groovy) or 'build.gradle.kts' (Gradle with Kotlin), this 
+*README.adoc*, etc.
+
+To minimize the impact of synchronization and code collisions, each branch has its own specific *README.adoc*,
+named as follows.
+
+* README.adoc in *master* branch.
+* README-0001-initial.adoc.
+* README-0002-spring-mvc-redis.adoc.
+* README-0003-spring-webflux-redis.adoc.
+* README-0004-spring-mvc-elasticsearch.adoc.
+* README-0005-spring-webflux-elasticsearch.adoc.
+* README-0006-spring-mvc-mongodb.adoc.
+* README-0007-spring-webflux-mongodb.adoc.
+
+[WARNING]
+====
+Whenever it is required to make adjustment to the common files which need to be replicated to all branches, 
+they must be added/updated in the *master* branch. If you make any changes to the code base, then run the
+unit tests to validate nothing has broken. 
+====
+
+== References
+
+= H
+* https://stackabuse.com/how-to-return-http-status-codes-in-a-spring-boot-application/[How to Return HTTP Status Codes in a Spring Boot Application^]
+
+
