@@ -13,9 +13,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.apache.commons.collections4.CollectionUtils;
 
 /**
  * Implements a Region Redis Cache Service. All the &lt;K&gt; beans are assumed to be of {@code String} type, but

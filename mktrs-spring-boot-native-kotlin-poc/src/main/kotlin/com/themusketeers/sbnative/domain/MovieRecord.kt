@@ -10,7 +10,10 @@ package com.themusketeers.sbnative.domain
 
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonPropertyOrder
+import jakarta.validation.constraints.Max
+import jakarta.validation.constraints.Min
 import jakarta.validation.constraints.NotEmpty
+import jakarta.validation.constraints.NotNull
 
 /**
  * Represents Movie Record information.
@@ -26,6 +29,9 @@ import jakarta.validation.constraints.NotEmpty
 data class MovieRecord(
     @field:NotEmpty(message = "Movie Record Id is mandatory") val id: String,
     @field:NotEmpty(message = "Movie Record Title is mandatory")  val title:  String,
-    @field:NotEmpty(message = "Movie Record Year is mandatory")  val year:  Int,
+    @field:NotNull(message = "Movie Record Year is mandatory")
+    @field:Min(value = 1900, message = "Movie Record Year must be after 1900")
+    @field:Max(value = 9999, message = "Movie Record Year must be before 9999")
+    val year:  Int,
     @field:NotEmpty(message = "Movie Record Genre is mandatory") val genre:  String
 )

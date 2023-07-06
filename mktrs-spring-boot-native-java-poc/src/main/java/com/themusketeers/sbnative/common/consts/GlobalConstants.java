@@ -23,6 +23,7 @@ public class GlobalConstants {
     public static final String DOT = ".";
     public static final String WILD_CARD_ASTERISK = "*";
     public static final String EMPTY_STRING = "";
+    public static final String MOVIE_RECORD_CACHE_KEY = "MOVIE";
 
     public static final int INT_ZERO = 0;
     public static final int INT_ONE = 1;

@@ -4,18 +4,17 @@
 /*----------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------
  History
- Jul.05/2023  COQ  File created.
+ Jul.06/2023  COQ  File created.
  -----------------------------------------------------------------------------*/
-package com.themusketeers.sbnative.controller.api.v1;
-
-import static com.themusketeers.sbnative.common.consts.GlobalConstants.EMPTY_STRING;
+package com.themusketeers.sbnative.controller.api.v2;
 
 import com.themusketeers.sbnative.common.exception.MovieRecordNotFoundException;
-import com.themusketeers.sbnative.domain.MovieRecord;
-import com.themusketeers.sbnative.domain.response.MovieRecordResponse;
-import com.themusketeers.sbnative.domain.response.MovieRecordsResponse;
-import com.themusketeers.sbnative.service.intr.RedisCacheService;
+import com.themusketeers.sbnative.domain.MovieRecordRedisHash;
+import com.themusketeers.sbnative.domain.response.MovieRecordRedisHashResponse;
+import com.themusketeers.sbnative.domain.response.MovieRecordsRedisHashResponse;
+import com.themusketeers.sbnative.repository.MovieRecordRedisHashRepository;
 import jakarta.validation.Valid;
+import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,31 +26,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-/**
- * Movie Record API Controller.
- * <p><b>Path:</b>{@code api/v1/movie/records}</p>
- *
- * @author COQ - Carlos Adolfo Ortiz Q.
- */
-@RestController(value="MovieRecordControllerV1")
-@RequestMapping("api/v1/movie/records")
-public record MovieRecordController(RedisCacheService<String, Object> redisMovieRecordCacheService) {
+@RestController(value = "MovieRecordControllerV2")
+@RequestMapping("api/v2/movie/records")
+public record MovieRecordController(MovieRecordRedisHashRepository movieRecordRedisHashRepository) {
 
     /**
      * Retrieves all movie records registered in the system.
-     * <p>{@code GET: api/v1/movie/records}</p>
+     * <p>{@code GET: api/v2/movie/records}</p>
      *
      * @return Registered information.
      */
     @GetMapping
-    public MovieRecordsResponse retrieveMovies() {
-        return
-            new MovieRecordsResponse(
-                redisMovieRecordCacheService.count(),
-                redisMovieRecordCacheService.multiRetrieveList(EMPTY_STRING)
-                    .stream()
-                    .map(m -> (MovieRecord) m)
-                    .toList());
+    public MovieRecordsRedisHashResponse retrieveMovies() {
+        return new MovieRecordsRedisHashResponse(
+            movieRecordRedisHashRepository.count(),
+            (List<MovieRecordRedisHash>) movieRecordRedisHashRepository.findAll()
+        );
     }
 
     /**
@@ -62,33 +52,31 @@ public record MovieRecordController(RedisCacheService<String, Object> redisMovie
      * @return If it is not found an HTTP 404 is returned, otherwise an HTTP 200 is returned with the proper information.
      */
     @GetMapping("{movieId}")
-    public MovieRecordResponse retrieve(@PathVariable String movieId) {
-
-        var movieRecordRetrieved = (MovieRecord) redisMovieRecordCacheService.retrieve(movieId);
-
-        if (movieRecordRetrieved == null) {
-            throw new MovieRecordNotFoundException(movieId);
-        }
-
-        return new MovieRecordResponse(movieRecordRetrieved);
+    public MovieRecordRedisHashResponse retrieve(@PathVariable String movieId) {
+        return
+            new MovieRecordRedisHashResponse(
+                movieRecordRedisHashRepository
+                    .findById(movieId)
+                    .orElseThrow(() -> new MovieRecordNotFoundException(movieId))
+            );
     }
 
     /**
      * Add new record to the Movie Record List system.
-     * <p>{@code POST: api/v1/movie/records}</p>
+     * <p>{@code POST: api/v2/movie/records}</p>
      * <p>For the 'Movie Record' to be inserted there are validations for required fields, {@code id}, {@code title},
      * {@code year}, and {@code genre}.
      * A BAD REQUEST 400 error code is returned when {@code payload} is mal formed.</p>
      *
-     * @param movieRecord Includes the 'Movie Record' information to insert.
+     * @param movieRecordRedisHash Includes the 'Movie Record' information to insert.
      * @return Record with 'Id' inserted.
      */
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
-    public MovieRecord insert(@Valid @RequestBody MovieRecord movieRecord) {
-        redisMovieRecordCacheService.insert(movieRecord.id(), movieRecord);
+    public MovieRecordRedisHash insert(@Valid @RequestBody MovieRecordRedisHash movieRecordRedisHash) {
+        movieRecordRedisHashRepository.save(movieRecordRedisHash);
 
-        return movieRecord;
+        return movieRecordRedisHash;
     }
 
     /**
@@ -98,18 +86,19 @@ public record MovieRecordController(RedisCacheService<String, Object> redisMovie
      * {@code year}, and {@code genre}.
      * A BAD REQUEST 400 error code is returned when {@code payload} is mal formed.</p>
      *
-     * @param movieRecord Includes the 'Movie Record' information to update.
+     * @param movieRecordRedisHash Includes the 'Movie Record' information to update.
      * @return If record is not found, then an HTTP 404 is returned, otherwise an HTTP 200 is returned.
      */
     @PatchMapping
-    public MovieRecord update(@Valid @RequestBody MovieRecord movieRecord) {
-        if (!redisMovieRecordCacheService.exists(movieRecord.id())) {
-            throw new MovieRecordNotFoundException(movieRecord.id());
+    public MovieRecordRedisHash update(@Valid @RequestBody MovieRecordRedisHash movieRecordRedisHash) {
+
+        if (!movieRecordRedisHashRepository.findById(movieRecordRedisHash.id()).isPresent()) {
+            throw new MovieRecordNotFoundException(movieRecordRedisHash.id());
         }
 
-        redisMovieRecordCacheService.insert(movieRecord.id(), movieRecord);
+        movieRecordRedisHashRepository.save(movieRecordRedisHash);
 
-        return movieRecord;
+        return movieRecordRedisHash;
     }
 
     /**
@@ -121,9 +110,7 @@ public record MovieRecordController(RedisCacheService<String, Object> redisMovie
      */
     @DeleteMapping("{movieId}")
     public Boolean delete(@PathVariable String movieId) {
-        if (!redisMovieRecordCacheService.delete(movieId)) {
-            throw new MovieRecordNotFoundException(movieId);
-        }
+        movieRecordRedisHashRepository.deleteById(movieId);
 
         return true;
     }

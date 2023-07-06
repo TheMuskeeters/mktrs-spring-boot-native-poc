@@ -8,4 +8,27 @@ This approach uses the *Spring RedisTemplate* class, and it is exercised in the
 *com.themusketeers.sbnative.MovieRecordSpringDataController* uses a *Spring Data Redis Repository*.
 
 Another aspect here is that here it implements a *Redis Region* and a *Redis Hash* strategy, to activate 
-its usage, use the Spring Profile mechanism.
+its usage, use the *Spring Profile* mechanism.
+
+Use 
+
+[source,yaml]
+----
+spring:
+    profiles:
+        active: default,redis-region
+----
+
+This activates the usage of the implementation based in *com.themusketeers.sbnative.service.RedisRegionCacheService*.
+
+[source,yaml]
+----
+spring:
+    profiles:
+        active: default,redis-hash
+----
+
+This activates the usage of the implementation based in *com.themusketeers.sbnative.service.RedisHashService*.
+
+The *com.themusketeers.sbnative.controller.api.v1.MovieRecordController* then uses *RedisCacheService* approach.
+And The *com.themusketeers.sbnative.controller.api.v2.MovieRecordController* then uses *MovieRecordRedisHashRepository* approach.
