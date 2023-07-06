@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 /**
@@ -31,15 +31,16 @@ public class RedisConfig {
      */
     @Bean
     public RedisTemplate redisTemplate(RedisConnectionFactory redisConnectionFactory) {
-        RedisTemplate redisTemplate = new RedisTemplate<String, Object>();
-        StringRedisSerializer stringRedisSerializer = new StringRedisSerializer();
-        Jackson2JsonRedisSerializer serializer = new Jackson2JsonRedisSerializer(Object.class);
+        var redisTemplate = new RedisTemplate<String, Object>();
+        var stringRedisSerializer = new StringRedisSerializer();
+        var serializer = new GenericJackson2JsonRedisSerializer();
 
         redisTemplate.setConnectionFactory(redisConnectionFactory);
         redisTemplate.setValueSerializer(serializer);
         redisTemplate.setHashValueSerializer(serializer);
         redisTemplate.setKeySerializer(stringRedisSerializer);
         redisTemplate.setHashKeySerializer(stringRedisSerializer);
+        redisTemplate.setEnableTransactionSupport(true);
 
         return redisTemplate;
     }
