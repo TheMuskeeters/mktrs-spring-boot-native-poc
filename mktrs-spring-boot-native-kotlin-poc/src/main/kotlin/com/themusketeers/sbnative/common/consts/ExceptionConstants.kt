@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------*/
-/* Source File:   EXCEPTIONCONSTANTS.JAVA                                     */
+/* Source File:   EXCEPTIONCONSTANTS.KT                                       */
 /* Copyright (c), 2023 The Musketeers                                         */
 /*----------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------
@@ -15,5 +15,6 @@ package com.themusketeers.sbnative.common.consts
  */
 object ExceptionConstants {
     const val USER_WITH_ID = "User with id=["
+    const val MOVIE_RECORD_WITH_ID = "Movie Record with id=["
     const val NOT_FOUND = "] not found"
 }

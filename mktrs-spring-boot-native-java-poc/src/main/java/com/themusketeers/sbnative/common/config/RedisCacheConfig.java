@@ -29,13 +29,13 @@ public class RedisCacheConfig {
 
     @Profile("redis-region")
     @Bean("redisMovieRecordCacheService")
-    public RedisCacheService<String, Object> redisRegionCacheService(RedisTemplate redisTemplate) {
-        return new RedisRegionCacheService<String, Object>(MOVIE_RECORD_CACHE_KEY, redisTemplate);
+    public RedisCacheService<String, Object> redisRegionCacheService(RedisTemplate<String, Object> redisTemplate) {
+        return new RedisRegionCacheService(MOVIE_RECORD_CACHE_KEY, redisTemplate);
     }
 
     @Profile("redis-hash")
     @Bean("redisMovieRecordCacheService")
-    public RedisCacheService<String, Object> redisHashCacheService(RedisTemplate redisTemplate) {
-        return new RedisHashCacheService<String, Object>(MOVIE_RECORD_CACHE_KEY, redisTemplate);
+    public RedisCacheService<String, Object> redisHashCacheService(RedisTemplate<String, Object> redisTemplate) {
+        return new RedisHashCacheService(MOVIE_RECORD_CACHE_KEY, redisTemplate);
     }
 }

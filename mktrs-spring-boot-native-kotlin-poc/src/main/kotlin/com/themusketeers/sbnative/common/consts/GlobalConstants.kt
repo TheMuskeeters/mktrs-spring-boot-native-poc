@@ -22,6 +22,8 @@ object GlobalConstants {
     const val COLON_SPACE_DELIMITER = ": "
     const val DOT = "."
     const val WILD_CARD_ASTERISK = "*"
+    const val EMPTY_STRING = ""
+    const val MOVIE_RECORD_CACHE_KEY = "MOVIE"
 
     const val INT_ZERO = 0
     const val INT_ONE = 1
