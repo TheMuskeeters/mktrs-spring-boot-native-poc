@@ -62,17 +62,15 @@ unit tests to validate nothing has broken.
 
 == References
 
-=== H
-* https://stackabuse.com/how-to-return-http-status-codes-in-a-spring-boot-application/[How to Return HTTP Status Codes in a Spring Boot Application^]
-
-=== J
+=== Kotlin
 * https://www.baeldung.com/kotlin/java-8-stream-vs-kotlin[Java 8 Stream API Analogies in Kotlin^]
-
-=== K
 * https://www.tutorialspoint.com/kotlin/index.htm[Kotlin Tutorial^]
 * https://medium.com/codex/kotlin-why-no-collectors-ba314c6f6b1e[Kotlin: Why no Collectors?^]
 
-=== S
+=== Spring Boot
+* https://stackabuse.com/how-to-return-http-status-codes-in-a-spring-boot-application/[How to Return HTTP Status Codes in a Spring Boot Application^]
+
+=== Spring Data
+* https://www.baeldung.com/spring-data-redis-tutorial[Introduction to Spring Data Redis^]
+* https://github.com/spring-projects/spring-data-examples/tree/main/redis[Spring Data Examples (Official repository)^]
 * https://github.com/kasramp/spring-data-redis-example-kotlin[Spring Data Redis Example with Kotlin^]
-
-
