@@ -75,7 +75,7 @@ public class GlobalControllerExceptionHandler extends ResponseEntityExceptionHan
      * @return An instance to the detailed problem using RFC 7807 error response.
      */
     @ExceptionHandler(UserNotFoundException.class)
-    public ErrorResponse handleBookmarkNotFoundException(UserNotFoundException e) {
+    public ErrorResponse handleUserNotFoundException(UserNotFoundException e) {
         return ErrorResponse.builder(e, HttpStatus.NOT_FOUND, e.getMessage())
             .title(TITLE_USER_NOT_FOUND)
             .type(URI.create(USER_NOT_FOUND_ERROR_URL))
