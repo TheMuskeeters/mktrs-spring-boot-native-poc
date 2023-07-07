@@ -23,6 +23,6 @@ public class MovieRecordNotFoundException extends RuntimeException {
      * @param movieId Indicates the {@code movieId} which was not found.
      */
     public MovieRecordNotFoundException(String movieId) {
-        super(MOVIE_RECORD_WITH_ID+movieId+ NOT_FOUND);
+        super(MOVIE_RECORD_WITH_ID + movieId + NOT_FOUND);
     }
 }

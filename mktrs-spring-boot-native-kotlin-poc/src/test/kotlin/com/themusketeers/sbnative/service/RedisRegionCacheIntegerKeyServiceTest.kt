@@ -12,8 +12,6 @@ import com.themusketeers.sbnative.common.consts.GlobalConstants.INT_THREE
 import com.themusketeers.sbnative.common.consts.GlobalConstants.INT_TWO
 import com.themusketeers.sbnative.common.consts.GlobalConstants.LONG_THREE
 import com.themusketeers.sbnative.common.consts.GlobalConstants.LONG_TWO
-import kotlin.Int
-import kotlin.String
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName

@@ -36,6 +36,19 @@ import org.springframework.web.bind.annotation.RestController
 @RestController(value = "MovieRecordControllerV1")
 @RequestMapping("api/v1/movie/records")
 class MovieRecordController(val redisMovieRecordCacheService: RedisCacheService<String, Any>) {
+
+    /**
+     * Retrieves a map o[f movie records.
+     *
+     * **Path:**`api/v1/movie/records/map`
+     *
+     * @return A map with Ids and movie data.
+     */
+    @GetMapping("map")
+    fun retrieveMoviesAsMap(): Map<String, Any> {
+        return redisMovieRecordCacheService.multiRetrieveMap()
+    }
+
     /**
      * Retrieves all movie records registered in the system.
      *

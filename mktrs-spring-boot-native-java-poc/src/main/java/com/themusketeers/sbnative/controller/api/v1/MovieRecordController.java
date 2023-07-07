@@ -16,6 +16,7 @@ import com.themusketeers.sbnative.domain.response.MovieRecordResponse;
 import com.themusketeers.sbnative.domain.response.MovieRecordsResponse;
 import com.themusketeers.sbnative.service.intr.RedisCacheService;
 import jakarta.validation.Valid;
+import java.util.Map;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,9 +34,20 @@ import org.springframework.web.bind.annotation.RestController;
  *
  * @author COQ - Carlos Adolfo Ortiz Q.
  */
-@RestController(value="MovieRecordControllerV1")
+@RestController(value = "MovieRecordControllerV1")
 @RequestMapping("api/v1/movie/records")
 public record MovieRecordController(RedisCacheService<String, Object> redisMovieRecordCacheService) {
+
+    /**
+     * Retrieves a map o[f movie records.
+     * <p><b>Path:</b>{@code api/v1/movie/records/map}</p>
+     *
+     * @return A map with Ids and movie data.
+     */
+    @GetMapping("map")
+    public Map<String, Object> retrieveMoviesAsMap() {
+        return redisMovieRecordCacheService.multiRetrieveMap();
+    }
 
     /**
      * Retrieves all movie records registered in the system.

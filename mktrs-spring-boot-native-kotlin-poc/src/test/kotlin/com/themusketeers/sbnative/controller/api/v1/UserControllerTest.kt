@@ -293,7 +293,7 @@ class UserControllerTest {
             .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
             .body(BodyInserters.fromValue(user))
             .exchange()
-            .expectStatus().isOk()
+            .expectStatus().isCreated()
             .expectBody(User::class.java)
             .consumeWith { response -> assertThat(response.responseBody).isEqualTo(user) }
 

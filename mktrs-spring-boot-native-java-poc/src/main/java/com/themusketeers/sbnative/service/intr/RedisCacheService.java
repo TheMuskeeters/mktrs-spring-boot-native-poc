@@ -18,8 +18,8 @@ import java.util.Map;
  *
  * @param <K> Indicates the Redis key type (usually a String) to work with.
  * @param <V> Indicates the Redis Value type to work with.
- * @see org.springframework.data.redis.core.RedisTemplate
  * @author COQ - Carlos Adolfo Ortiz Q.
+ * @see org.springframework.data.redis.core.RedisTemplate
  */
 public interface RedisCacheService<K, V> {
     /**

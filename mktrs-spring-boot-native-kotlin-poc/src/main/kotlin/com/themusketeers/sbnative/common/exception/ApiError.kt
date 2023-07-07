@@ -8,8 +8,8 @@
  -----------------------------------------------------------------------------*/
 package com.themusketeers.sbnative.common.exception
 
-import org.springframework.http.HttpStatus
 import java.util.List
+import org.springframework.http.HttpStatus
 
 class ApiError {
     // Getter/Setters

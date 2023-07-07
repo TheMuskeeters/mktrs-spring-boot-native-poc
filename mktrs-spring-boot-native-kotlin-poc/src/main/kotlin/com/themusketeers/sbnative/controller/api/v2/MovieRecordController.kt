@@ -74,7 +74,7 @@ class MovieRecordController(val movieRecordRedisHashRepository: MovieRecordRedis
      */
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
-    fun insert(@Valid @RequestBody movieRecordRedisHash:  MovieRecordRedisHash): MovieRecordRedisHash {
+    fun insert(@Valid @RequestBody movieRecordRedisHash: MovieRecordRedisHash): MovieRecordRedisHash {
         movieRecordRedisHashRepository.save(movieRecordRedisHash)
 
         return movieRecordRedisHash
@@ -93,7 +93,7 @@ class MovieRecordController(val movieRecordRedisHashRepository: MovieRecordRedis
      * @return If record is not found, then an HTTP 404 is returned, otherwise an HTTP 200 is returned.
      */
     @PatchMapping
-    fun update(@Valid @RequestBody movieRecordRedisHash:  MovieRecordRedisHash): MovieRecordRedisHash {
+    fun update(@Valid @RequestBody movieRecordRedisHash: MovieRecordRedisHash): MovieRecordRedisHash {
         if (!movieRecordRedisHashRepository.findById(movieRecordRedisHash.id).isPresent) {
             throw MovieRecordNotFoundException(movieRecordRedisHash.id)
         }

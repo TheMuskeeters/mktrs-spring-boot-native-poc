@@ -1,8 +1,7 @@
-
 ## If you need to connect to a non-cluster Redis, use the following.
 spring:
   profiles:
-    active: default,redis-hash
+    active: default,redis-region
   redis:
     password: ''
     host: localhost
