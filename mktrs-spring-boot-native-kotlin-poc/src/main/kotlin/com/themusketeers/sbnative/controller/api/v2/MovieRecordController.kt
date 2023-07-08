@@ -8,6 +8,8 @@
  -----------------------------------------------------------------------------*/
 package com.themusketeers.sbnative.controller.api.v2
 
+import com.themusketeers.sbnative.common.consts.GlobalConstants.EMPTY_STRING
+import com.themusketeers.sbnative.common.consts.GlobalConstants.NULL_STRING
 import com.themusketeers.sbnative.common.exception.MovieRecordNotFoundException
 import com.themusketeers.sbnative.domain.MovieRecordRedisHash
 import com.themusketeers.sbnative.domain.response.MovieRecordRedisHashResponse
@@ -94,8 +96,8 @@ class MovieRecordController(val movieRecordRedisHashRepository: MovieRecordRedis
      */
     @PatchMapping
     fun update(@Valid @RequestBody movieRecordRedisHash: MovieRecordRedisHash): MovieRecordRedisHash {
-        if (!movieRecordRedisHashRepository.findById(movieRecordRedisHash.id).isPresent) {
-            throw MovieRecordNotFoundException(movieRecordRedisHash.id)
+        if (!movieRecordRedisHashRepository.findById(movieRecordRedisHash.id ?: EMPTY_STRING).isPresent) {
+            throw MovieRecordNotFoundException(movieRecordRedisHash.id ?: NULL_STRING)
         }
 
         movieRecordRedisHashRepository.save(movieRecordRedisHash)

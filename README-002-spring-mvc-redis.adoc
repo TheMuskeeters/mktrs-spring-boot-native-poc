@@ -32,3 +32,71 @@ This activates the usage of the implementation based in *com.themusketeers.sbnat
 
 The *com.themusketeers.sbnative.controller.api.v1.MovieRecordController* then uses *RedisCacheService* approach.
 And The *com.themusketeers.sbnative.controller.api.v2.MovieRecordController* then uses *MovieRecordRedisHashRepository* approach.
+
+== Notes
+When you are validating in *Kotlin* using *Jakarta Validator* for a payload in *JSON*
+and you send null in the fields, then the corresponding fields must have the nullable mark.
+
+*Example*
+
+[source,json]
+----
+{
+  "id" : null,
+  "title" : null,
+  "year" : null,
+  "genre" : null
+----
+
+The model for this must be defined as
+
+[source,kotlin]
+----
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonPropertyOrder("id", "title", "year", "genre")
+data class MovieRecord(
+    @field:NotEmpty(message = "Movie Record Id is mandatory") val id: String?,
+    @field:NotEmpty(message = "Movie Record Title is mandatory") val title: String?,
+    @field:NotNull(message = "Movie Record Year is mandatory")
+    @field:Min(value = 1900, message = "Movie Record Year must be after 1900")
+    @field:Max(value = 9999, message = "Movie Record Year must be before 9999")
+    val year: Int?,
+    @field:NotEmpty(message = "Movie Record Genre is mandatory") val genre: String?
+)
+----
+
+Now when you try to validate this record data sending that payload, the system replies with the 
+following *_Problem Detail_*.
+
+[source,json]
+----
+{
+	"statusCode": "BAD_REQUEST",
+	"headers": {},
+	"detailMessageCode": "problemDetail.org.springframework.web.bind.MethodArgumentNotValidException",
+	"detailMessageArguments": null,
+	"titleMessageCode": "problemDetail.title.org.springframework.web.bind.MethodArgumentNotValidException",
+	"body": {
+		"type": "/api/v1/movie/records",
+		"title": "Bad Request on payload",
+		"status": 400,
+		"detail": "Validation error on supplied payload",
+		"instance": "/api/v1/movie/records",
+		"errorCategory": "Parameters",
+		"errors": [
+			"genre: Movie Record Genre is mandatory",
+			"id: Movie Record Id is mandatory",
+			"title: Movie Record Title is mandatory",
+			"year: Movie Record Year is mandatory"
+		],
+		"timestamp": "2023-07-08T17:38:09.069012800Z"
+	}
+}
+----
+
+As such the errors array is telling you that null or empty is not allowed according to the validation
+annotations defined.
+
+
+
+

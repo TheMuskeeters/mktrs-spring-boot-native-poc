@@ -9,6 +9,7 @@
 package com.themusketeers.sbnative.controller.api.v1
 
 import com.themusketeers.sbnative.common.consts.GlobalConstants.EMPTY_STRING
+import com.themusketeers.sbnative.common.consts.GlobalConstants.NULL_STRING
 import com.themusketeers.sbnative.common.exception.MovieRecordNotFoundException
 import com.themusketeers.sbnative.domain.MovieRecord
 import com.themusketeers.sbnative.domain.response.MovieRecordResponse
@@ -96,8 +97,8 @@ class MovieRecordController(val redisMovieRecordCacheService: RedisCacheService<
      */
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
-    fun insert(@RequestBody movieRecord: @Valid MovieRecord): MovieRecord {
-        redisMovieRecordCacheService.insert(movieRecord.id, movieRecord)
+    fun insert(@Valid @RequestBody movieRecord: MovieRecord): MovieRecord {
+        redisMovieRecordCacheService.insert(movieRecord.id ?: EMPTY_STRING, movieRecord)
 
         return movieRecord
     }
@@ -115,12 +116,12 @@ class MovieRecordController(val redisMovieRecordCacheService: RedisCacheService<
      * @return If record is not found, then an HTTP 404 is returned, otherwise an HTTP 200 is returned.
      */
     @PatchMapping
-    fun update(@RequestBody movieRecord: @Valid MovieRecord): MovieRecord {
-        if (!redisMovieRecordCacheService.exists(movieRecord.id)) {
-            throw MovieRecordNotFoundException(movieRecord.id)
+    fun update(@Valid @RequestBody movieRecord: MovieRecord): MovieRecord {
+        if (!redisMovieRecordCacheService.exists(movieRecord.id ?: EMPTY_STRING)) {
+            throw MovieRecordNotFoundException(movieRecord.id ?: NULL_STRING)
         }
 
-        redisMovieRecordCacheService.insert(movieRecord.id, movieRecord)
+        redisMovieRecordCacheService.insert(movieRecord.id ?: EMPTY_STRING, movieRecord)
 
         return movieRecord
     }

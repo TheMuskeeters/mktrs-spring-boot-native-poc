@@ -29,11 +29,11 @@ import org.springframework.data.redis.core.RedisHash
 @JsonPropertyOrder("id", "title", "year", "genre")
 @RedisHash("MovieRecordRedisHash")
 data class MovieRecordRedisHash(
-    @field:NotEmpty(message = "Movie Record Id is mandatory") val id: String,
-    @field:NotEmpty(message = "Movie Record Title is mandatory") val title: String,
+    @field:NotEmpty(message = "Movie Record Id is mandatory") val id: String?,
+    @field:NotEmpty(message = "Movie Record Title is mandatory") val title: String?,
     @field:NotNull(message = "Movie Record Year is mandatory")
     @field:Min(value = 1900, message = "Movie Record Year must be after 1900")
     @Max(value = 9999, message = "Movie Record Year must be before 9999")
-    val year: Int,
-    val genre: @NotEmpty(message = "Movie Record Genre is mandatory") String
+    val year: Int?,
+    val genre: @NotEmpty(message = "Movie Record Genre is mandatory") String?
 )
