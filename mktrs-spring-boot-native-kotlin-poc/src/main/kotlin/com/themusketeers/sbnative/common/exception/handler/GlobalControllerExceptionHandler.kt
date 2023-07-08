@@ -22,7 +22,7 @@ import com.themusketeers.sbnative.common.exception.ApiException
 import com.themusketeers.sbnative.common.exception.UserNotFoundException
 import java.net.URI
 import java.time.Instant
-import java.util.stream.*
+import java.util.stream.Stream
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.HttpStatusCode
