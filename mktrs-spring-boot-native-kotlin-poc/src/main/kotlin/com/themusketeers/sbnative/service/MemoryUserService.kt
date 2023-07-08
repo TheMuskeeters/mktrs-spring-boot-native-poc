@@ -6,8 +6,8 @@ package com.themusketeers.sbnative.service
 
 import com.themusketeers.sbnative.domain.User
 import com.themusketeers.sbnative.service.intr.UserService
+import java.util.UUID
 import org.springframework.stereotype.Service
-import java.util.*
 
 /**
  * Handles the list of user in the system. The internal representation is to

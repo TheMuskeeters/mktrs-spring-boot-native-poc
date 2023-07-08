@@ -113,8 +113,8 @@ class UserControllerTest {
                 val resBody = response.responseBody
 
                 assertThat(resBody).isNotNull()
-                assertThat(resBody!!.count).isNotNull().isEqualTo(LONG_ZERO)
-                assertThat(resBody!!.users).isNotNull().isEmpty()
+                assertThat(resBody?.count).isNotNull().isEqualTo(LONG_ZERO)
+                assertThat(resBody?.users).isNotNull().isEmpty()
             }
     }
 
@@ -137,8 +137,8 @@ class UserControllerTest {
                 val resBody = response.responseBody
 
                 assertThat(resBody).isNotNull()
-                assertThat(resBody!!.count).isNotNull().isEqualTo(LONG_TWO)
-                assertThat(resBody!!.users).isNotNull().isNotEmpty().hasSameElementsAs(userList)
+                assertThat(resBody?.count).isNotNull().isEqualTo(LONG_TWO)
+                assertThat(resBody?.users).isNotNull().isNotEmpty().hasSameElementsAs(userList)
             }
 
         verify(userService).count()
@@ -172,8 +172,13 @@ class UserControllerTest {
             .bodyValue(jsonPayload)
             .exchange()
             .expectStatus().isBadRequest()
-            .expectBody(String::class.java)
-            .consumeWith { response -> assertThat(response.responseBody).isEqualTo(HTTP_400_BAD_REQUEST_RESPONSE) }
+            .expectBody()
+            .jsonPath(JSONPATH_BODY_TITLE).isEqualTo(TITLE_BAD_REQUEST_ON_PAYLOAD)
+            .jsonPath(JSONPATH_BODY_DETAIL).isEqualTo(TITLE_VALIDATION_ERROR_ON_SUPPLIED_PAYLOAD)
+            .jsonPath(JSONPATH_BODY_ERROR_CATEGORY).isEqualTo(ERROR_CATEGORY_PARAMETERS)
+            .jsonPath(JSONPATH_BODY_ERRORS).isArray()
+            .jsonPath(JSONPATH_BODY_ERRORS_0).isEqualTo(EXPECTED_ERROR_ADDRESS_IS_MANDATORY)
+            .jsonPath(JSONPATH_BODY_ERRORS_1).isEqualTo(EXPECTED_ERROR_NAME_USER_IS_MANDATORY)
     }
 
     @Test
@@ -194,8 +199,13 @@ class UserControllerTest {
             .bodyValue(jsonPayload)
             .exchange()
             .expectStatus().isBadRequest()
-            .expectBody(String::class.java)
-            .consumeWith { response -> assertThat(response.responseBody).isEqualTo(HTTP_400_BAD_REQUEST_RESPONSE) }
+            .expectBody()
+            .jsonPath(JSONPATH_BODY_TITLE).isEqualTo(TITLE_BAD_REQUEST_ON_PAYLOAD)
+            .jsonPath(JSONPATH_BODY_DETAIL).isEqualTo(TITLE_VALIDATION_ERROR_ON_SUPPLIED_PAYLOAD)
+            .jsonPath(JSONPATH_BODY_ERROR_CATEGORY).isEqualTo(ERROR_CATEGORY_PARAMETERS)
+            .jsonPath(JSONPATH_BODY_ERRORS).isArray()
+            .jsonPath(JSONPATH_BODY_ERRORS_0).isEqualTo(EXPECTED_ERROR_ADDRESS_IS_MANDATORY)
+            .jsonPath(JSONPATH_BODY_ERRORS_1).isEqualTo(EXPECTED_ERROR_NAME_USER_IS_MANDATORY);
     }
 
     @Test
@@ -280,7 +290,7 @@ class UserControllerTest {
     @Test
     @DisplayName("Verify we can create a new record.")
     fun shouldCreateNewRecord() {
-        var user = buildUserWithIDSet()
+        val user = buildUserWithIDSet()
 
         // NOTE: Mockito used in Kotlin cannot use the ArgumentMatchers.any() returns NPE
         // Needs more thought.
@@ -293,7 +303,7 @@ class UserControllerTest {
             .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
             .body(BodyInserters.fromValue(user))
             .exchange()
-            .expectStatus().isOk()
+            .expectStatus().isCreated()
             .expectBody(User::class.java)
             .consumeWith { response -> assertThat(response.responseBody).isEqualTo(user) }
 
@@ -366,8 +376,13 @@ class UserControllerTest {
             .bodyValue(jsonPayload)
             .exchange()
             .expectStatus().isBadRequest()
-            .expectBody(String::class.java)
-            .consumeWith { response -> assertThat(response.responseBody).isEqualTo(HTTP_400_BAD_REQUEST_RESPONSE) }
+            .expectBody()
+            .jsonPath(JSONPATH_BODY_TITLE).isEqualTo(TITLE_BAD_REQUEST_ON_PAYLOAD)
+            .jsonPath(JSONPATH_BODY_DETAIL).isEqualTo(TITLE_VALIDATION_ERROR_ON_SUPPLIED_PAYLOAD)
+            .jsonPath(JSONPATH_BODY_ERROR_CATEGORY).isEqualTo(ERROR_CATEGORY_PARAMETERS)
+            .jsonPath(JSONPATH_BODY_ERRORS).isArray()
+            .jsonPath(JSONPATH_BODY_ERRORS_0).isEqualTo(EXPECTED_ERROR_ADDRESS_IS_MANDATORY)
+            .jsonPath(JSONPATH_BODY_ERRORS_1).isEqualTo(EXPECTED_ERROR_NAME_USER_IS_MANDATORY);
     }
 
     @Test
@@ -388,8 +403,13 @@ class UserControllerTest {
             .bodyValue(jsonPayload)
             .exchange()
             .expectStatus().isBadRequest()
-            .expectBody(String::class.java)
-            .consumeWith { response -> assertThat(response.responseBody).isEqualTo(HTTP_400_BAD_REQUEST_RESPONSE) }
+            .expectBody()
+            .jsonPath(JSONPATH_BODY_TITLE).isEqualTo(TITLE_BAD_REQUEST_ON_PAYLOAD)
+            .jsonPath(JSONPATH_BODY_DETAIL).isEqualTo(TITLE_VALIDATION_ERROR_ON_SUPPLIED_PAYLOAD)
+            .jsonPath(JSONPATH_BODY_ERROR_CATEGORY).isEqualTo(ERROR_CATEGORY_PARAMETERS)
+            .jsonPath(JSONPATH_BODY_ERRORS).isArray()
+            .jsonPath(JSONPATH_BODY_ERRORS_0).isEqualTo(EXPECTED_ERROR_ADDRESS_IS_MANDATORY)
+            .jsonPath(JSONPATH_BODY_ERRORS_1).isEqualTo(EXPECTED_ERROR_NAME_USER_IS_MANDATORY);
     }
 
     @Test

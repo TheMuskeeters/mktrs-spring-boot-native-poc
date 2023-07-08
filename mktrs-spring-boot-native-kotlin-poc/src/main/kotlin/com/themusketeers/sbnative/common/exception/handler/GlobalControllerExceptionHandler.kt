@@ -20,6 +20,9 @@ import com.themusketeers.sbnative.common.consts.ControllerExceptionHandlerConsta
 import com.themusketeers.sbnative.common.consts.GlobalConstants.COLON_SPACE_DELIMITER
 import com.themusketeers.sbnative.common.exception.ApiException
 import com.themusketeers.sbnative.common.exception.UserNotFoundException
+import java.net.URI
+import java.time.Instant
+import java.util.stream.*
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.HttpStatusCode
@@ -32,9 +35,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice
 import org.springframework.web.context.request.ServletWebRequest
 import org.springframework.web.context.request.WebRequest
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler
-import java.net.URI
-import java.time.Instant
-import java.util.stream.*
 
 /**
  * Put in a global place the exception handling mechanism, this is shared among all the REST Controllers defined

@@ -10,12 +10,6 @@ package com.themusketeers.sbnative.common.consts
  * @author COQ - Carlos Adolfo Ortiz Q.
  */
 object ControllerExceptionHandlerConstants {
-    /**
-     * Constants associated with Controller Exception Handler.
-     *
-     * @author COQ - Carlos Adolfo Ortiz Q.
-     */
-
     /*
      * General
     */
