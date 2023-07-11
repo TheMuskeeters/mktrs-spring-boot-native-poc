@@ -24,6 +24,7 @@ import jakarta.validation.constraints.NotNull
  * @param genre Indicates the classification given (mandatory).
  * @author COQ - Carlos Adolfo Ortiz Q.
  */
+@JvmRecord
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder("id", "title", "year", "genre")
 data class MovieRecord(

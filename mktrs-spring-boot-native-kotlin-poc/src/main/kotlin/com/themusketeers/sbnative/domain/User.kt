@@ -20,6 +20,7 @@ import jakarta.validation.constraints.NotEmpty
  * @param address Indicates the location of the User (mandatory).
  * @author COQ - Carlos Adolfo Ortiz Q.
  */
+@JvmRecord
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder("id", "name", "address")
 data class User(
