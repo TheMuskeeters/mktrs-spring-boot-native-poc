@@ -139,3 +139,24 @@ how we can write controllers with the same _class_ name but different version ap
 Look into the 'com.themusketeers.sbnative.controller.api.v1.MovieRecordController' for 'api/v1/movie/records'
 and 'com.themusketeers.sbnative.controller.api.v2.MovieRecordController' for 'api/v2/movie/records'.
 
+== Runnig Redis Server Locally
+As of now you may be needing to run the *_Redis_* server to run the application.
+
+The best way to do this is to rely on Docker for this purpose.
+
+Use the following command to create and run the container.
+
+[source,bash]
+----
+$ docker run --name local-redis -d -p 6379:6379 redis:latest
+----
+
+When the container is running and probably you restart your local computer, you
+would need to restart the container, that is the purpose next.
+
+[source,bash]
+----
+$ docker start local-redis
+----
+
+Now you can speak to a *Redis* server.
