@@ -70,6 +70,7 @@ For the *_Kotlin_* version.
 
 [source,java]
 ----
+@JvmRecord
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"id", "title", "year", "genre"})
 public record MovieRecord(@NotEmpty(message = "Movie Record Id is mandatory") String id,
@@ -81,6 +82,21 @@ public record MovieRecord(@NotEmpty(message = "Movie Record Id is mandatory") St
                           @NotEmpty(message = "Movie Record Genre is mandatory") String genre) {
 }
 ----
+
+[NOTE]
+====
+For every model class defined under the *_Kotlin_* language, and in order for _JSON_
+serializer libraries which work with *_Java*_ semantics, also because of *Spring Data*, we need the following to properly
+work under *_Kotlin*_.
+
+<dependency>
+    <groupId>com.fasterxml.jackson.module</groupId>
+    <artifactId>jackson-module-kotlin</artifactId>
+</dependency>
+
+And in the class we add the @JvmRecord annotation. This way it instruct *Jackson JSON Library*.
+====
+
 
 For the *Java* version.
 
