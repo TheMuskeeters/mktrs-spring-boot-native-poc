@@ -46,6 +46,7 @@ and you send null in the fields, then the corresponding fields must have the nul
   "title" : null,
   "year" : null,
   "genre" : null
+}
 ----
 
 The model for this must be defined as
@@ -64,6 +65,25 @@ data class MovieRecord(
     @field:NotEmpty(message = "Movie Record Genre is mandatory") val genre: String?
 )
 ----
+
+For the *_Kotlin_* version.
+
+[source,java]
+----
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonPropertyOrder({"id", "title", "year", "genre"})
+public record MovieRecord(@NotEmpty(message = "Movie Record Id is mandatory") String id,
+                          @NotEmpty(message = "Movie Record Title is mandatory") String title,
+                          @NotNull(message = "Movie Record Year is mandatory")
+                          @Min(value = 1900, message = "Movie Record Year must be after 1900")
+                          @Max(value = 9999, message = "Movie Record Year must be before 9999")
+                          Integer year,
+                          @NotEmpty(message = "Movie Record Genre is mandatory") String genre) {
+}
+----
+
+For the *Java* version.
+
 
 Now when you try to validate this record data sending that payload, the system replies with the 
 following *_Problem Detail_*.
@@ -97,6 +117,9 @@ following *_Problem Detail_*.
 As such the errors array is telling you that null or empty is not allowed according to the validation
 annotations defined.
 
+In this project, you can see there are two controllers for the *_MovieRecord_* Api, this demonstrates
+how we can write controllers with the same _class_ name but different version api.
 
-
+Look into the 'com.themusketeers.sbnative.controller.api.v1.MovieRecordController' for 'api/v1/movie/records'
+and 'com.themusketeers.sbnative.controller.api.v2.MovieRecordController' for 'api/v2/movie/records'.
 

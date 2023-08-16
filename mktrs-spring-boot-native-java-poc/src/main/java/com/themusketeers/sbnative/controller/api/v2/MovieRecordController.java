@@ -26,6 +26,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * Movie Record API Controller.
+ * <p><b>Path:</b>{@code api/v2/movie/records}</p>
+ *
+ * @author COQ - Carlos Adolfo Ortiz Q.
+ */
 @RestController(value = "MovieRecordControllerV2")
 @RequestMapping("api/v2/movie/records")
 public record MovieRecordController(MovieRecordRedisHashRepository movieRecordRedisHashRepository) {
