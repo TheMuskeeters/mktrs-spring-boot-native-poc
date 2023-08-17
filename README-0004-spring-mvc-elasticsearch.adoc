@@ -1,0 +1,32 @@
+= Readme 004
+
+Introduction to Spring Data Elasticsearch
+https://www.baeldung.com/spring-data-elasticsearch-tutorial
+
+Using Elasticsearch with Spring Boot
+https://reflectoring.io/spring-boot-elasticsearch/
+
+
+[NOTE]
+====
+These articles uses RestHighLevelClient which with 'spring-boot-starter-data-elasticsearch' does not include. 
+Pending how to configure properly. Learning phase...
+====
+
+= Running ElasticSearch instance
+
+Use Docker
+
+See this page for the official current version.
+https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html
+
+
+[source,bash]
+----
+$ docker pull docker.elastic.co/elasticsearch/elasticsearch:8.9.0
+----
+
+[source,bash]
+----
+$ docker run -d --name local-elasticsearch -p 9200:9200 -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch:8.9.0
+----
