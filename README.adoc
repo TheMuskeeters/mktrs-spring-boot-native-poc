@@ -53,6 +53,7 @@ named as follows.
 * README-0006-spring-mvc-mongodb.adoc.
 * README-0007-spring-webflux-mongodb.adoc.
 * README-0008-spring-mvc-gcp-firestore.adoc
+* README-0009-spring-webflux-gcp-firestore.adoc
 
 [WARNING]
 ====
