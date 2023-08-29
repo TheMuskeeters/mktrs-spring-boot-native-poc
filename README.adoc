@@ -67,6 +67,8 @@ unit tests to validate nothing has broken.
 === GCP (Firebase/Firestore)
 * https://www.knowledgefactory.net/2023/02/google-cloud-firestore-spring-boot-spring-webflux-build-reactive-crud-rest-apis.html[Google Cloud Firestore + Spring Boot + Spring WebFlux - Build Reactive CRUD REST APIs^]
 * https://firebase.google.com/docs/firestore/pricing#:~:text=Cloud%20Firestore%20offers%20free%20quota,reset%20around%20midnight%20Pacific%20time.[Understand Cloud Firestore billing^]
+* https://cloud.google.com/free[Google Cloud Platform Free^]
+* https://partner.cloudskillsboost.google/[Google Cloud Skills Boost for Partners^]
 
 === Kotlin
 * https://www.baeldung.com/kotlin/java-8-stream-vs-kotlin[Java 8 Stream API Analogies in Kotlin^]
