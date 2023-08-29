@@ -2,6 +2,16 @@
 
 When you come to this branch you find how to use a *GCP Firebase/Firestore* database.
 
+[NOTE]
+====
+When you are in the _Google Cloud Console_ and you want to create a new project without and organization, you need
+to have the proper permissions to be able to add/modify organizations. If you don't want a *_new project_*
+to have an *Organization*, just select the _no organization_ should you have the proper permissions. 
+
+For the creation of the *Organization*, read 
+https://cloud.google.com/resource-manager/docs/creating-managing-organization[Creating and managing organization resources^].
+====
+
 == References
 * https://www.knowledgefactory.net/2023/02/google-cloud-firestore-spring-boot-spring-webflux-build-reactive-crud-rest-apis.html[Google Cloud Firestore + Spring Boot + Spring WebFlux - Build Reactive CRUD REST APIs^]
 * https://firebase.google.com/docs/firestore/pricing#:~:text=Cloud%20Firestore%20offers%20free%20quota,reset%20around%20midnight%20Pacific%20time.[Understand Cloud Firestore billing^]
