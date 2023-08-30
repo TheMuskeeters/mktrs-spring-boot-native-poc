@@ -1,0 +1,39 @@
+= mktrs-spring-boot-native-poc (0005-spring-webflux-elasticsearch)
+
+When you come to this branch you find how to use a *ElasticSearch* database.
+
+[NOTE]
+====
+This version uses the *Reactive Programming* (non-blocking app model, asynchronous model) using the _spring-webflux_ module. 
+====
+
+Introduction to Spring Data Elasticsearch
+https://www.baeldung.com/spring-data-elasticsearch-tutorial
+
+Using Elasticsearch with Spring Boot
+https://reflectoring.io/spring-boot-elasticsearch/
+
+
+[NOTE]
+====
+These articles uses RestHighLevelClient which with 'spring-boot-starter-data-elasticsearch' does not include. 
+Pending how to configure properly. Learning phase...
+====
+
+= Running ElasticSearch instance
+
+Use Docker
+
+See this page for the official current version.
+https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html
+
+
+[source,bash]
+----
+$ docker pull docker.elastic.co/elasticsearch/elasticsearch:8.9.0
+----
+
+[source,bash]
+----
+$ docker run -d --name local-elasticsearch -p 9200:9200 -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch:8.9.0
+----
