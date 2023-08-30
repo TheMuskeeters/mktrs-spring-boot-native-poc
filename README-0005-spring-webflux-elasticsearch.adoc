@@ -1,10 +1,10 @@
-= mktrs-spring-boot-native-poc (0004-spring-mvc-elasticsearch)
+= mktrs-spring-boot-native-poc (0005-spring-webflux-elasticsearch)
 
 When you come to this branch you find how to use a *ElasticSearch* database.
 
 [NOTE]
 ====
-This version uses the *Imperative Programming* (Servlet technology, blocking app model, synchronous model) using the _spring-mvc_ module. 
+This version uses the *Reactive Programming* (non-blocking app model, asynchronous model) using the _spring-webflux_ module. 
 ====
 
 Introduction to Spring Data Elasticsearch
