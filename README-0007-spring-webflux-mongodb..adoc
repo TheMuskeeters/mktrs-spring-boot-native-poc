@@ -1,0 +1,8 @@
+= mktrs-spring-boot-native-poc (0007-spring-webflux-mongodb)
+
+When you come to this branch you find how to use a *mongodb* database.
+
+[NOTE]
+====
+This version uses the *Reactive Programming* (non-blocking app model, asynchronous model) using the _spring-webflux_ module. 
+====
