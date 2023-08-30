@@ -1,0 +1,5 @@
+= mktrs-spring-boot-native-poc (0001-initial)
+
+This only contains the minimal *_Spring MVC_* as a way of getting started in implementing a *REST Service*.
+This branch is the same as *_master_* and contains bare bones configurations that eventually 
+the other known branches will use. 

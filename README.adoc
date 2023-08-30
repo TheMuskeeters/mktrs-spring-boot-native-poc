@@ -33,6 +33,8 @@ Here are the current branches.
 * *steps/0005-spring-webflux-elasticsearch:* From the initial app adds *ElasticSearch* support, uses *Spring WebFlux* (non-blocking app model, asynchronous model).
 * *steps/0006-spring-mvc-mongodb:* From the initial app adds *MongoDB* support, uses *Spring MVC* (Servlet technology, blocking app model, synchronous model).
 * *steps/0007-spring-webflux-mongodb:* From the initial app adds *MongoDB* support, uses *Spring WebFlux* (non-blocking app model, asynchronous model).
+* *steps/0008-spring-mvc-gcp-firestore:* From the initial app adds *GCP Firestore* support, uses *Spring MVC* (Servlet technology, blocking app model, synchronous model).
+* *steps/0009-spring-webflux-gcp-firestore:* From the initial app adds *GCP Firestore* support, uses *Spring WebFlux* (non-blocking app model, asynchronous model).
 
 Some necessary files are to be touched as common files in all branches so from time to time those are synchronized
 with all the branches.
@@ -41,8 +43,7 @@ These files are kept in the *master* branch and replicated in all other branches
 'pom.xml' (Maven) or eventually 'build.gradle' (Gradle with Groovy) or 'build.gradle.kts' (Gradle with Kotlin), this 
 *README.adoc*, etc.
 
-To minimize the impact of synchronization and code collisions, each branch has its own specific *README.adoc*,
-named as follows.
+Each branch holds a *README* to put into place, notes, tips, etc., around the technology being used there.
 
 * README.adoc in *master* branch.
 * README-0001-initial.adoc.
@@ -60,6 +61,10 @@ named as follows.
 Whenever it is required to make adjustment to the common files which need to be replicated to all branches, 
 they must be added/updated in the *master* branch. If you make any changes to the code base, then run the
 unit tests to validate nothing has broken. 
+
+Common files are (present at all times in the branches):
+
+* README files. 
 ====
 
 == References
@@ -67,6 +72,8 @@ unit tests to validate nothing has broken.
 === GCP (Firebase/Firestore)
 * https://www.knowledgefactory.net/2023/02/google-cloud-firestore-spring-boot-spring-webflux-build-reactive-crud-rest-apis.html[Google Cloud Firestore + Spring Boot + Spring WebFlux - Build Reactive CRUD REST APIs^]
 * https://firebase.google.com/docs/firestore/pricing#:~:text=Cloud%20Firestore%20offers%20free%20quota,reset%20around%20midnight%20Pacific%20time.[Understand Cloud Firestore billing^]
+* https://cloud.google.com/free[Google Cloud Platform Free^]
+* https://partner.cloudskillsboost.google/[Google Cloud Skills Boost for Partners^]
 
 === Kotlin
 * https://www.baeldung.com/kotlin/java-8-stream-vs-kotlin[Java 8 Stream API Analogies in Kotlin^]

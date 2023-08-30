@@ -1,0 +1,167 @@
+= mktrs-spring-boot-native-poc (0002-spring-mvc-redis)
+
+When you come to this branch you find how to use a *Redis* database.
+
+[NOTE]
+====
+This version uses the *Imperative Programming* (Servlet technology, blocking app model, synchronous model) using the _spring-mvc_ module. 
+====
+
+Check the *com.themusketeers.sbnative.service.intr.RedisCacheService* interface and its implementations. 
+This approach uses the *Spring RedisTemplate* class, and it is exercised in the
+*com.themusketeers.sbnative.controller.MovieRecordController* and 
+*com.themusketeers.sbnative.MovieRecordSpringDataController* uses a *Spring Data Redis Repository*.
+
+Another aspect here is that here it implements a *Redis Region* and a *Redis Hash* strategy, to activate 
+its usage, use the *Spring Profile* mechanism.
+
+Use 
+
+[source,yaml]
+----
+spring:
+    profiles:
+        active: default,redis-region
+----
+
+This activates the usage of the implementation based in *com.themusketeers.sbnative.service.RedisRegionCacheService*.
+
+[source,yaml]
+----
+spring:
+    profiles:
+        active: default,redis-hash
+----
+
+This activates the usage of the implementation based in *com.themusketeers.sbnative.service.RedisHashService*.
+
+The *com.themusketeers.sbnative.controller.api.v1.MovieRecordController* then uses *RedisCacheService* approach.
+And The *com.themusketeers.sbnative.controller.api.v2.MovieRecordController* then uses *MovieRecordRedisHashRepository* approach.
+
+== Notes
+When you are validating in *Kotlin* using *Jakarta Validator* for a payload in *JSON*
+and you send null in the fields, then the corresponding fields must have the nullable mark.
+
+*Example*
+
+[source,json]
+----
+{
+  "id" : null,
+  "title" : null,
+  "year" : null,
+  "genre" : null
+}
+----
+
+The model for this must be defined as
+
+[source,kotlin]
+----
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonPropertyOrder("id", "title", "year", "genre")
+data class MovieRecord(
+    @field:NotEmpty(message = "Movie Record Id is mandatory") val id: String?,
+    @field:NotEmpty(message = "Movie Record Title is mandatory") val title: String?,
+    @field:NotNull(message = "Movie Record Year is mandatory")
+    @field:Min(value = 1900, message = "Movie Record Year must be after 1900")
+    @field:Max(value = 9999, message = "Movie Record Year must be before 9999")
+    val year: Int?,
+    @field:NotEmpty(message = "Movie Record Genre is mandatory") val genre: String?
+)
+----
+
+For the *_Kotlin_* version.
+
+[source,java]
+----
+@JvmRecord
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonPropertyOrder({"id", "title", "year", "genre"})
+public record MovieRecord(@NotEmpty(message = "Movie Record Id is mandatory") String id,
+                          @NotEmpty(message = "Movie Record Title is mandatory") String title,
+                          @NotNull(message = "Movie Record Year is mandatory")
+                          @Min(value = 1900, message = "Movie Record Year must be after 1900")
+                          @Max(value = 9999, message = "Movie Record Year must be before 9999")
+                          Integer year,
+                          @NotEmpty(message = "Movie Record Genre is mandatory") String genre) {
+}
+----
+
+[NOTE]
+====
+For every model class defined under the *_Kotlin_* language, and in order for _JSON_
+serializer libraries which work with *_Java*_ semantics, also because of *Spring Data*, we need the following to properly
+work under *_Kotlin*_.
+
+<dependency>
+    <groupId>com.fasterxml.jackson.module</groupId>
+    <artifactId>jackson-module-kotlin</artifactId>
+</dependency>
+
+And in the class we add the @JvmRecord annotation. This way it instruct *Jackson JSON Library*.
+====
+
+
+For the *Java* version.
+
+
+Now when you try to validate this record data sending that payload, the system replies with the 
+following *_Problem Detail_*.
+
+[source,json]
+----
+{
+	"statusCode": "BAD_REQUEST",
+	"headers": {},
+	"detailMessageCode": "problemDetail.org.springframework.web.bind.MethodArgumentNotValidException",
+	"detailMessageArguments": null,
+	"titleMessageCode": "problemDetail.title.org.springframework.web.bind.MethodArgumentNotValidException",
+	"body": {
+		"type": "/api/v1/movie/records",
+		"title": "Bad Request on payload",
+		"status": 400,
+		"detail": "Validation error on supplied payload",
+		"instance": "/api/v1/movie/records",
+		"errorCategory": "Parameters",
+		"errors": [
+			"genre: Movie Record Genre is mandatory",
+			"id: Movie Record Id is mandatory",
+			"title: Movie Record Title is mandatory",
+			"year: Movie Record Year is mandatory"
+		],
+		"timestamp": "2023-07-08T17:38:09.069012800Z"
+	}
+}
+----
+
+As such the errors array is telling you that null or empty is not allowed according to the validation
+annotations defined.
+
+In this project, you can see there are two controllers for the *_MovieRecord_* Api, this demonstrates
+how we can write controllers with the same _class_ name but different version api.
+
+Look into the 'com.themusketeers.sbnative.controller.api.v1.MovieRecordController' for 'api/v1/movie/records'
+and 'com.themusketeers.sbnative.controller.api.v2.MovieRecordController' for 'api/v2/movie/records'.
+
+== Runnig Redis Server Locally
+As of now you may be needing to run the *_Redis_* server to run the application.
+
+The best way to do this is to rely on Docker for this purpose.
+
+Use the following command to create and run the container.
+
+[source,bash]
+----
+$ docker run --name local-redis -d -p 6379:6379 redis:latest
+----
+
+When the container is running and probably you restart your local computer, you
+would need to restart the container, that is the purpose next.
+
+[source,bash]
+----
+$ docker start local-redis
+----
+
+Now you can speak to a *Redis* server.

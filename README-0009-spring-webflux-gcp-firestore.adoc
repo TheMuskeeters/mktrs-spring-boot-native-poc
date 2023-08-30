@@ -1,10 +1,10 @@
-= mktrs-spring-boot-native-poc (0008-spring-mvc-gcp-firestore)
+= mktrs-spring-boot-native-poc (0009-spring-webflux-gcp-firestore)
 
 When you come to this branch you find how to use a *GCP Firebase/Firestore* database.
 
 [NOTE]
 ====
-This version uses the *Imperative Programming* (Servlet technology, blocking app model, synchronous model) using the _spring-mvc_ module. 
+This version uses the *Reactive Programming* (non-blocking app model, asynchronous model) using the _spring-webflux_ module. 
 ====
 
 [NOTE]
