@@ -1,39 +1,55 @@
+/*----------------------------------------------------------------------------*/
+/* Source File:   LOCALEKEYVALIDATORSERVICEIMPL.JAVA                          */
+/* Copyright (c), 2023 The Musketeers                                         */
+/*----------------------------------------------------------------------------*/
+/*-----------------------------------------------------------------------------
+ History
+ Sep.07/2023  COQ  File created.
+ -----------------------------------------------------------------------------*/
 package com.themusketeers.sbnative.service;
 
+import static com.themusketeers.sbnative.common.consts.GlobalConstants.DOT;
+import static com.themusketeers.sbnative.common.consts.GlobalConstants.EMPTY_DEFINITION;
+import static com.themusketeers.sbnative.common.consts.GlobalConstants.EN_KEY_MANDATORY;
+import static com.themusketeers.sbnative.common.consts.GlobalConstants.INT_ONE;
+import static com.themusketeers.sbnative.common.consts.GlobalConstants.INT_ZERO;
+import static com.themusketeers.sbnative.common.consts.GlobalConstants.KEY_CONTAINS_MORE_THAN_ONE_TOKEN;
+import static com.themusketeers.sbnative.common.consts.GlobalConstants.KEY_LEFT_BRACKET;
+import static com.themusketeers.sbnative.common.consts.GlobalConstants.KEY_MULTIPLE_DEFINED;
+import static com.themusketeers.sbnative.common.consts.GlobalConstants.KEY_MUST_NOT_CONTAIN_SPACES;
+import static com.themusketeers.sbnative.common.consts.GlobalConstants.KEY_RIGHT_BRACKET_SUPPORTED_LIST;
+import static com.themusketeers.sbnative.common.consts.GlobalConstants.LOCALE_EN;
+import static com.themusketeers.sbnative.common.consts.GlobalConstants.NULL_STR;
+import static com.themusketeers.sbnative.common.consts.GlobalConstants.SPACE_STR;
+
+import com.themusketeers.sbnative.service.intr.LocaleKeyValidatorService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.StringTokenizer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
+/**
+ * Helps validate the keys contained in the map about the languages supported
+ * in the Marketing Card. (Implementation).
+ *
+ * @author COQ - Carlos Adolfo Ortiz Q.
+ */
 @Service
 public class LocaleKeyValidatorServiceImpl implements LocaleKeyValidatorService {
-    private static final String EMPTY_DEFINITION = "\"\"";
-    private static final String DOT = ".";
-    private static final String COMMA = ",";
-    private static final String SPACE_STR = " ";
-    private static final String NULL_STR = "null";
-    private static final String KEY_LEFT_BRACKET = "Key [";
-    private static final String KEY_MULTIPLE_DEFINED = "] in 'localeData' has more than one value defined.";
-    private static final String KEY_RIGHT_BRACKET_SUPPORTED_LIST = "] in 'localeData' is not supported as valid locale key. List of supported language keys are ";
-    private static final String KEY_MUST_NOT_CONTAIN_SPACES = "] must not contain spaces.";
-    private static final String KEY_CONTAINS_MORE_THAN_ONE_TOKEN = "] contains more than one token.";
-    private static final String EN_KEY_MANDATORY = "EN key is mandatory to be present in 'localeData'.";
-
-    private static final int INT_ZERO = 0;
-    private static final int INT_ONE = 1;
-
-    private String defaultLanguage = "en";
-
     private List<String> validLanguageKeys;
 
+    /**
+     * Default constructor.
+     */
     public LocaleKeyValidatorServiceImpl() {
 
         validLanguageKeys =
-            List.of("en, fr, es")
-                .stream()
+            Stream.of("en, es, fr")
                 .map(s -> s.trim())
                 .collect(Collectors.toList());
     }
@@ -46,6 +62,7 @@ public class LocaleKeyValidatorServiceImpl implements LocaleKeyValidatorService 
                 .map(key -> key.trim())
                 .map(key -> key.toLowerCase(Locale.getDefault()))
                 .collect(Collectors.groupingByConcurrent(Function.identity(), Collectors.counting()));
+        var defaultLanguage = LOCALE_EN;
 
         if (!keyCountMap.keySet().contains(defaultLanguage)) {
             errorList.add(EN_KEY_MANDATORY);
