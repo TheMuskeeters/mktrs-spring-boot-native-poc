@@ -15,7 +15,25 @@
     <description>Toying with Spring Native (Java Version)</description>
     <properties>
         <java.version>17</java.version>
+        <commons-lang3.version>3.13.0</commons-lang3.version>
+        <commons-collections4.version>4.4</commons-collections4.version>
     </properties>
+    <dependencyManagement>
+        <dependencies>
+            <!-- Apache -->
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${commons-lang3.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-collections4</artifactId>
+                <version>${commons-collections4.version}</version>
+            </dependency>
+            <!-- END Apache -->
+        </dependencies>
+    </dependencyManagement>
     <dependencies>
         <!-- Spring Boot dependencies -->
         <dependency>
@@ -43,6 +61,17 @@
             <optional>true</optional>
         </dependency>
         <!-- END Spring Boot dependencies -->
+
+        <!-- Apache -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-collections4</artifactId>
+        </dependency>
+        <!-- END Apache -->
 
         <!-- Testing dependencies -->
         <dependency>
