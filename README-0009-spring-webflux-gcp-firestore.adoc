@@ -2,6 +2,10 @@
 
 When you come to this branch you find how to use a *GCP Firebase/Firestore* database.
 
+The following link is a way to interact with your firestore database inside *GCP*.
+
+https://console.firebase.google.com/[Firebase Console^]
+
 [NOTE]
 ====
 This version uses the *Reactive Programming* (non-blocking app model, asynchronous model) using the _spring-webflux_ module. 
@@ -17,6 +21,54 @@ For the creation of the *Organization*, read
 https://cloud.google.com/resource-manager/docs/creating-managing-organization[Creating and managing organization resources^].
 ====
 
+== Credentials
+In order to be able to communicate with *Firestore* we need to create a *_Service Account_* and download the *JSON* file from
+the *GCP Console*.
+
+Now in the *Spring Boot* application propeties file, add the following entry.
+
+[source,yaml]
+====
+spring:
+  cloud:
+    gcp:
+      credentials:
+        location: : file:<path-to-filework-data>/service-account.json
+====
+
+Use this setting to configure the *Spring Cloud GCP Core* module.
+
+And use the following one only if it is different to the latter.
+
+[source,yaml]
+----
+spring:
+  cloud:
+    gcp:
+      firestore:
+        credentials:
+          location: file:<path-to-filework-data>/service-account.json
+----
+
+[WARNING]
+====
+When using 
+* *Spring Cloud GCP Version:* 4.7.2
+* *Spring Cloud Version:* 2022.0.4
+
+these libraries are not yet compatible to use *Java 17 Record* structure.
+====
+
+Notice that the service account file must not be stored in the repository as this is sensitive information.
+Although that is good for developing/testing purposes, it is not recommended for *Production* purposes. In order to
+circumvent this, use an environment variable *_'GOOGLE_APPLICATION_CREDENTIALS'_* and give the location to your *JSON* file.  
+
+[NOTE]
+====
+If your application is running on Google App Engine or Google Compute Engine, in most cases you should omit the "spring.cloud.gcp.credentials.location" property and instead, let Spring Cloud GCP Core Starter find the correct credentials for those environments.
+====
+
 == References
 * https://www.knowledgefactory.net/2023/02/google-cloud-firestore-spring-boot-spring-webflux-build-reactive-crud-rest-apis.html[Google Cloud Firestore + Spring Boot + Spring WebFlux - Build Reactive CRUD REST APIs^]
 * https://firebase.google.com/docs/firestore/pricing#:~:text=Cloud%20Firestore%20offers%20free%20quota,reset%20around%20midnight%20Pacific%20time.[Understand Cloud Firestore billing^]
+* https://firebase.google.com/docs/firestore/quickstart[Get started with Cloud Firestore^]
