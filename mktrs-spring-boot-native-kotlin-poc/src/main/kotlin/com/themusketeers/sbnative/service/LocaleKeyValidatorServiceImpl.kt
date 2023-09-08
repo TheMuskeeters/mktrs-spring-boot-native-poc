@@ -20,7 +20,6 @@ import com.themusketeers.sbnative.common.consts.GlobalConstants.SPACE_STR
 import com.themusketeers.sbnative.service.intr.LocaleKeyValidatorService
 import java.util.Locale
 import java.util.StringTokenizer
-import java.util.function.Function
 import java.util.stream.Collectors
 import java.util.stream.Stream
 import org.apache.commons.lang3.StringUtils
@@ -34,23 +33,18 @@ import org.springframework.stereotype.Service
  */
 @Service
 class LocaleKeyValidatorServiceImpl : LocaleKeyValidatorService {
-    private val validLanguageKeys: List<String>
-
-    /**
-     * Default initialization.
-     */
-    init {
-        validLanguageKeys = Stream.of("en, es, fr")
-            .map { s: String -> s.trim { it <= ' ' } }
-            .collect(Collectors.toList())
-    }
+    private var validLanguageKeys= Stream.of("en, es, fr")
+        .map { s: String -> s.trim { it <= ' ' } }
+        .collect(Collectors.toList())
 
     override fun validateErrorsOnKeys(keys: List<String>): List<String> {
         val errorList = ArrayList<String>()
         val keyCountMap = keys.stream()
             .map { key: String -> key.trim { it <= ' ' } }
             .map { key: String -> key.lowercase(Locale.getDefault()) }
-            .collect(Collectors.groupingByConcurrent<String, String, Any, Long>(Function.identity(), Collectors.counting()))
+            .toList()
+            .groupingBy { it }
+            .eachCount()
         val defaultLanguage: String = LOCALE_EN
 
         if (!keyCountMap.keys.contains(defaultLanguage)) {
@@ -75,7 +69,7 @@ class LocaleKeyValidatorServiceImpl : LocaleKeyValidatorService {
                 }
             }
 
-        keyCountMap.forEach { (k: String, v: Long) ->
+        keyCountMap.forEach { (k, v) ->
             if (!validLanguageKeys.contains(k)) {
                 val isNullOrEmptyKey = StringUtils.EMPTY == k || NULL_STR == k
                 errorList.add(
