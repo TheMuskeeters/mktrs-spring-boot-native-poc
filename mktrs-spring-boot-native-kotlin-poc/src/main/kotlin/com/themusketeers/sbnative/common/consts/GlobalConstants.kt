@@ -24,7 +24,6 @@ object GlobalConstants {
     const val WILD_CARD_ASTERISK = "*"
     const val EMPTY_STRING = ""
     const val NULL_STRING = "null"
-    const val MOVIE_RECORD_CACHE_KEY = "MOVIE"
 
     const val INT_ZERO = 0
     const val INT_ONE = 1
