@@ -1,15 +1,17 @@
 /*----------------------------------------------------------------------------*/
-/* Source File:   MARKETINGCARD.JAVA                                          */
+/* Source File:   MARKETINGCARDDOCUNEBT.JAVA                                  */
 /* Copyright (c), 2023 The Musketeers                                         */
 /*----------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------
  History
  Sep.05/2023  COQ  File created.
  -----------------------------------------------------------------------------*/
-package com.themusketeers.sbnative.domain;
+package com.themusketeers.sbnative.domain.document.marketing.card;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.google.cloud.firestore.annotation.DocumentId;
+import com.google.cloud.spring.data.firestore.Document;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -19,6 +21,7 @@ import java.util.Objects;
  *
  * @author COQ - Carlos Adolfo Ortiz Q.
  */
+@Document(collectionName = "marketing-cards-v1")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
     "id",
@@ -34,7 +37,8 @@ import java.util.Objects;
     "localeData",
     "updated"
 })
-public class MarketingCard {
+public class MarketingCardDocument {
+    @DocumentId
     private String id;
     private String title;
     private String description;
@@ -49,10 +53,10 @@ public class MarketingCard {
     private Map<String, MarketingCardLocaleData> localeData;
     private MarketingCardPublishTime publish;
 
-    public MarketingCard() {
+    public MarketingCardDocument() {
     }
 
-    public MarketingCard(
+    public MarketingCardDocument(
         String id,
         String title,
         String description,
@@ -179,7 +183,7 @@ public class MarketingCard {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        MarketingCard that = (MarketingCard) o;
+        MarketingCardDocument that = (MarketingCardDocument) o;
         return Objects.equals(id, that.id)
             && Objects.equals(title, that.title)
             && Objects.equals(description, that.description)
@@ -213,7 +217,7 @@ public class MarketingCard {
 
     @Override
     public String toString() {
-        return "MarketingCard{"
+        return "MarketingCardDocument{"
             + "id='"
             + id
             + '\''

@@ -6,7 +6,7 @@
  History
  Sep.05/2023  COQ  File created.
  -----------------------------------------------------------------------------*/
-package com.themusketeers.sbnative.domain;
+package com.themusketeers.sbnative.domain.document.marketing.card;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;

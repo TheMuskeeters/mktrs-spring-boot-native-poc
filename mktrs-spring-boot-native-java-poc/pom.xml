@@ -17,6 +17,8 @@
         <java.version>17</java.version>
         <commons-lang3.version>3.13.0</commons-lang3.version>
         <commons-collections4.version>4.4</commons-collections4.version>
+        <spring-cloud-gcp.version>4.7.2</spring-cloud-gcp.version>
+        <spring-cloud.version>2022.0.4</spring-cloud.version>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -32,6 +34,16 @@
                 <version>${commons-collections4.version}</version>
             </dependency>
             <!-- END Apache -->
+
+            <!-- GCP -->
+            <dependency>
+                <groupId>com.google.cloud</groupId>
+                <artifactId>spring-cloud-gcp-dependencies</artifactId>
+                <version>${spring-cloud-gcp.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <!-- END GCP -->
         </dependencies>
     </dependencyManagement>
     <dependencies>
@@ -72,6 +84,17 @@
             <artifactId>commons-collections4</artifactId>
         </dependency>
         <!-- END Apache -->
+
+        <!-- GCP -->
+        <dependency>
+            <groupId>com.google.cloud</groupId>
+            <artifactId>spring-cloud-gcp-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.cloud</groupId>
+            <artifactId>spring-cloud-gcp-starter-data-firestore</artifactId>
+        </dependency>
+        <!-- END GCP -->
 
         <!-- Testing dependencies -->
         <dependency>

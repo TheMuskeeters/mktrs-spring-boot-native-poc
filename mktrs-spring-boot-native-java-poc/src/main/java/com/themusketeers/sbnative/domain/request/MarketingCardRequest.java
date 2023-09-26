@@ -13,8 +13,8 @@ package com.themusketeers.sbnative.domain.request;
 // StringPublishTime.builder().start(TEXT_PUBLISH_START).end(TEXT_PUBLISH_END).build())
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.themusketeers.sbnative.domain.MarketingCardLocaleData;
-import com.themusketeers.sbnative.domain.MarketingCardPublishTime;
+import com.themusketeers.sbnative.domain.document.marketing.card.MarketingCardLocaleData;
+import com.themusketeers.sbnative.domain.document.marketing.card.MarketingCardPublishTime;
 import java.util.List;
 import java.util.Map;
 
