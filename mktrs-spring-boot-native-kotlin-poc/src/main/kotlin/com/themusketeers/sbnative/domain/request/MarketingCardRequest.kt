@@ -9,8 +9,8 @@
 package com.themusketeers.sbnative.domain.request
 
 import com.fasterxml.jackson.annotation.JsonInclude
-import com.themusketeers.sbnative.domain.document.marketing.card.MarketingCardLocaleData
-import com.themusketeers.sbnative.domain.document.marketing.card.MarketingCardPublishTime
+import com.themusketeers.sbnative.domain.marketing.card.MarketingCardLocaleData
+import com.themusketeers.sbnative.domain.marketing.card.MarketingCardPublishTime
 
 //private static final String TEXT_PUBLISH_START = "2023-07-17T13:56:00Z";
 //private static final String TEXT_PUBLISH_END = "2023-07-31T13:56:00Z";

@@ -1,34 +1,44 @@
 /*----------------------------------------------------------------------------*/
-/* Source File:   MARKETINGCARDMEDIA.JAVA                                     */
+/* Source File:   MARKETINGCARDCALLTOACTION.JAVA                              */
 /* Copyright (c), 2023 The Musketeers                                         */
 /*----------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------
  History
  Sep.05/2023  COQ  File created.
  -----------------------------------------------------------------------------*/
-package com.themusketeers.sbnative.domain.document.marketing.card;
+package com.themusketeers.sbnative.domain.marketing.card;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import java.util.Objects;
 
 /**
- * Contains the information for Marketing Card Media definition.
+ * Contains the information for Marketing Card Call to Action definition.
  *
  * @author COQ - Carlos Adolfo Ortiz Q.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"type", "uri"})
-public class MarketingCardMedia {
+@JsonPropertyOrder({"label", "type", "uri"})
+public class MarketingCardCallToAction {
+    private String label;
     private String type;
     private String uri;
 
-    public MarketingCardMedia() {
+    public MarketingCardCallToAction() {
     }
 
-    public MarketingCardMedia(String type, String uri) {
+    public MarketingCardCallToAction(String label, String type, String uri) {
+        this.label = label;
         this.type = type;
         this.uri = uri;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
     }
 
     public String getType() {
@@ -51,17 +61,29 @@ public class MarketingCardMedia {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        MarketingCardMedia that = (MarketingCardMedia) o;
-        return Objects.equals(type, that.type) && Objects.equals(uri, that.uri);
+        MarketingCardCallToAction that = (MarketingCardCallToAction) o;
+        return Objects.equals(label, that.label)
+            && Objects.equals(type, that.type)
+            && Objects.equals(uri, that.uri);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(type, uri);
+        return Objects.hash(label, type, uri);
     }
 
     @Override
     public String toString() {
-        return "MarketingCardMedia{" + "type='" + type + '\'' + ", uri='" + uri + '\'' + '}';
+        return "MarketingCardCallToAction{"
+            + "label='"
+            + label
+            + '\''
+            + ", type='"
+            + type
+            + '\''
+            + ", uri='"
+            + uri
+            + '\''
+            + '}';
     }
 }

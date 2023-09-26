@@ -1,23 +1,29 @@
 /*----------------------------------------------------------------------------*/
-/* Source File:   MARKETINGCARDDOCUNEBT.JAVA                                  */
+/* Source File:   MARKETINGCARDDOCUMENT.JAVA                                  */
 /* Copyright (c), 2023 The Musketeers                                         */
 /*----------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------
  History
  Sep.05/2023  COQ  File created.
  -----------------------------------------------------------------------------*/
-package com.themusketeers.sbnative.domain.document.marketing.card;
+package com.themusketeers.sbnative.domain.marketing.card.document;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.google.cloud.firestore.annotation.DocumentId;
 import com.google.cloud.spring.data.firestore.Document;
+import com.themusketeers.sbnative.domain.marketing.card.MarketingCardCallToAction;
+import com.themusketeers.sbnative.domain.marketing.card.MarketingCardLocaleData;
+import com.themusketeers.sbnative.domain.marketing.card.MarketingCardMedia;
+import com.themusketeers.sbnative.domain.marketing.card.MarketingCardPublishTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
 /**
- * Contains the information for Marketing Card.
+ * Contains the information for Marketing Card (Firestore document).
+ *
+ * <p><b>NOTE:</b>As of now. Java Record is not supported in Spring Data Firestore.</p>
  *
  * @author COQ - Carlos Adolfo Ortiz Q.
  */
