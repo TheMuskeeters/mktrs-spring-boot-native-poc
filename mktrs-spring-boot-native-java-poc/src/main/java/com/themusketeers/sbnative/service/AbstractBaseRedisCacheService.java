@@ -29,7 +29,7 @@ import org.springframework.data.redis.core.RedisTemplate;
  * @param <V> Indicates the Redis Value type to work with.
  * @author COQ - Carlos Adolfo Ortiz Q.
  */
-public class AbstractBaseRedisCacheService<K, V> {
+public abstract class AbstractBaseRedisCacheService<K, V> {
     protected final String cacheName;
     protected final RedisTemplate<K, V> redisTemplate;
 
