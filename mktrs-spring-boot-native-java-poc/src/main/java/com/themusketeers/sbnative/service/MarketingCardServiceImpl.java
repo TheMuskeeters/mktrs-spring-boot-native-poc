@@ -9,12 +9,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
-public class MarketingCardServiceImpl implements MarketingCardService {
-    private final MarketingCardRepository marketingCardRepository;
-
-    public MarketingCardServiceImpl(MarketingCardRepository marketingCardRepository) {
-        this.marketingCardRepository = marketingCardRepository;
-    }
+public record MarketingCardServiceImpl(MarketingCardRepository marketingCardRepository) implements MarketingCardService {
 
     @Override
     public Mono<MarketingCard> save(MarketingCard marketingCard) {
