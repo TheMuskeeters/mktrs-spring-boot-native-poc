@@ -1,0 +1,16 @@
+= mktrs-spring-boot-native-poc (0010-spring-mvc-postgresql)
+
+This branch will be based on the following tutorial. 
+https://www.knowledgefactory.net/2023/10/spring-boot-3-spring-security-6-thymeleaf-registration-and-login-example.html
+
+This way you can learn how to use
+
+* Spring Boot 3+
+* Spring Framework 6+
+* Spring Security 6.1.4
+* Hibernate 6+
+* JPA
+* Maven
+* Thymeleaf
+* PostgreSQL 
+
