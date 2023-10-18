@@ -35,6 +35,8 @@ Here are the current branches.
 * *steps/0007-spring-webflux-mongodb:* From the initial app adds *MongoDB* support, uses *Spring WebFlux* (non-blocking app model, asynchronous model).
 * *steps/0008-spring-mvc-gcp-firestore:* From the initial app adds *GCP Firestore* support, uses *Spring MVC* (Servlet technology, blocking app model, synchronous model).
 * *steps/0009-spring-webflux-gcp-firestore:* From the initial app adds *GCP Firestore* support, uses *Spring WebFlux* (non-blocking app model, asynchronous model).
+* *steps/0010-spring-mvc-postgresql.adoc:* From the initial app adds *PostgreSQL* support and adds *Spring Security* and *Thymeleaf* page rendering, uses *Spring MVC* (Servlet technology, blocking app model, synchronous model).
+* *steps/0011-spring-webflux-postgresql.adoc:* From the initial app adds *PostgreSQL* support and adds *Spring Security* and *Thymeleaf* page rendering, uses *Spring WebFlux* (non-blocking app model, asynchronous model).
 
 Some necessary files are to be touched as common files in all branches so from time to time those are synchronized
 with all the branches.
@@ -55,6 +57,8 @@ Each branch holds a *README* to put into place, notes, tips, etc., around the te
 * README-0007-spring-webflux-mongodb.adoc.
 * README-0008-spring-mvc-gcp-firestore.adoc
 * README-0009-spring-webflux-gcp-firestore.adoc
+* README-0010-spring-mvc-postgresql.adoc
+* README-0011-spring-webflux-postgresql.adoc
 
 [WARNING]
 ====
