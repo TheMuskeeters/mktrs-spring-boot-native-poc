@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.1.4</version>
+        <version>3.1.5</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.themusketeers.</groupId>
@@ -19,6 +19,12 @@
         <commons-collections4.version>4.4</commons-collections4.version>
         <spring-cloud-gcp.version>4.7.2</spring-cloud-gcp.version>
         <spring-cloud.version>2022.0.4</spring-cloud.version>
+
+        <!-- Docker image settings -->
+        <docker.registry>docker.io</docker.registry>
+        <docker.user>library</docker.user>
+        <docker.image.name>${docker.registry}/${docker.user}/${project.name}:${project.version}</docker.image.name>
+        <!-- END Docker image settings -->
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -137,6 +143,12 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <image>
+                        <name>${docker.image.name}</name>
+                        <builder>paketobuildpacks/builder-jammy-tiny:latest</builder>
+                    </image>
+                </configuration>
             </plugin>
         </plugins>
     </build>
