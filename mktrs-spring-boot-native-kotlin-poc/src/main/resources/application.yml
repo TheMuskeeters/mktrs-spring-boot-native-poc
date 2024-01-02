@@ -6,6 +6,9 @@
 spring:
   profiles:
     active: default,redis-region
+  threads:
+    virtual:
+      enabled: true
   data:
     ## If you need to connect to a non-cluster Redis, use the following.
     redis:
