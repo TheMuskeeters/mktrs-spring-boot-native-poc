@@ -5,18 +5,18 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.2.1</version>
+        <version>3.2.5</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.themusketeers.</groupId>
     <artifactId>mktrs-spring-boot-native-kotlin-poc</artifactId>
-    <version>2024.1.0</version>
+    <version>2024.2.0</version>
     <name>mktrs-spring-boot-native-kotlin-poc</name>
     <description>Toying with Spring Native (Kotlin Version)</description>
     <properties>
         <java.version>21</java.version>
-        <kotlin.version>1.9.21</kotlin.version>
-        <commons-lang3.version>3.13.0</commons-lang3.version>
+        <kotlin.version>1.9.23</kotlin.version>
+        <commons-lang3.version>3.14.0</commons-lang3.version>
         <commons-collections4.version>4.4</commons-collections4.version>
 
         <!-- Docker image settings -->
