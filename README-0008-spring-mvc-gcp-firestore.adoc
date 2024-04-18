@@ -72,3 +72,4 @@ If your application is running on Google App Engine or Google Compute Engine, in
 * https://www.knowledgefactory.net/2023/02/google-cloud-firestore-spring-boot-spring-webflux-build-reactive-crud-rest-apis.html[Google Cloud Firestore + Spring Boot + Spring WebFlux - Build Reactive CRUD REST APIs^]
 * https://firebase.google.com/docs/firestore/pricing#:~:text=Cloud%20Firestore%20offers%20free%20quota,reset%20around%20midnight%20Pacific%20time.[Understand Cloud Firestore billing^]
 * https://firebase.google.com/docs/firestore/quickstart[Get started with Cloud Firestore^]
+* https://medium.com/@claudiorauso/local-testing-spring-gcp-firestore-57f2ffc49c1e[Local testing Spring + GCP Firestore^]
