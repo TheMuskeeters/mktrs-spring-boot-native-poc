@@ -8,7 +8,7 @@
         <version>3.2.5</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.themusketeers.</groupId>
+    <groupId>com.themusketeers</groupId>
     <artifactId>mktrs-spring-boot-native-kotlin-poc</artifactId>
     <version>2024.2.0</version>
     <name>mktrs-spring-boot-native-kotlin-poc</name>
