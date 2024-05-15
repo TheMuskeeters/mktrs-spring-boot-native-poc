@@ -2,4 +2,7 @@ spring:
   threads:
     virtual:
       enabled: true
-
+  r2dbc:
+    username: cortizq
+    password: tstpwd
+    url: r2dbc:oracle://localhost/tst_latest

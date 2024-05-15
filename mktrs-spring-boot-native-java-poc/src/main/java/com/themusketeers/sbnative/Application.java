@@ -4,12 +4,13 @@
 /*----------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------
  History
- May.23/2023  COQ  File created.
+ May.14/2024  COQ  File created.
  -----------------------------------------------------------------------------*/
 package com.themusketeers.sbnative;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.r2dbc.repository.config.EnableR2dbcRepositories;
 
 /**
  * Entry point for running the application.
@@ -17,6 +18,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @author COQ - Carlos Adolfo Ortiz Q.
  */
 @SpringBootApplication
+@EnableR2dbcRepositories
 public class Application {
 
     /**

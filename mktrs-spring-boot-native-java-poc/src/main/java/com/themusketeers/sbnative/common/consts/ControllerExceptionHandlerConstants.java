@@ -18,6 +18,7 @@ public class ControllerExceptionHandlerConstants {
      * General
      */
     public static final String USER_NOT_FOUND_ERROR_URL = "/api/v1/users";
+    public static final String REST_CLIENT_API_CALL_ISSUE = "Rest Client API call issue.";
 
     /*
      * Error Category

@@ -1,41 +1,29 @@
 /*----------------------------------------------------------------------------*/
 /* Source File:   GLOBALCONTROLLEREXCEPTIONHANDLER.JAVA                       */
-/* Copyright (c), 2023 The Musketeers                                         */
+/* Copyright (c), 2024 The Musketeers                                         */
 /*----------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------
  History
- Jun.21/2023  COQ  File created.
+ May.14/2024  COQ  File created.
  -----------------------------------------------------------------------------*/
-package com.themusketeers.sbnative.common.exception.handler;
+package com.themusketeers.jps.common.exception.handler;
 
 import static com.themusketeers.sbnative.common.consts.ControllerExceptionHandlerConstants.ERROR_CATEGORY_GENERIC;
-import static com.themusketeers.sbnative.common.consts.ControllerExceptionHandlerConstants.ERROR_CATEGORY_PARAMETERS;
-import static com.themusketeers.sbnative.common.consts.ControllerExceptionHandlerConstants.PROPERTY_ERRORS;
 import static com.themusketeers.sbnative.common.consts.ControllerExceptionHandlerConstants.PROPERTY_ERROR_CATEGORY;
 import static com.themusketeers.sbnative.common.consts.ControllerExceptionHandlerConstants.PROPERTY_TIMESTAMP;
-import static com.themusketeers.sbnative.common.consts.ControllerExceptionHandlerConstants.TITLE_BAD_REQUEST_ON_PAYLOAD;
-import static com.themusketeers.sbnative.common.consts.ControllerExceptionHandlerConstants.TITLE_USER_NOT_FOUND;
-import static com.themusketeers.sbnative.common.consts.ControllerExceptionHandlerConstants.TITLE_VALIDATION_ERROR_ON_SUPPLIED_PAYLOAD;
-import static com.themusketeers.sbnative.common.consts.ControllerExceptionHandlerConstants.USER_NOT_FOUND_ERROR_URL;
-import static com.themusketeers.sbnative.common.consts.GlobalConstants.COLON_SPACE_DELIMITER;
+import static com.themusketeers.sbnative.common.consts.ControllerExceptionHandlerConstants.REST_CLIENT_API_CALL_ISSUE;
 
-import com.themusketeers.sbnative.common.exception.ApiException;
-import com.themusketeers.sbnative.common.exception.UserNotFoundException;
 import java.net.URI;
 import java.time.Instant;
-import java.util.stream.Stream;
-import org.springframework.http.HttpHeaders;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.ErrorResponse;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.context.request.ServletWebRequest;
-import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestClient;
+import org.springframework.web.reactive.result.method.annotation.ResponseEntityExceptionHandler;
 
 /**
  * Put in a global place the exception handling mechanism, this is shared among all the REST Controllers defined
@@ -46,6 +34,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
  * <ul>
  * <li><a href="https://www.baeldung.com/global-error-handler-in-a-spring-rest-api">Global Error Handler in A Spring Rest Api</a></li>
  * <li><a href="https://www.youtube.com/watch?v=4YyJUS_7rQE">Spring 6 and Problem Details</a></li>
+ * <li><a href="https://mkyong.com/spring-boot/spring-rest-error-handling-example/">Spring REST Error Handling Example</a></li>
  * </ul>
  * </p>
  *
@@ -53,43 +42,34 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
  */
 @RestControllerAdvice
 public class GlobalControllerExceptionHandler extends ResponseEntityExceptionHandler {
+    private static final Logger log = LoggerFactory.getLogger(GlobalControllerExceptionHandler.class);
 
     /**
-     * Defines the message to be returned as the response when the {@link ApiException} is raised.
-     * Contains the information of the thrown exception to include as part of the response.
-     *
-     * @param ex Instance to the whole problem.
-     * @return A message indicating properly when this exception is raised that the system has not properly managed.
-     * @see RuntimeException
-     */
-    @ExceptionHandler(ApiException.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ResponseEntity<String> handleInternalError(RuntimeException ex) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-
-    /**
-     * Reports as response when the exception is raised indicating an User was not found.
+     * Handles {@link RestClient} {@link HttpClientErrorException} when external request gives an unsuccessful HTTP error code, such as 404.
      *
      * @param e Instance to the whole problem.
-     * @return An instance to the detailed problem using RFC 7807 error response.
+     * @return An ErrorResponse with the Problem Detail information.
+     * @see RuntimeException
+     * @see ErrorResponse
      */
-    @ExceptionHandler(UserNotFoundException.class)
-    public ErrorResponse handleUserNotFoundException(UserNotFoundException e) {
+    @ExceptionHandler(HttpClientErrorException.class)
+    public ErrorResponse handleTodoNotFoundException(RuntimeException e) {
+        log.error(REST_CLIENT_API_CALL_ISSUE, e);
+
         return ErrorResponse.builder(e, HttpStatus.NOT_FOUND, e.getMessage())
-            .title(TITLE_USER_NOT_FOUND)
-            .type(URI.create(USER_NOT_FOUND_ERROR_URL))
+            .title("TITLE_TODO_NOT_FOUND")
+            .type(URI.create("TODO_API_V1_URL"))
             .property(PROPERTY_ERROR_CATEGORY, ERROR_CATEGORY_GENERIC)
             .property(PROPERTY_TIMESTAMP, Instant.now())
             .build();
     }
 
-    @Override
+    /*@Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
                                                                   HttpHeaders headers,
                                                                   HttpStatusCode status,
                                                                   WebRequest request) {
-        var instanceURL = ((ServletWebRequest) request).getRequest().getRequestURI(); // This cast is for Servlet use case.
+        var instanceURL = request.getDescription(false);
 
         return this.createResponseEntity(
             ErrorResponse.builder(ex, HttpStatus.BAD_REQUEST, TITLE_VALIDATION_ERROR_ON_SUPPLIED_PAYLOAD)
@@ -114,5 +94,5 @@ public class GlobalControllerExceptionHandler extends ResponseEntityExceptionHan
                 .property(PROPERTY_TIMESTAMP, Instant.now())
                 .build(),
             headers, status, request);
-    }
+    }*/
 }
