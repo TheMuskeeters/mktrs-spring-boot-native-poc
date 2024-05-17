@@ -1,6 +1,6 @@
 = mktrs-spring-boot-native-poc
 
-V2023.1.0
+V2024.1.0
 
 Welcome to the Proof Of Concept project around *_Spring Boot 3.x_* which has a lot of 
 improvements for the modern *_Java_* application writing.
@@ -20,6 +20,23 @@ Basically what is done in the *Java* folder is replicated in the *Kotlin* folder
 you have a lot of reference code without distractions about a topic in testing. To follow
 this goal, we have different braches to exercise some concept.
 
+[IMPORTANT]
+----
+If you look into the git commit history, you will notice that the steps are sync'ed with the *_'master'_* branch
+to get the *Spring Boot* version and other stuff. From now on this synchronization is done manually as 
+*_'master'_* can only store one structure (be it reactive, or non reactive; the one it has now is non-reactive) 
+and it would lead to merge conflicts.
+
+Starting from _0012_ step, the programming paradigm will be only the *Reactive* paradigm.
+
+This project will always use the latest version of *_Spring Boot_* and the current LTS JDK (as of now JDK 21).
+
+In the future, when new steps are created, don't use neither the *master* nor the *0001-initial* branch to bootstrap
+(make it your code in a brand new way). This means, for example, if you create *'0013-whatever'* it will use
+the *Spring WebFlux (Reactive)* mode and the _Users_ endpoint (sample contained in either *master* or *0001-initial*)
+will not go through.
+----
+
 == Branches
 Each branch is named after the concept in consideration. You can browse the branch for each folder code to check
 how it is built and hopefully you learn something new.
@@ -37,6 +54,7 @@ Here are the current branches.
 * *steps/0009-spring-webflux-gcp-firestore:* From the initial app adds *GCP Firestore* support, uses *Spring WebFlux* (non-blocking app model, asynchronous model).
 * *steps/0010-spring-mvc-postgresql.adoc:* From the initial app adds *PostgreSQL* support and adds *Spring Security* and *Thymeleaf* page rendering, uses *Spring MVC* (Servlet technology, blocking app model, synchronous model).
 * *steps/0011-spring-webflux-postgresql.adoc:* From the initial app adds *PostgreSQL* support and adds *Spring Security* and *Thymeleaf* page rendering, uses *Spring WebFlux* (non-blocking app model, asynchronous model).
+* *steps/0012-spring-webflux-oracle.adoc:* From the initial app adds *Oracle* support, uses *Spring WebFlux* (non-blocking app model, asynchronous model).
 
 Some necessary files are to be touched as common files in all branches so from time to time those are synchronized
 with all the branches.
@@ -59,6 +77,7 @@ Each branch holds a *README* to put into place, notes, tips, etc., around the te
 * README-0009-spring-webflux-gcp-firestore.adoc
 * README-0010-spring-mvc-postgresql.adoc
 * README-0011-spring-webflux-postgresql.adoc
+* README-0012-spring-webflux-oracle.adoc
 
 [WARNING]
 ====
@@ -69,6 +88,8 @@ unit tests to validate nothing has broken.
 Common files are (present at all times in the branches):
 
 * README files. 
+
+Make this synchronization manually from now on.
 ====
 
 == References
