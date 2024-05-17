@@ -6,20 +6,23 @@
  History
  May.14/2024  COQ  File created.
  -----------------------------------------------------------------------------*/
-package com.themusketeers.jps.common.exception.handler;
+package com.themusketeers.sbnative.common.exception.handler;
 
 import static com.themusketeers.sbnative.common.consts.ControllerExceptionHandlerConstants.ERROR_CATEGORY_GENERIC;
 import static com.themusketeers.sbnative.common.consts.ControllerExceptionHandlerConstants.PROPERTY_ERROR_CATEGORY;
 import static com.themusketeers.sbnative.common.consts.ControllerExceptionHandlerConstants.PROPERTY_TIMESTAMP;
 import static com.themusketeers.sbnative.common.consts.ControllerExceptionHandlerConstants.REST_CLIENT_API_CALL_ISSUE;
 
+import com.themusketeers.sbnative.common.exception.ApiException;
 import java.net.URI;
 import java.time.Instant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClient;
@@ -43,6 +46,20 @@ import org.springframework.web.reactive.result.method.annotation.ResponseEntityE
 @RestControllerAdvice
 public class GlobalControllerExceptionHandler extends ResponseEntityExceptionHandler {
     private static final Logger log = LoggerFactory.getLogger(GlobalControllerExceptionHandler.class);
+
+    /**
+     * Defines the message to be returned as the response when the {@link ApiException} is raised.
+     * Contains the information of the thrown exception to include as part of the response.
+     *
+     * @param ex Instance to the whole problem.
+     * @return A message indicating properly when this exception is raised that the system has not properly managed.
+     * @see RuntimeException
+     */
+    @ExceptionHandler(ApiException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ResponseEntity<String> handleInternalError( RuntimeException ex)     {
+        return new ResponseEntity(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 
     /**
      * Handles {@link RestClient} {@link HttpClientErrorException} when external request gives an unsuccessful HTTP error code, such as 404.

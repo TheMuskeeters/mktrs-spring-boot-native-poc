@@ -4,37 +4,26 @@
 /*----------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------
  History
- Jun.24/2023  COQ  File created.
+ May.17/2024  COQ  File created.
  -----------------------------------------------------------------------------*/
 package com.themusketeers.sbnative.common.exception.handler
 
 import com.themusketeers.sbnative.common.consts.ControllerExceptionHandlerConstants.ERROR_CATEGORY_GENERIC
-import com.themusketeers.sbnative.common.consts.ControllerExceptionHandlerConstants.ERROR_CATEGORY_PARAMETERS
-import com.themusketeers.sbnative.common.consts.ControllerExceptionHandlerConstants.PROPERTY_ERRORS
 import com.themusketeers.sbnative.common.consts.ControllerExceptionHandlerConstants.PROPERTY_ERROR_CATEGORY
 import com.themusketeers.sbnative.common.consts.ControllerExceptionHandlerConstants.PROPERTY_TIMESTAMP
-import com.themusketeers.sbnative.common.consts.ControllerExceptionHandlerConstants.TITLE_BAD_REQUEST_ON_PAYLOAD
 import com.themusketeers.sbnative.common.consts.ControllerExceptionHandlerConstants.TITLE_USER_NOT_FOUND
-import com.themusketeers.sbnative.common.consts.ControllerExceptionHandlerConstants.TITLE_VALIDATION_ERROR_ON_SUPPLIED_PAYLOAD
 import com.themusketeers.sbnative.common.consts.ControllerExceptionHandlerConstants.USER_NOT_FOUND_ERROR_URL
-import com.themusketeers.sbnative.common.consts.GlobalConstants.COLON_SPACE_DELIMITER
 import com.themusketeers.sbnative.common.exception.ApiException
 import com.themusketeers.sbnative.common.exception.UserNotFoundException
 import java.net.URI
 import java.time.Instant
-import java.util.stream.Stream
-import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
-import org.springframework.http.HttpStatusCode
 import org.springframework.http.ResponseEntity
 import org.springframework.web.ErrorResponse
-import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestControllerAdvice
-import org.springframework.web.context.request.ServletWebRequest
-import org.springframework.web.context.request.WebRequest
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler
+import org.springframework.web.reactive.result.method.annotation.ResponseEntityExceptionHandler
 
 /**
  * Put in a global place the exception handling mechanism, this is shared among all the REST Controllers defined
@@ -82,6 +71,7 @@ class GlobalControllerExceptionHandler : ResponseEntityExceptionHandler() {
             .build()
     }
 
+    /*
     override fun handleMethodArgumentNotValid(
         ex: MethodArgumentNotValidException,
         headers: HttpHeaders,
@@ -114,4 +104,5 @@ class GlobalControllerExceptionHandler : ResponseEntityExceptionHandler() {
                 .build(),
             headers, status, request)
     }
+     */
 }
