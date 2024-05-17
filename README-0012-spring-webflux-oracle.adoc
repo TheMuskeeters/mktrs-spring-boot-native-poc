@@ -1,0 +1,55 @@
+= mktrs-spring-boot-native-poc (0012-spring-webflux-oracle)
+
+[NOTE]
+====
+This version uses the *Reactive Programming* (non-blocking app model, asynchronous model) using the _spring-webflux_ module. 
+====
+
+In order to use *Oracle* database locally we use an *OCI* docker image. Follow the instrucions in the *README* from 
+https://github.com/gvenzl/oci-oracle-free[Oracle Free^] and populate the database using data collected in 
+https://github.com/gvenzl/sample-data[Sample Data for SQL databases^].
+
+Using the following command is a default setup.
+
+[source,bash]
+----
+$ docker run -d -p 1521:1521 -e ORACLE_PASSWORD=mypwd --name local-oracle gvenzl/oracle-free<1>
+----
+<1> Replace the password on your own. If you use this command your SYS or SYSTEM user will use the password supplied.
+
+Using the following command will create multiple databases and some users.
+[source,bash]
+----
+$ docker run -d -p 1521:1521\
+  -e ORACLE_DATABASE=TST_LATEST,TST_STAGE\
+  -e APP_USER=cortizq\
+  -e APP_USER_PASSWORD=tstpwd\
+  -e ORACLE_PASSWORD=mypwd\
+  --name local-oracle\
+  gvenzl/oracle-free
+----
+
+[NOTE]
+====
+Spring Data project uses the _gvenzl/oci-oracle-free:23-slim_ (version may change).
+====
+
+Now you can connect using JDBC Driver (using DBeaver)
+
+[source,jdbc]
+----
+jdbc:oracle:thin:@localhost:1521/tst_latest
+jdbc:oracle:thin:@localhost:1521/tst_stage<1>
+----
+<1> You must provide the user and password 'cortizq'.
+
+Next, add table and data. We will use the scripts contained in https://github.com/gvenzl/sample-data/tree/main/countries-cities-currencies[Sample Data for SQL databases - Countries/Cities/Currencies^].
+
+For referece, here we have data statistics
+
+regions	7	
+countries	196
+cities	204
+currencies	146
+currencies_countries	203
+
