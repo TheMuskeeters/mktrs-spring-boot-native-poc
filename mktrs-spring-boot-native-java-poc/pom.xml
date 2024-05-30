@@ -5,12 +5,12 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.2.5</version>
+        <version>3.3.0</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.themusketeers.</groupId>
+    <groupId>com.themusketeers</groupId>
     <artifactId>mktrs-spring-boot-native-java-poc</artifactId>
-    <version>2024.2.0</version>
+    <version>2024.1.0</version>
     <name>mktrs-spring-boot-native-java-poc</name>
     <description>Toying with Spring Native (Java Version)</description>
     <properties>
