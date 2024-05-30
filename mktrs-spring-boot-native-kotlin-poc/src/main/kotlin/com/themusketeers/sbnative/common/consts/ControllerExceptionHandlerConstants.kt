@@ -25,7 +25,7 @@ object ControllerExceptionHandlerConstants {
      * Title
     */
     const val TITLE_BAD_REQUEST_ON_PAYLOAD = "Bad Request on payload"
-    const val TITLE_USER_NOT_FOUND = "User Not Found"
+    const val TITLE_NOT_FOUND = "Not Found"
     const val TITLE_VALIDATION_ERROR_ON_SUPPLIED_PAYLOAD = "Validation error on supplied payload"
 
     /*
