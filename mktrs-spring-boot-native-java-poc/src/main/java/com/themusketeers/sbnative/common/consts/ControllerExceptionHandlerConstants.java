@@ -29,7 +29,7 @@ public class ControllerExceptionHandlerConstants {
      * Title
      */
     public static final String TITLE_BAD_REQUEST_ON_PAYLOAD = "Bad Request on payload";
-    public static final String TITLE_USER_NOT_FOUND = "User Not Found";
+    public static final String TITLE_NOT_FOUND = "Not Found";
     public static final String TITLE_VALIDATION_ERROR_ON_SUPPLIED_PAYLOAD = "Validation error on supplied payload";
 
     /*
