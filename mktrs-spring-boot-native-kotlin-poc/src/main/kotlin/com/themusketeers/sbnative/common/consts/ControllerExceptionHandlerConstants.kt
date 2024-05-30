@@ -1,8 +1,4 @@
-/*----------------------------------------------------------------------------*/
-/* Source File:   CONTROLLEREXCEPTIONHANDLERCONSTANTS.KT                      */
-/* Copyright (c), 2023 The Musketeers                                         */
-/*----------------------------------------------------------------------------*/
-/*-----------------------------------------------------------------------------
+/*----------------------------------------------------------------------------*/ /* Source File:   CONTROLLEREXCEPTIONHANDLERCONSTANTS.JAVA                    */ /* Copyright (c), 2023 The Musketeers                                         */ /*----------------------------------------------------------------------------*/ /*-----------------------------------------------------------------------------
  History
  Jun.2/2023  COQ  File created.
  -----------------------------------------------------------------------------*/
@@ -18,7 +14,6 @@ object ControllerExceptionHandlerConstants {
      * General
     */
     const val USER_NOT_FOUND_ERROR_URL = "/api/v1/users"
-    const val MOVIE_RECORD_NOT_FOUND_ERROR_URL = "/api/v1/movie/records"
 
     /*
      * Error Category
@@ -30,8 +25,7 @@ object ControllerExceptionHandlerConstants {
      * Title
     */
     const val TITLE_BAD_REQUEST_ON_PAYLOAD = "Bad Request on payload"
-    const val TITLE_USER_NOT_FOUND = "User Not Found"
-    const val TITLE_MOVIE_RECORD_NOT_FOUND = "Movie Record Not Found"
+    const val TITLE_NOT_FOUND = "Not Found"
     const val TITLE_VALIDATION_ERROR_ON_SUPPLIED_PAYLOAD = "Validation error on supplied payload"
 
     /*

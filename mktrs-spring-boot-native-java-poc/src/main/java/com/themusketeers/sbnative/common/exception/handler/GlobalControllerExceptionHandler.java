@@ -5,24 +5,20 @@
 /*-----------------------------------------------------------------------------
  History
  Jun.21/2023  COQ  File created.
+ May.29/2024  COQ  Change implementation for handlers.
  -----------------------------------------------------------------------------*/
 package com.themusketeers.sbnative.common.exception.handler;
 
 import static com.themusketeers.sbnative.common.consts.ControllerExceptionHandlerConstants.ERROR_CATEGORY_GENERIC;
 import static com.themusketeers.sbnative.common.consts.ControllerExceptionHandlerConstants.ERROR_CATEGORY_PARAMETERS;
-import static com.themusketeers.sbnative.common.consts.ControllerExceptionHandlerConstants.MOVIE_RECORD_NOT_FOUND_ERROR_URL;
 import static com.themusketeers.sbnative.common.consts.ControllerExceptionHandlerConstants.PROPERTY_ERRORS;
 import static com.themusketeers.sbnative.common.consts.ControllerExceptionHandlerConstants.PROPERTY_ERROR_CATEGORY;
 import static com.themusketeers.sbnative.common.consts.ControllerExceptionHandlerConstants.PROPERTY_TIMESTAMP;
 import static com.themusketeers.sbnative.common.consts.ControllerExceptionHandlerConstants.TITLE_BAD_REQUEST_ON_PAYLOAD;
-import static com.themusketeers.sbnative.common.consts.ControllerExceptionHandlerConstants.TITLE_MOVIE_RECORD_NOT_FOUND;
-import static com.themusketeers.sbnative.common.consts.ControllerExceptionHandlerConstants.TITLE_USER_NOT_FOUND;
 import static com.themusketeers.sbnative.common.consts.ControllerExceptionHandlerConstants.TITLE_VALIDATION_ERROR_ON_SUPPLIED_PAYLOAD;
-import static com.themusketeers.sbnative.common.consts.ControllerExceptionHandlerConstants.USER_NOT_FOUND_ERROR_URL;
 import static com.themusketeers.sbnative.common.consts.GlobalConstants.COLON_SPACE_DELIMITER;
 
 import com.themusketeers.sbnative.common.exception.ApiException;
-import com.themusketeers.sbnative.common.exception.MovieRecordNotFoundException;
 import com.themusketeers.sbnative.common.exception.UserNotFoundException;
 import java.net.URI;
 import java.time.Instant;
@@ -30,8 +26,8 @@ import java.util.stream.Stream;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -47,6 +43,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
  *
  * <p>Check some useful reference links
  * <ul>
+ * <li><a href="https://datatracker.ietf.org/doc/html/rfc9457">RFC 9457: Problem Details for HTTP APIs</a></li>
  * <li><a href="https://www.baeldung.com/global-error-handler-in-a-spring-rest-api">Global Error Handler in A Spring Rest Api</a></li>
  * <li><a href="https://www.youtube.com/watch?v=4YyJUS_7rQE">Spring 6 and Problem Details</a></li>
  * </ul>
@@ -74,33 +71,28 @@ public class GlobalControllerExceptionHandler extends ResponseEntityExceptionHan
     /**
      * Reports as response when the exception is raised indicating an User was not found.
      *
-     * @param e Instance to the whole problem.
-     * @return An instance to the detailed problem using RFC 7807 error response.
+     * @param ex      Instance to the whole problem.
+     * @param request Instance with information about the request.
+     * @return A message indicating properly when this exception is raised that the system has not properly managed.
+     * @see RuntimeException
+     * @see UserNotFoundException
+     * @see ResponseEntity
+     * @see ProblemDetail
      */
     @ExceptionHandler(UserNotFoundException.class)
-    public ErrorResponse handleUserNotFoundException(UserNotFoundException e) {
-        return ErrorResponse.builder(e, HttpStatus.NOT_FOUND, e.getMessage())
-            .title(TITLE_USER_NOT_FOUND)
-            .type(URI.create(USER_NOT_FOUND_ERROR_URL))
-            .property(PROPERTY_ERROR_CATEGORY, ERROR_CATEGORY_GENERIC)
-            .property(PROPERTY_TIMESTAMP, Instant.now())
-            .build();
-    }
+    public ResponseEntity<Object> handleUserNotFoundExceptionX(RuntimeException ex, WebRequest request) {
+        var httpStatus = HttpStatus.NOT_FOUND;
+        var problemDetail = ProblemDetail.forStatusAndDetail(httpStatus, ex.getMessage());
+        var instanceURL = ((ServletWebRequest) request).getRequest().getRequestURI(); // This cast is for Servlet use case.
 
-    /**
-     * Reports as response when the exception is raised indicating an 'Movie Record' was not found.
-     *
-     * @param e Instance to the whole problem.
-     * @return An instance to the detailed problem using RFC 7807 error response.
-     */
-    @ExceptionHandler(MovieRecordNotFoundException.class)
-    public ErrorResponse handleMovieRecordNotFoundException(MovieRecordNotFoundException e) {
-        return ErrorResponse.builder(e, HttpStatus.NOT_FOUND, e.getMessage())
-            .title(TITLE_MOVIE_RECORD_NOT_FOUND)
-            .type(URI.create(MOVIE_RECORD_NOT_FOUND_ERROR_URL))
-            .property(PROPERTY_ERROR_CATEGORY, ERROR_CATEGORY_GENERIC)
-            .property(PROPERTY_TIMESTAMP, Instant.now())
-            .build();
+        problemDetail.setType(URI.create(instanceURL));
+        problemDetail.setInstance(URI.create(instanceURL));
+        problemDetail.setProperty(PROPERTY_ERROR_CATEGORY, ERROR_CATEGORY_GENERIC);
+        problemDetail.setProperty(PROPERTY_TIMESTAMP, Instant.now());
+
+        // Pending how to extract all headers to comply with HttpHeaders class. May.28/2024
+        var httpHeaders = new HttpHeaders();
+        return this.createResponseEntity(problemDetail, httpHeaders, httpStatus, request);
     }
 
     @Override
@@ -109,29 +101,25 @@ public class GlobalControllerExceptionHandler extends ResponseEntityExceptionHan
                                                                   HttpStatusCode status,
                                                                   WebRequest request) {
         var instanceURL = ((ServletWebRequest) request).getRequest().getRequestURI(); // This cast is for Servlet use case.
+        var problemDetail = ProblemDetail.forStatusAndDetail(status, TITLE_VALIDATION_ERROR_ON_SUPPLIED_PAYLOAD);
 
-        return this.createResponseEntity(
-            ErrorResponse.builder(ex, HttpStatus.BAD_REQUEST, TITLE_VALIDATION_ERROR_ON_SUPPLIED_PAYLOAD)
-                .title(TITLE_BAD_REQUEST_ON_PAYLOAD)
-                .type(URI.create(instanceURL))
-                .instance(URI.create(instanceURL))
-                .property(PROPERTY_ERROR_CATEGORY, ERROR_CATEGORY_PARAMETERS)
-                .property(PROPERTY_ERRORS,
-                    Stream.concat(
-                            ex.getBindingResult()
-                                .getFieldErrors()
-                                .stream()
-                                .map(field -> field.getField() + COLON_SPACE_DELIMITER + field.getDefaultMessage()),
-                            ex.getBindingResult()
-                                .getGlobalErrors()
-                                .stream()
-                                .map(field1 -> field1.getObjectName() + COLON_SPACE_DELIMITER + field1.getDefaultMessage())
-                        )
-                        .sorted()
-                        .toList()
-                )
-                .property(PROPERTY_TIMESTAMP, Instant.now())
-                .build(),
-            headers, status, request);
+        problemDetail.setTitle(TITLE_BAD_REQUEST_ON_PAYLOAD);
+        problemDetail.setType(URI.create(instanceURL));
+        problemDetail.setInstance(URI.create(instanceURL));
+        problemDetail.setProperty(PROPERTY_TIMESTAMP, Instant.now());
+        problemDetail.setProperty(PROPERTY_ERROR_CATEGORY, ERROR_CATEGORY_PARAMETERS);
+        problemDetail.setProperty(PROPERTY_ERRORS, Stream.concat(
+                ex.getBindingResult()
+                    .getFieldErrors()
+                    .stream()
+                    .map(field -> field.getField() + COLON_SPACE_DELIMITER + field.getDefaultMessage()),
+                ex.getBindingResult()
+                    .getGlobalErrors()
+                    .stream()
+                    .map(field1 -> field1.getObjectName() + COLON_SPACE_DELIMITER + field1.getDefaultMessage()))
+            .sorted()
+            .toList());
+
+        return this.createResponseEntity(problemDetail, headers, status, request);
     }
 }

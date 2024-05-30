@@ -5,18 +5,17 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.2.5</version>
+        <version>3.3.0</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.themusketeers.</groupId>
+    <groupId>com.themusketeers</groupId>
     <artifactId>mktrs-spring-boot-native-kotlin-poc</artifactId>
-    <version>2024.2.0</version>
+    <version>2024.1.0</version>
     <name>mktrs-spring-boot-native-kotlin-poc</name>
     <description>Toying with Spring Native (Kotlin Version)</description>
     <properties>
         <java.version>21</java.version>
-        <kotlin.version>1.9.23</kotlin.version>
-        <redisson-spring-boot-starter.version>3.22.0</redisson-spring-boot-starter.version>
+        <kotlin.version>1.9.24</kotlin.version>
         <commons-lang3.version>3.14.0</commons-lang3.version>
         <commons-collections4.version>4.4</commons-collections4.version>
 
@@ -28,14 +27,6 @@
     </properties>
     <dependencyManagement>
         <dependencies>
-            <!-- Redisson  -->
-            <dependency>
-                <groupId>org.redisson</groupId>
-                <artifactId>redisson-spring-boot-starter</artifactId>
-                <version>${redisson-spring-boot-starter.version}</version>
-            </dependency>
-            <!-- END Redisson -->
-
             <!-- Apache -->
             <dependency>
                 <groupId>org.apache.commons</groupId>
@@ -100,13 +91,6 @@
             <artifactId>kotlinx-coroutines-reactor</artifactId>
         </dependency>
         <!-- End Kotlin related dependencies -->
-
-        <!-- Redisson  -->
-        <dependency>
-            <groupId>org.redisson</groupId>
-            <artifactId>redisson-spring-boot-starter</artifactId>
-        </dependency>
-        <!-- END Redisson -->
 
         <!-- Apache -->
         <dependency>
