@@ -6,7 +6,7 @@
  History
  Jun.22/2023  COQ  File created.
  -----------------------------------------------------------------------------*/
-package com.themusketeers.sbnative.controller.api.v1;
+package com.themusketeers.sbnative.users.controller.api.v1;
 
 import static com.themusketeers.sbnative.common.consts.ControllerExceptionHandlerConstants.ERROR_CATEGORY_GENERIC;
 import static com.themusketeers.sbnative.common.consts.ControllerExceptionHandlerConstants.ERROR_CATEGORY_PARAMETERS;
@@ -24,22 +24,20 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
+import com.themusketeers.sbnative.controller.api.v1.UserController;
 import com.themusketeers.sbnative.domain.User;
 import com.themusketeers.sbnative.domain.response.UserDataResponse;
 import com.themusketeers.sbnative.domain.response.UsersDataResponse;
 import com.themusketeers.sbnative.service.intr.UserService;
 import java.util.List;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.client.MockMvcWebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
 
 /**
@@ -55,7 +53,7 @@ import org.springframework.web.reactive.function.BodyInserters;
  *
  * @author COQ- Carlos Adolfo Ortiz Q.
  */
-@WebMvcTest(UserController.class)
+@WebFluxTest(UserController.class)
 class UserControllerTest {
     public static final String USER_CONTROLLER_BASE_PATH = "/api/v1/users";
     public static final String EXPECTED_ERROR_ADDRESS_IS_MANDATORY = "address: User Address is mandatory";
@@ -63,12 +61,9 @@ class UserControllerTest {
     public static final String JSONPATH_TITLE = "$.title";
     public static final String JSONPATH_DETAIL = "$.detail";
     public static final String JSONPATH_ERROR_CATEGORY = "$.errorCategory";
-    public static final String JSONPATH_BODY_TITLE = "$.body.title";
-    public static final String JSONPATH_BODY_DETAIL = "$.body.detail";
-    public static final String JSONPATH_BODY_ERROR_CATEGORY = "$.body.errorCategory";
-    public static final String JSONPATH_BODY_ERRORS = "$.body.errors";
-    public static final String JSONPATH_BODY_ERRORS_0 = "$.body.errors[0]";
-    public static final String JSONPATH_BODY_ERRORS_1 = "$.body.errors[1]";
+    public static final String JSONPATH_ERRORS = "$.errors";
+    public static final String JSONPATH_ERRORS_0 = "$.errors[0]";
+    public static final String JSONPATH_ERRORS_1 = "$.errors[1]";
     public static final String USER_NAME = "USER_NAME";
     public static final String USER_ADDRESS = "USER_ADDRESS";
     public static final String USER_ID_UUID = "53eb385f-582d-4a13-8275-c26a5de6655c";
@@ -84,19 +79,20 @@ class UserControllerTest {
     public static final String USER_ADDRESS_TWO = "Address Two";
     public static final String USER_ID_PATH_VARIABLE = "/{userId}";
     public static final String HTTP_400_BAD_REQUEST_RESPONSE = """
-        {"type":"about:blank","title":"Bad Request","status":400,"detail":"Failed to read request","instance":"/api/v1/users"}""";
+        {"type":"about:blank","title":"Bad Request","status":400,"detail":"Invalid request content","instance":"/api/v1/users"}""";
 
+    @Autowired
     private WebTestClient client;
 
     @MockBean
     private UserService userService;
 
-    @BeforeEach
-    void beforeEach(@Autowired MockMvc mockMvc) {
-        this.client = MockMvcWebTestClient
-            .bindTo(mockMvc)
-            .build();
-    }
+    //@BeforeEach
+    //void beforeEach(@Autowired MockMvc mockMvc) {
+    //    this.client = MockMvcWebTestClient
+    //        .bindTo(mockMvc)
+    //        .build();
+   // }
 
     @Test
     @DisplayName("Should Retrieve an empty list of users")
@@ -173,12 +169,12 @@ class UserControllerTest {
             .exchange()
             .expectStatus().isBadRequest()
             .expectBody()
-            .jsonPath(JSONPATH_BODY_TITLE).isEqualTo(TITLE_BAD_REQUEST_ON_PAYLOAD)
-            .jsonPath(JSONPATH_BODY_DETAIL).isEqualTo(TITLE_VALIDATION_ERROR_ON_SUPPLIED_PAYLOAD)
-            .jsonPath(JSONPATH_BODY_ERROR_CATEGORY).isEqualTo(ERROR_CATEGORY_PARAMETERS)
-            .jsonPath(JSONPATH_BODY_ERRORS).isArray()
-            .jsonPath(JSONPATH_BODY_ERRORS_0).isEqualTo(EXPECTED_ERROR_ADDRESS_IS_MANDATORY)
-            .jsonPath(JSONPATH_BODY_ERRORS_1).isEqualTo(EXPECTED_ERROR_NAME_USER_IS_MANDATORY);
+            .jsonPath(JSONPATH_TITLE).isEqualTo(TITLE_BAD_REQUEST_ON_PAYLOAD)
+            .jsonPath(JSONPATH_DETAIL).isEqualTo(TITLE_VALIDATION_ERROR_ON_SUPPLIED_PAYLOAD)
+            .jsonPath(JSONPATH_ERROR_CATEGORY).isEqualTo(ERROR_CATEGORY_PARAMETERS)
+            .jsonPath(JSONPATH_ERRORS).isArray()
+            .jsonPath(JSONPATH_ERRORS_0).isEqualTo(EXPECTED_ERROR_ADDRESS_IS_MANDATORY)
+            .jsonPath(JSONPATH_ERRORS_1).isEqualTo(EXPECTED_ERROR_NAME_USER_IS_MANDATORY);
     }
 
     @Test
@@ -200,12 +196,12 @@ class UserControllerTest {
             .exchange()
             .expectStatus().isBadRequest()
             .expectBody()
-            .jsonPath(JSONPATH_BODY_TITLE).isEqualTo(TITLE_BAD_REQUEST_ON_PAYLOAD)
-            .jsonPath(JSONPATH_BODY_DETAIL).isEqualTo(TITLE_VALIDATION_ERROR_ON_SUPPLIED_PAYLOAD)
-            .jsonPath(JSONPATH_BODY_ERROR_CATEGORY).isEqualTo(ERROR_CATEGORY_PARAMETERS)
-            .jsonPath(JSONPATH_BODY_ERRORS).isArray()
-            .jsonPath(JSONPATH_BODY_ERRORS_0).isEqualTo(EXPECTED_ERROR_ADDRESS_IS_MANDATORY)
-            .jsonPath(JSONPATH_BODY_ERRORS_1).isEqualTo(EXPECTED_ERROR_NAME_USER_IS_MANDATORY);
+            .jsonPath(JSONPATH_TITLE).isEqualTo(TITLE_BAD_REQUEST_ON_PAYLOAD)
+            .jsonPath(JSONPATH_DETAIL).isEqualTo(TITLE_VALIDATION_ERROR_ON_SUPPLIED_PAYLOAD)
+            .jsonPath(JSONPATH_ERROR_CATEGORY).isEqualTo(ERROR_CATEGORY_PARAMETERS)
+            .jsonPath(JSONPATH_ERRORS).isArray()
+            .jsonPath(JSONPATH_ERRORS_0).isEqualTo(EXPECTED_ERROR_ADDRESS_IS_MANDATORY)
+            .jsonPath(JSONPATH_ERRORS_1).isEqualTo(EXPECTED_ERROR_NAME_USER_IS_MANDATORY);
     }
 
     @Test
@@ -227,12 +223,12 @@ class UserControllerTest {
             .exchange()
             .expectStatus().isBadRequest()
             .expectBody()
-            .jsonPath(JSONPATH_BODY_TITLE).isEqualTo(TITLE_BAD_REQUEST_ON_PAYLOAD)
-            .jsonPath(JSONPATH_BODY_DETAIL).isEqualTo(TITLE_VALIDATION_ERROR_ON_SUPPLIED_PAYLOAD)
-            .jsonPath(JSONPATH_BODY_ERROR_CATEGORY).isEqualTo(ERROR_CATEGORY_PARAMETERS)
-            .jsonPath(JSONPATH_BODY_ERRORS).isArray()
-            .jsonPath(JSONPATH_BODY_ERRORS_0).isEqualTo(EXPECTED_ERROR_ADDRESS_IS_MANDATORY)
-            .jsonPath(JSONPATH_BODY_ERRORS_1).isEqualTo(EXPECTED_ERROR_NAME_USER_IS_MANDATORY);
+            .jsonPath(JSONPATH_TITLE).isEqualTo(TITLE_BAD_REQUEST_ON_PAYLOAD)
+            .jsonPath(JSONPATH_DETAIL).isEqualTo(TITLE_VALIDATION_ERROR_ON_SUPPLIED_PAYLOAD)
+            .jsonPath(JSONPATH_ERROR_CATEGORY).isEqualTo(ERROR_CATEGORY_PARAMETERS)
+            .jsonPath(JSONPATH_ERRORS).isArray()
+            .jsonPath(JSONPATH_ERRORS_0).isEqualTo(EXPECTED_ERROR_ADDRESS_IS_MANDATORY)
+            .jsonPath(JSONPATH_ERRORS_1).isEqualTo(EXPECTED_ERROR_NAME_USER_IS_MANDATORY);
     }
 
     @Test
@@ -254,11 +250,11 @@ class UserControllerTest {
             .exchange()
             .expectStatus().isBadRequest()
             .expectBody()
-            .jsonPath(JSONPATH_BODY_TITLE).isEqualTo(TITLE_BAD_REQUEST_ON_PAYLOAD)
-            .jsonPath(JSONPATH_BODY_DETAIL).isEqualTo(TITLE_VALIDATION_ERROR_ON_SUPPLIED_PAYLOAD)
-            .jsonPath(JSONPATH_BODY_ERROR_CATEGORY).isEqualTo(ERROR_CATEGORY_PARAMETERS)
-            .jsonPath(JSONPATH_BODY_ERRORS).isArray()
-            .jsonPath(JSONPATH_BODY_ERRORS_0).isEqualTo(EXPECTED_ERROR_NAME_USER_IS_MANDATORY);
+            .jsonPath(JSONPATH_TITLE).isEqualTo(TITLE_BAD_REQUEST_ON_PAYLOAD)
+            .jsonPath(JSONPATH_DETAIL).isEqualTo(TITLE_VALIDATION_ERROR_ON_SUPPLIED_PAYLOAD)
+            .jsonPath(JSONPATH_ERROR_CATEGORY).isEqualTo(ERROR_CATEGORY_PARAMETERS)
+            .jsonPath(JSONPATH_ERRORS).isArray()
+            .jsonPath(JSONPATH_ERRORS_0).isEqualTo(EXPECTED_ERROR_NAME_USER_IS_MANDATORY);
     }
 
     @Test
@@ -266,7 +262,7 @@ class UserControllerTest {
     void whenUserCreatePayloadFieldAddressIsNotEmptyShouldReturnBadRequest() {
         var jsonPayload = """
             {
-              "name": "user",
+              "name": "users",
               "address": ""
             }
             """;
@@ -280,11 +276,11 @@ class UserControllerTest {
             .exchange()
             .expectStatus().isBadRequest()
             .expectBody()
-            .jsonPath(JSONPATH_BODY_TITLE).isEqualTo(TITLE_BAD_REQUEST_ON_PAYLOAD)
-            .jsonPath(JSONPATH_BODY_DETAIL).isEqualTo(TITLE_VALIDATION_ERROR_ON_SUPPLIED_PAYLOAD)
-            .jsonPath(JSONPATH_BODY_ERROR_CATEGORY).isEqualTo(ERROR_CATEGORY_PARAMETERS)
-            .jsonPath(JSONPATH_BODY_ERRORS).isArray()
-            .jsonPath(JSONPATH_BODY_ERRORS_0).isEqualTo(EXPECTED_ERROR_ADDRESS_IS_MANDATORY);
+            .jsonPath(JSONPATH_TITLE).isEqualTo(TITLE_BAD_REQUEST_ON_PAYLOAD)
+            .jsonPath(JSONPATH_DETAIL).isEqualTo(TITLE_VALIDATION_ERROR_ON_SUPPLIED_PAYLOAD)
+            .jsonPath(JSONPATH_ERROR_CATEGORY).isEqualTo(ERROR_CATEGORY_PARAMETERS)
+            .jsonPath(JSONPATH_ERRORS).isArray()
+            .jsonPath(JSONPATH_ERRORS_0).isEqualTo(EXPECTED_ERROR_ADDRESS_IS_MANDATORY);
     }
 
     @Test
@@ -309,7 +305,7 @@ class UserControllerTest {
     }
 
     @Test
-    @DisplayName("Verify when we look for an user Id and it is not found it gives 404 error.")
+    @DisplayName("Verify when we look for an users Id and it is not found it gives 404 error.")
     void shouldFindByIdNotFoundThenReturnError404() {
         client.get()
             .uri(USER_CONTROLLER_BASE_PATH + USER_ID_PATH_VARIABLE, USER_ID_UUID)
@@ -324,7 +320,7 @@ class UserControllerTest {
     }
 
     @Test
-    @DisplayName("Verify we can find an existing user with its 'Id'.")
+    @DisplayName("Verify we can find an existing users with its 'Id'.")
     void shouldFindByIdUsingExistingUserId() {
         var user = buildUserWithUUIDForInsert();
         var expectedUserDataResponse = buildUserDataResponseWith(user);
@@ -375,12 +371,12 @@ class UserControllerTest {
             .exchange()
             .expectStatus().isBadRequest()
             .expectBody()
-            .jsonPath(JSONPATH_BODY_TITLE).isEqualTo(TITLE_BAD_REQUEST_ON_PAYLOAD)
-            .jsonPath(JSONPATH_BODY_DETAIL).isEqualTo(TITLE_VALIDATION_ERROR_ON_SUPPLIED_PAYLOAD)
-            .jsonPath(JSONPATH_BODY_ERROR_CATEGORY).isEqualTo(ERROR_CATEGORY_PARAMETERS)
-            .jsonPath(JSONPATH_BODY_ERRORS).isArray()
-            .jsonPath(JSONPATH_BODY_ERRORS_0).isEqualTo(EXPECTED_ERROR_ADDRESS_IS_MANDATORY)
-            .jsonPath(JSONPATH_BODY_ERRORS_1).isEqualTo(EXPECTED_ERROR_NAME_USER_IS_MANDATORY);
+            .jsonPath(JSONPATH_TITLE).isEqualTo(TITLE_BAD_REQUEST_ON_PAYLOAD)
+            .jsonPath(JSONPATH_DETAIL).isEqualTo(TITLE_VALIDATION_ERROR_ON_SUPPLIED_PAYLOAD)
+            .jsonPath(JSONPATH_ERROR_CATEGORY).isEqualTo(ERROR_CATEGORY_PARAMETERS)
+            .jsonPath(JSONPATH_ERRORS).isArray()
+            .jsonPath(JSONPATH_ERRORS_0).isEqualTo(EXPECTED_ERROR_ADDRESS_IS_MANDATORY)
+            .jsonPath(JSONPATH_ERRORS_1).isEqualTo(EXPECTED_ERROR_NAME_USER_IS_MANDATORY);
     }
 
     @Test
@@ -402,12 +398,12 @@ class UserControllerTest {
             .exchange()
             .expectStatus().isBadRequest()
             .expectBody()
-            .jsonPath(JSONPATH_BODY_TITLE).isEqualTo(TITLE_BAD_REQUEST_ON_PAYLOAD)
-            .jsonPath(JSONPATH_BODY_DETAIL).isEqualTo(TITLE_VALIDATION_ERROR_ON_SUPPLIED_PAYLOAD)
-            .jsonPath(JSONPATH_BODY_ERROR_CATEGORY).isEqualTo(ERROR_CATEGORY_PARAMETERS)
-            .jsonPath(JSONPATH_BODY_ERRORS).isArray()
-            .jsonPath(JSONPATH_BODY_ERRORS_0).isEqualTo(EXPECTED_ERROR_ADDRESS_IS_MANDATORY)
-            .jsonPath(JSONPATH_BODY_ERRORS_1).isEqualTo(EXPECTED_ERROR_NAME_USER_IS_MANDATORY);
+            .jsonPath(JSONPATH_TITLE).isEqualTo(TITLE_BAD_REQUEST_ON_PAYLOAD)
+            .jsonPath(JSONPATH_DETAIL).isEqualTo(TITLE_VALIDATION_ERROR_ON_SUPPLIED_PAYLOAD)
+            .jsonPath(JSONPATH_ERROR_CATEGORY).isEqualTo(ERROR_CATEGORY_PARAMETERS)
+            .jsonPath(JSONPATH_ERRORS).isArray()
+            .jsonPath(JSONPATH_ERRORS_0).isEqualTo(EXPECTED_ERROR_ADDRESS_IS_MANDATORY)
+            .jsonPath(JSONPATH_ERRORS_1).isEqualTo(EXPECTED_ERROR_NAME_USER_IS_MANDATORY);
     }
 
     @Test
@@ -429,12 +425,12 @@ class UserControllerTest {
             .exchange()
             .expectStatus().isBadRequest()
             .expectBody()
-            .jsonPath(JSONPATH_BODY_TITLE).isEqualTo(TITLE_BAD_REQUEST_ON_PAYLOAD)
-            .jsonPath(JSONPATH_BODY_DETAIL).isEqualTo(TITLE_VALIDATION_ERROR_ON_SUPPLIED_PAYLOAD)
-            .jsonPath(JSONPATH_BODY_ERROR_CATEGORY).isEqualTo(ERROR_CATEGORY_PARAMETERS)
-            .jsonPath(JSONPATH_BODY_ERRORS).isArray()
-            .jsonPath(JSONPATH_BODY_ERRORS_0).isEqualTo(EXPECTED_ERROR_ADDRESS_IS_MANDATORY)
-            .jsonPath(JSONPATH_BODY_ERRORS_1).isEqualTo(EXPECTED_ERROR_NAME_USER_IS_MANDATORY);
+            .jsonPath(JSONPATH_TITLE).isEqualTo(TITLE_BAD_REQUEST_ON_PAYLOAD)
+            .jsonPath(JSONPATH_DETAIL).isEqualTo(TITLE_VALIDATION_ERROR_ON_SUPPLIED_PAYLOAD)
+            .jsonPath(JSONPATH_ERROR_CATEGORY).isEqualTo(ERROR_CATEGORY_PARAMETERS)
+            .jsonPath(JSONPATH_ERRORS).isArray()
+            .jsonPath(JSONPATH_ERRORS_0).isEqualTo(EXPECTED_ERROR_ADDRESS_IS_MANDATORY)
+            .jsonPath(JSONPATH_ERRORS_1).isEqualTo(EXPECTED_ERROR_NAME_USER_IS_MANDATORY);
     }
 
     @Test
@@ -456,11 +452,11 @@ class UserControllerTest {
             .exchange()
             .expectStatus().isBadRequest()
             .expectBody()
-            .jsonPath(JSONPATH_BODY_TITLE).isEqualTo(TITLE_BAD_REQUEST_ON_PAYLOAD)
-            .jsonPath(JSONPATH_BODY_DETAIL).isEqualTo(TITLE_VALIDATION_ERROR_ON_SUPPLIED_PAYLOAD)
-            .jsonPath(JSONPATH_BODY_ERROR_CATEGORY).isEqualTo(ERROR_CATEGORY_PARAMETERS)
-            .jsonPath(JSONPATH_BODY_ERRORS).isArray()
-            .jsonPath(JSONPATH_BODY_ERRORS_0).isEqualTo(EXPECTED_ERROR_NAME_USER_IS_MANDATORY);
+            .jsonPath(JSONPATH_TITLE).isEqualTo(TITLE_BAD_REQUEST_ON_PAYLOAD)
+            .jsonPath(JSONPATH_DETAIL).isEqualTo(TITLE_VALIDATION_ERROR_ON_SUPPLIED_PAYLOAD)
+            .jsonPath(JSONPATH_ERROR_CATEGORY).isEqualTo(ERROR_CATEGORY_PARAMETERS)
+            .jsonPath(JSONPATH_ERRORS).isArray()
+            .jsonPath(JSONPATH_ERRORS_0).isEqualTo(EXPECTED_ERROR_NAME_USER_IS_MANDATORY);
     }
 
     @Test
@@ -468,7 +464,7 @@ class UserControllerTest {
     void whenUserUpdatePayloadFieldAddressIsNotEmptyShouldReturnBadRequest() {
         var jsonPayload = """
             {
-              "name": "user",
+              "name": "users",
               "address": ""
             }
             """;
@@ -482,11 +478,11 @@ class UserControllerTest {
             .exchange()
             .expectStatus().isBadRequest()
             .expectBody()
-            .jsonPath(JSONPATH_BODY_TITLE).isEqualTo(TITLE_BAD_REQUEST_ON_PAYLOAD)
-            .jsonPath(JSONPATH_BODY_DETAIL).isEqualTo(TITLE_VALIDATION_ERROR_ON_SUPPLIED_PAYLOAD)
-            .jsonPath(JSONPATH_BODY_ERROR_CATEGORY).isEqualTo(ERROR_CATEGORY_PARAMETERS)
-            .jsonPath(JSONPATH_BODY_ERRORS).isArray()
-            .jsonPath(JSONPATH_BODY_ERRORS_0).isEqualTo(EXPECTED_ERROR_ADDRESS_IS_MANDATORY);
+            .jsonPath(JSONPATH_TITLE).isEqualTo(TITLE_BAD_REQUEST_ON_PAYLOAD)
+            .jsonPath(JSONPATH_DETAIL).isEqualTo(TITLE_VALIDATION_ERROR_ON_SUPPLIED_PAYLOAD)
+            .jsonPath(JSONPATH_ERROR_CATEGORY).isEqualTo(ERROR_CATEGORY_PARAMETERS)
+            .jsonPath(JSONPATH_ERRORS).isArray()
+            .jsonPath(JSONPATH_ERRORS_0).isEqualTo(EXPECTED_ERROR_ADDRESS_IS_MANDATORY);
     }
 
     @Test
@@ -494,7 +490,7 @@ class UserControllerTest {
     void whenUserUpdatePayloadRequiredFieldsSetButNoIdSetReturn404Error() {
         var jsonPayload = """
             {
-              "name": "user",
+              "name": "users",
               "address": "address"
             }
             """;
@@ -519,7 +515,7 @@ class UserControllerTest {
         var jsonPayload = """
             {
               "id" : "",
-              "name": "user",
+              "name": "users",
               "address": "address"
             }
             """;
