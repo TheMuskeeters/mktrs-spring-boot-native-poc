@@ -4,7 +4,8 @@
 /*----------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------
  History
- Jun.24/2023  COQ  File created.
+ May.17/2024  COQ  File created.
+ May.30/2024  COQ  Change implementation for handlers.
  -----------------------------------------------------------------------------*/
 package com.themusketeers.sbnative.common.exception.handler
 
@@ -14,9 +15,7 @@ import com.themusketeers.sbnative.common.consts.ControllerExceptionHandlerConsta
 import com.themusketeers.sbnative.common.consts.ControllerExceptionHandlerConstants.PROPERTY_ERROR_CATEGORY
 import com.themusketeers.sbnative.common.consts.ControllerExceptionHandlerConstants.PROPERTY_TIMESTAMP
 import com.themusketeers.sbnative.common.consts.ControllerExceptionHandlerConstants.TITLE_BAD_REQUEST_ON_PAYLOAD
-import com.themusketeers.sbnative.common.consts.ControllerExceptionHandlerConstants.TITLE_USER_NOT_FOUND
 import com.themusketeers.sbnative.common.consts.ControllerExceptionHandlerConstants.TITLE_VALIDATION_ERROR_ON_SUPPLIED_PAYLOAD
-import com.themusketeers.sbnative.common.consts.ControllerExceptionHandlerConstants.USER_NOT_FOUND_ERROR_URL
 import com.themusketeers.sbnative.common.consts.GlobalConstants.COLON_SPACE_DELIMITER
 import com.themusketeers.sbnative.common.exception.ApiException
 import com.themusketeers.sbnative.common.exception.UserNotFoundException
@@ -26,15 +25,17 @@ import java.util.stream.Stream
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.HttpStatusCode
+import org.springframework.http.ProblemDetail
 import org.springframework.http.ResponseEntity
-import org.springframework.web.ErrorResponse
-import org.springframework.web.bind.MethodArgumentNotValidException
+import org.springframework.validation.FieldError
+import org.springframework.validation.ObjectError
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestControllerAdvice
-import org.springframework.web.context.request.ServletWebRequest
-import org.springframework.web.context.request.WebRequest
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler
+import org.springframework.web.bind.support.WebExchangeBindException
+import org.springframework.web.reactive.result.method.annotation.ResponseEntityExceptionHandler
+import org.springframework.web.server.ServerWebExchange
+import reactor.core.publisher.Mono
 
 /**
  * Put in a global place the exception handling mechanism, this is shared among all the REST Controllers defined
@@ -43,6 +44,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
  *
  * <p>Check some useful reference links
  * <ul>
+ * <li><a href="https://datatracker.ietf.org/doc/html/rfc9457">RFC 9457: Problem Details for HTTP APIs</a></li>
  * <li><a href="https://www.baeldung.com/global-error-handler-in-a-spring-rest-api">Global Error Handler in A Spring Rest Api</a></li>
  * <li><a href="https://www.youtube.com/watch?v=4YyJUS_7rQE">Spring 6 and Problem Details</a></li>
  * </ul>
@@ -69,49 +71,57 @@ class GlobalControllerExceptionHandler : ResponseEntityExceptionHandler() {
     /**
      * Reports as response when the exception is raised indicating an User was not found.
      *
-     * @param e Instance to the whole problem.
-     * @return An instance to the detailed problem using RFC 7807 error response.
+     * @param ex       Instance to the whole problem.
+     * @param exchange Instance with information about the request.
+     * @return A message indicating properly when this exception is raised that the system has not properly managed.
+     * @see RuntimeException
+     * @see UserNotFoundException
+     * @see ResponseEntity
+     * @see ProblemDetail
      */
     @ExceptionHandler(UserNotFoundException::class)
-    fun handleUserNotFoundException(e: UserNotFoundException): ErrorResponse {
-        return ErrorResponse.builder(e, HttpStatus.NOT_FOUND, e.message!!)
-            .title(TITLE_USER_NOT_FOUND)
-            .type(URI.create(USER_NOT_FOUND_ERROR_URL))
-            .property(PROPERTY_ERROR_CATEGORY, ERROR_CATEGORY_GENERIC)
-            .property(PROPERTY_TIMESTAMP, Instant.now())
-            .build()
+    fun handleUserNotFoundExceptionX(ex: java.lang.RuntimeException, exchange: ServerWebExchange): Mono<ResponseEntity<Any>> {
+        val httpStatus = HttpStatus.NOT_FOUND
+        val problemDetail = ProblemDetail.forStatusAndDetail(httpStatus, ex.message)
+        val instanceURL = exchange.request.uri.path
+        val headers = exchange.request.headers
+
+        problemDetail.type = URI.create(instanceURL)
+        problemDetail.instance = URI.create(instanceURL)
+        problemDetail.setProperty(PROPERTY_ERROR_CATEGORY, ERROR_CATEGORY_GENERIC)
+        problemDetail.setProperty(PROPERTY_TIMESTAMP, Instant.now())
+
+        return this.createResponseEntity(problemDetail, headers, httpStatus, exchange)
     }
 
-    override fun handleMethodArgumentNotValid(
-        ex: MethodArgumentNotValidException,
+    override fun handleWebExchangeBindException(
+        ex: WebExchangeBindException,
         headers: HttpHeaders,
         status: HttpStatusCode,
-        request: WebRequest
-    ): ResponseEntity<Any> {
-        val instanceURL = (request as ServletWebRequest).request.requestURI // This cast is for Servlet use case.
+        exchange: ServerWebExchange
+    ): Mono<ResponseEntity<Any>> {
+        val instanceURL = exchange.request.uri.path
+        val problemDetail = ProblemDetail.forStatusAndDetail(status!!, TITLE_VALIDATION_ERROR_ON_SUPPLIED_PAYLOAD)
 
-        return createResponseEntity(
-            ErrorResponse.builder(ex, HttpStatus.BAD_REQUEST, TITLE_VALIDATION_ERROR_ON_SUPPLIED_PAYLOAD)
-                .title(TITLE_BAD_REQUEST_ON_PAYLOAD)
-                .type(URI.create(instanceURL))
-                .instance(URI.create(instanceURL))
-                .property(PROPERTY_ERROR_CATEGORY, ERROR_CATEGORY_PARAMETERS)
-                .property(PROPERTY_ERRORS,
-                          Stream.concat(
-                              ex.bindingResult
-                                  .fieldErrors
-                                  .stream()
-                                  .map { field -> field.field + COLON_SPACE_DELIMITER + field.defaultMessage },
-                              ex.bindingResult
-                                  .globalErrors
-                                  .stream()
-                                  .map { field1 -> field1.objectName + COLON_SPACE_DELIMITER + field1.defaultMessage }
-                          )
-                              .sorted()
-                              .toList()
-                )
-                .property(PROPERTY_TIMESTAMP, Instant.now())
-                .build(),
-            headers, status, request)
+        problemDetail.title = TITLE_BAD_REQUEST_ON_PAYLOAD
+        problemDetail.type = URI.create(instanceURL)
+        problemDetail.instance = URI.create(instanceURL)
+        problemDetail.setProperty(PROPERTY_TIMESTAMP, Instant.now())
+        problemDetail.setProperty(PROPERTY_ERROR_CATEGORY, ERROR_CATEGORY_PARAMETERS)
+        problemDetail.setProperty(
+            PROPERTY_ERRORS, Stream.concat<String>(
+                ex.bindingResult
+                    .fieldErrors
+                    .stream()
+                    .map<String> { field: FieldError -> field.field + COLON_SPACE_DELIMITER + field.defaultMessage },
+                ex.bindingResult
+                    .globalErrors
+                    .stream()
+                    .map<String> { field1: ObjectError -> field1.objectName + COLON_SPACE_DELIMITER + field1.defaultMessage })
+                .sorted()
+                .toList()
+        )
+
+        return this.createResponseEntity(problemDetail, headers, status, exchange)
     }
 }
