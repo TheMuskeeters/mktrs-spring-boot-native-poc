@@ -7,7 +7,7 @@
  Jun.24/2023  COQ  File created.
  May.30/2024  COQ  Change implementation for handlers.
  -----------------------------------------------------------------------------*/
-package com.themusketeers.sbnative.controller.api.v1
+package com.themusketeers.sbnative.users.controller.api.v1
 
 import com.themusketeers.sbnative.common.consts.ControllerExceptionHandlerConstants.ERROR_CATEGORY_GENERIC
 import com.themusketeers.sbnative.common.consts.ControllerExceptionHandlerConstants.ERROR_CATEGORY_PARAMETERS
@@ -22,7 +22,6 @@ import com.themusketeers.sbnative.users.domain.User
 import com.themusketeers.sbnative.users.domain.response.UserDataResponse
 import com.themusketeers.sbnative.users.domain.response.UsersDataResponse
 import com.themusketeers.sbnative.users.UserService
-import com.themusketeers.sbnative.users.controller.api.v1.UserController
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
