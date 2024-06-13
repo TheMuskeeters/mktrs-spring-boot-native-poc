@@ -102,7 +102,7 @@ class GlobalControllerExceptionHandler : ResponseEntityExceptionHandler() {
         request: WebRequest
     ): ResponseEntity<Any> {
         val instanceURL = (request as ServletWebRequest).request.requestURI // This cast is for Servlet use case.
-        val problemDetail = ProblemDetail.forStatusAndDetail(status!!, TITLE_VALIDATION_ERROR_ON_SUPPLIED_PAYLOAD)
+        val problemDetail = ProblemDetail.forStatusAndDetail(status, TITLE_VALIDATION_ERROR_ON_SUPPLIED_PAYLOAD)
 
         problemDetail.title = TITLE_BAD_REQUEST_ON_PAYLOAD
         problemDetail.type = URI.create(instanceURL)
