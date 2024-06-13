@@ -8,7 +8,6 @@
  -----------------------------------------------------------------------------*/
 package com.themusketeers.sbnative.common.exception
 
-import java.util.List
 import org.springframework.http.HttpStatus
 
 class ApiError {
@@ -45,11 +44,10 @@ class ApiError {
     constructor(status: HttpStatus, message: String, error: String) : super() {
         this.status = status
         this.message = message
-        //errors = Arrays.asList(error)
-        //errors = List.of<String>(error)
+        errors = listOf(error)
     }
 
     fun setError(error: String) {
-        //errors = mutableListOf(error)
+        errors = listOf(error)
     }
 }
