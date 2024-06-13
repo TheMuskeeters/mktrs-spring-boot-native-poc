@@ -4,7 +4,7 @@
 /*----------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------
  History
- Jun.24/2023  COQ  File created.
+ May.17/2024  COQ  File created.
  May.30/2024  COQ  Change implementation for handlers.
  -----------------------------------------------------------------------------*/
 package com.themusketeers.sbnative.common.exception.handler

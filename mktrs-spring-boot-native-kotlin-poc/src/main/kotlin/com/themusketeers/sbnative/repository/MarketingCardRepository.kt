@@ -9,7 +9,7 @@
 package com.themusketeers.sbnative.repository
 
 import com.google.cloud.spring.data.firestore.FirestoreReactiveRepository
-import com.themusketeers.sbnative.domain.marketing.card.MarketingCardDocument
+import com.themusketeers.sbnative.domain.marketing.card.document.MarketingCardDocument
 import org.springframework.stereotype.Repository
 
 /**
