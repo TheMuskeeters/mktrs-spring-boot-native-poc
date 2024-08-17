@@ -47,9 +47,9 @@ Next, add table and data. We will use the scripts contained in https://github.co
 
 For referece, here we have data statistics
 
-regions	7	
-countries	196
-cities	204
-currencies	146
-currencies_countries	203
+regions                7	
+countries	           196
+cities	               204
+currencies             146
+currencies_countries   203
 
