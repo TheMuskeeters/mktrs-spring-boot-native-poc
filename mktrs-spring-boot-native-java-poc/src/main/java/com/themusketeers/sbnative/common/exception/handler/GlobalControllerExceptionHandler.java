@@ -119,7 +119,7 @@ public class GlobalControllerExceptionHandler extends ResponseEntityExceptionHan
         problemDetail.setProperty(PROPERTY_ERROR_CATEGORY, ERROR_CATEGORY_GENERIC);
         problemDetail.setProperty(PROPERTY_TIMESTAMP, Instant.now());
 
-        return this.createResponseEntity(problemDetail, headers , httpStatus, exchange);
+        return this.createResponseEntity(problemDetail, headers, httpStatus, exchange);
     }
 
     @Override

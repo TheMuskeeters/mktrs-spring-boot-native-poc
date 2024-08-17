@@ -15,10 +15,10 @@ import static com.themusketeers.sbnative.common.consts.GlobalConstants.USER_CONT
 import static com.themusketeers.sbnative.common.consts.GlobalConstants.USER_CONTROLLER_POST_INSERT_USER_INFO;
 
 import com.themusketeers.sbnative.common.exception.UserNotFoundException;
+import com.themusketeers.sbnative.users.UserService;
 import com.themusketeers.sbnative.users.domain.User;
 import com.themusketeers.sbnative.users.domain.response.UserDataResponse;
 import com.themusketeers.sbnative.users.domain.response.UsersDataResponse;
-import com.themusketeers.sbnative.users.UserService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

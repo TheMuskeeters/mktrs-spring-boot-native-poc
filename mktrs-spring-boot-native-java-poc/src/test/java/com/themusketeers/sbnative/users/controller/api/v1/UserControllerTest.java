@@ -24,10 +24,10 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
+import com.themusketeers.sbnative.users.UserService;
 import com.themusketeers.sbnative.users.domain.User;
 import com.themusketeers.sbnative.users.domain.response.UserDataResponse;
 import com.themusketeers.sbnative.users.domain.response.UsersDataResponse;
-import com.themusketeers.sbnative.users.UserService;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -91,7 +91,7 @@ class UserControllerTest {
     //    this.client = MockMvcWebTestClient
     //        .bindTo(mockMvc)
     //        .build();
-   // }
+    // }
 
     @Test
     @DisplayName("Should Retrieve an empty list of users")

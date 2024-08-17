@@ -19,7 +19,7 @@ import java.util.List;
  */
 public interface UserService {
     /**
-     * Checks if users data is present in the list of Users. Here the {@Code id} field is used
+     * Checks if users data is present in the list of {@link User}. Here the {@Code id} field is used
      * in order to compute the existence.
      *
      * @param userId Indicates the unique identifier for users we want to validate.

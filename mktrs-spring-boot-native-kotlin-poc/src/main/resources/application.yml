@@ -5,4 +5,4 @@ spring:
   r2dbc:
     username: cortizq
     password: tstpwd
-    url: r2dbc:oracle://localhost/tst_latest
+    url: r2dbc:oracle://localhost:1522/tst_latest
