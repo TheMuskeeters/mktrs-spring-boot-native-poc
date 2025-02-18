@@ -19,7 +19,7 @@
         <kotlin.version>1.9.24</kotlin.version>
         <commons-lang3.version>3.14.0</commons-lang3.version>
         <commons-collections4.version>4.4</commons-collections4.version>
-        <redisson-spring-boot-starter.version>3.18.0</redisson-spring-boot-starter.version>
+        <redisson-spring-boot-starter.version>3.44.0</redisson-spring-boot-starter.version>
 
         <!-- Docker image settings -->
         <docker.registry>docker.io</docker.registry>

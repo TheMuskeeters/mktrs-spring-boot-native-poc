@@ -25,7 +25,7 @@ import org.springframework.data.redis.core.ScanOptions
  * @see RedisCacheService
  * @author COQ - Carlos Adolfo Ortiz Q.
  */
-class RedisHashCacheService<K, V>(cacheName: String, redisTemplate: RedisTemplate<K, V>) : AbstractBaseRedisCacheService<K, V>(cacheName, redisTemplate), RedisCacheService<K, V> {
+class RedisHashCacheService<K : Any, V : Any>(cacheName: String, redisTemplate: RedisTemplate<K, V>) : AbstractBaseRedisCacheService<K, V>(cacheName, redisTemplate), RedisCacheService<K, V> {
 
     override fun exists(key: K): Boolean = redisTemplate.opsForHash<Any, Any>().hasKey(cacheName as K, key as Any)
     override fun count(): Long = redisTemplate.opsForHash<Any, Any>().size(cacheName as K)
