@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 
 /**
  * Handles the list of user in the system. The internal representation is to
- * use a in-memory storage.
+ * use an in-memory storage.
  *
  * @author COQ - Carlos Adolfo Ortiz Q.
  */
